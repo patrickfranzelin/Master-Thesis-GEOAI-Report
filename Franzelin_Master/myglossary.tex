@@ -1,0 +1,31 @@
+%Befehl um Einheiten im Acronym ausgeben zu können
+\newcommand{\acrosecondcolumn}[1]{\acroextra{\makebox[21mm][l]{#1}}}
+
+% ============= Eingabe der Symbole und Abkürzungen ============= 
+\chapter*{Abkürzungsverzeichnis}\thispagestyle{rmplain}
+\addcontentsline{toc}{chapter}{Abkürzungsverzeichnis}
+\label{sec:abkuerzungsverzeichnis}
+\begin{acronym}[LONGEST]
+	\acro{KDE}{K Desktop Environment}
+	\acro{SQL}{Structured Query Language}
+	\acro{Bash}{Bourne-again shell}
+	\acro{JDK}{Java Development Kit}
+	\acro{VM}{Virtuelle Maschine}
+	%Falls eine Abkürzung in der Mehrzahl nicht einfach auf "s" endet muss das speziell eingestellt werden. 
+	\acro{slmtA}{super lange mega tolle Abkürzung} %Einzahl
+	\acroplural{slmtA}[slmtAs]{super lange mega tolle Abkürzungen} %Mehrzahl
+\end{acronym}
+
+
+\chapter*{Symbolverzeichnis}\thispagestyle{rmplain}
+\addcontentsline{toc}{chapter}{Symbolverzeichnis}
+\label{sec:symbolverzeichnis}
+\begin{acronym}[LONGEST]
+	\acro{temp}[$^\circ\text{C}$]{Europäische Einheit der Temperatur}
+	\acro{mu}[$\mu$]{Reibungskoeffizient}
+	\acro{pi}[$\pi$]{Kreiszahl}
+	\acro{alpha}[$\alpha$]{Winkel zwischen $0^\circ\text{C}$ und $360^\circ\text{C}$}
+	\acro{n}[$\mathbb{N}$]{Menge der natürlichen ganzen Zahlen}
+	\acro{A}[\ensuremath{A}]{Oberfläche}
+	%\acro{A}[\ensuremath{A}]{\acrosecondcolumn{$m^2$}Oberfläche}	%Darstellung mit Einheit
+\end{acronym}

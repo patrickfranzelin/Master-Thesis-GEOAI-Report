@@ -1,0 +1,234 @@
+% ==========================================
+% ============= Dokumentklasse/Präaambel =============
+% ==========================================
+\documentclass[a4paper,12pt,twoside]{scrreprt}
+\usepackage[left=2cm, right=2cm, top=2.5cm, bottom=2.5cm]{geometry}
+\usepackage{float}
+\usepackage{tikz}
+
+
+%\usepackage[onehalfspacing]{setspace}\onehalfspacing 
+
+
+%nicht einrücken nach jedem Absatz
+%\setlength{\parindent}{0pt}
+
+
+% ============= Packages =============
+%PDF-Dokumentinformationen
+\usepackage[
+	pdftitle={Analyse der Lawinengefahr in Südtirol: Eine Bewertung des bestehenden Lawinenkatasters durch Gefahrenkartierung und Simulationen},
+	pdfsubject={},
+	pdfauthor={Jean Patrick Franzelin},
+	pdfkeywords={},	
+	%Links nicht einrahmen
+	hidelinks
+]{hyperref}
+
+
+% ============= Standard Packages =============
+\usepackage{wrapfig}
+\usepackage[utf8]{inputenc}		%Paket um Sonderzeichen zu erhalten
+\usepackage[ngerman]{babel}		%Paket um deutsche Gramatik zu erkennen
+\usepackage[T1]{fontenc}		%Ausgabefonts	
+\usepackage{subcaption} % Paket für subfigure-Umgebung%Paket um Bilder einbinden zu können
+\graphicspath{{img/}}
+\usepackage{fancyhdr}			%Paket für erweiterte Kopf- und Fußzeilen
+\usepackage{lmodern}
+\usepackage{color}
+\usepackage{listings}   	%Paket für Code Listings
+\usepackage{multirow}		%Paket um Zellen/Spalten in Tabellen zu verbinden
+\usepackage{booktabs}		%Paket um verkitale und horizontale Linien in Tabellen einfacher zu erstellen
+\usepackage{titletoc}		%Paket zur Manipulation des Inhaltsverzeichnis
+\usepackage{tocbasic}		%Paket zur Manipulation des Inhaltsverzeichnis
+
+%zusätzliche Schriftzeichen der American Mathematical Society
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+\usepackage[printonlyused]{acronym}		%Paket für Abkürzungsverzeichnise
+\usepackage{siunitx}					%Paket um mathematische Einheiten zu verwenden
+\usepackage{hyperref}					%Paket für Links und Verweise im PDF-Dukument
+\usepackage[toc,page]{appendix}			%Paket um Anhänge zu erstellen
+\usepackage[utf8]{inputenc}
+\usepackage[ngerman]{babel}
+\usepackage{titletoc} % Paket für Inhaltsverzeichnisanpassungen
+\usepackage{hyperref}
+\usepackage[utf8]{inputenc}
+\usepackage{booktabs} % Für schönere Tabellen
+\usepackage{longtable} % Für Tabellen, die eine Seite überschreiten können
+% Custom commands
+\usepackage{float}
+\newcommand{\supervisor}[1]{\def\thesupervisor{#1}}
+\newcommand{\uselogo}[2]{\def\theuselogo{\includegraphics[#2]{#1}}}
+\usepackage{amsmath}
+\usepackage{booktabs} % Für bessere Linien in Tabellen
+\usepackage[labelfont=bf]{caption} % Für fetten Tabellenbeschriftungsstil
+\usepackage{tabularx} % Ermöglicht Tabellen mit automatischer Breitenanpassung
+\usepackage{caption}  % Verbesserte Beschriftungsfunktionen
+\usepackage[utf8]{inputenc}
+\usepackage{enumitem}
+\setlist[itemize]{itemsep=4pt, topsep=4pt, parsep=0pt}
+\usepackage[ngerman]{babel}
+\usepackage{booktabs}
+\usepackage[round]{natbib} % Runde Klammern um das Jahr
+\bibliographystyle{apalike} % oder ein anderer Stil, der Autor-Jahr-Zitate unterstützt
+\usepackage{subcaption}
+% ============= Inhaltsverzeichnis anpassen =============
+%\usetocstyle{allwithdot}			%Style für das Inhaltsverzeichnis
+
+
+% ============= Kopf- und Fußzeile =============
+%Befehl um Authoren, einzelnen Seiten/Kapitel zuzuweisen
+\renewcommand{\chaptermark}[1]{%
+\markboth{\thechapter.\ #1}{}}
+\newcommand{\TheAuthor}{}
+\newcommand{\Author}[1]{\renewcommand{\TheAuthor}{#1}}
+
+%Standartpagestyle
+\pagestyle{fancy}
+%L->left, C->center, R->right
+
+%Pagestyle "fancy" (Alle Seiten außer Titelseite und Chaper-Seiten)
+\fancyhf{}
+\fancyhead[LE,RO]{}
+\fancyhead[RE,LO]{Collaborative
+Building Footprint Quality Assessment}
+\fancyfoot[RE,LO]{\thepage}
+\fancyfoot[CE,CO]{\slshape \TheAuthor}
+\fancyfoot[LE,RO]{Universität Zürich}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+
+%Pagestyle "rmplain" (Alle Seiten mit römischer Nummerierung)
+\fancypagestyle{rmplain}
+{
+	\fancyhf{}
+	\fancyfoot[RE,LO]{\thepage}
+	\renewcommand\headrulewidth{0pt}
+	\renewcommand\footrulewidth{0pt}
+}
+
+%Pagestyle "plain" (Alle Chapter-Seiten)
+\fancypagestyle{plain}{
+	\fancyhf{}
+	\fancyhead[LE,RO]{}
+	\fancyhead[RE,LO]{Collaborative
+Building Footprint Quality Assessment}
+	\fancyfoot[RE,LO]{\thepage}
+	\fancyfoot[CE,CO]{\slshape \TheAuthor}
+	\fancyfoot[LE,RO]{Universität Zürich}
+	\renewcommand{\headrulewidth}{0.4pt}
+	\renewcommand{\footrulewidth}{0.4pt}
+}
+
+
+% ============= Package Einstellungen & Sonstiges ============= 
+%Besondere Trennungen
+\hyphenation{De-zi-mal-tren-nung}
+
+
+%Gliederungstiefen einstellen (Subsubsection freischalten wenn in {} 5 steht)
+\setcounter{secnumdepth}{5}
+\setcounter{tocdepth}{5}
+
+
+% ==========================================
+% ============= Dokumentbeginn =============
+% ==========================================
+\begin{document}
+%Erste Seite ohne Kopf- und Fußzeile sowie Seitenzahl
+\pagestyle{empty}
+\include{01_titel}		%include{...} einbinden der einzelnen Kapitel ein
+
+
+%Alle folgenden Seiten bis zu dem Befehl \pagenumbering{arabic} werden mit römischen Ziffern nummeriert
+\pagenumbering{roman}
+
+
+\include{02_eidesstattliche_erklaerung}
+
+
+%\include{03_vorwort}
+
+
+\include{04_abstract}
+
+
+
+
+% ==========================================
+% Inhaltsverzeichnis einfügen
+% ==========================================
+\tableofcontents\thispagestyle{rmplain}
+
+
+% ==========================================
+% Abbildungsverzeichnis einfügen
+% ==========================================
+\listoffigures\thispagestyle{rmplain}	
+\addcontentsline{toc}{chapter}{Abbildungsverzeichnis}	%Verzeichnis im Inhaltsverzeichnis hinzufügen (erzwingen)	
+
+
+% ==========================================
+% Tabellenverzeichnis einfügen
+% ==========================================
+\listoftables\thispagestyle{rmplain}
+\addcontentsline{toc}{chapter}{Tabellenverzeichnis}
+
+
+% ============= Glossary einbinden ============= 
+%\include{myglossary}		%Wenn man ein auf Acronymen basierendes Verzeichniss haben möchte
+
+
+%Beendet eine Seite und erzwingt auf den nachfolgenden Seiten die Ausgabe aller Gleitobjekte (z.B. Abbildungen), die bislang definiert, aber noch nicht ausgegeben wurden. Dieser Befehl fügt, falls nötig, eine leere Seite ein, sodass die nächste Seite nach den Gleitobjekten eine ungerade Seitennummer hat. 
+\cleardoubleoddpage
+%\pagestyle{otherpagesthenplain}
+%\pagestyle{fancy}
+
+
+%Ab hier wird im Inhaltsverzeichnis wie gewohnt mit arabischen Zahlen nummeriert
+\pagenumbering{arabic}
+\pagestyle{fancy}
+
+\include{05_einleitung}
+
+\Author{Jean Patrick Franzelin}
+\include{06_theorie}
+
+\Author{Jean Patrick Franzelin}
+\include{07_Untersuchungsgebiet}
+
+\Author{Jean Patrick Franzelin}
+\include{08_methoden}
+
+\Author{Jean Patrick Franzelin}
+\include{09_ergebnisse}
+
+\Author{Jean Patrick Franzelin}
+\include{10_diskussion}
+
+\Author{Jean Patrick Franzelin}
+\include{11_zusammenfassung}
+
+
+% ==========================================
+% Literaturverzeichnis  einfügen
+% ==========================================
+%\bibliographystyle{unsrtdin}		%gibt den Zitierstyle an
+\bibliographystyle{aiaa}
+\bibliography{Literatur}\thispagestyle{rmplain}			%gibt alle Ihnhalte von JabRef aus
+\label{bibpage}
+\addcontentsline{toc}{chapter}{Literaturverzeichnis}
+\cleardoublepage
+%!Wichtig! JabRef fügt erst eine Litaratur aus dem Inhalt der Datenbank hinzu,
+%wenn dieser im Text zitiert wird. Dazu muss man in JabRef einen Rechtsklick auf,
+%das zu Zitierende Buch oder sonstiges machen. Anschließend die Maus auf Kopieren
+%bewegen und im Drop-Down-Menu \cite{...}... auswählen. Als letztes noch "paste" an
+%der gewünschent Stelle im Latex-Dokkument machen => fertig ist das Zitat.
+
+
+% ============= Appendix einbinden ============= 
+%\include{appendix}
+\end{document}

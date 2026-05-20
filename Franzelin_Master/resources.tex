@@ -1,0 +1,50 @@
+%NOTES:
+%glossary: fluid (liquid or gas)
+% ACRONYM: \ac{CHTC}
+% FIGURE: Fig \ref{fig:ice_formation}
+% EQUATION: equation \ref{eq:chtc}
+% SECTION: section \ref{sec:1-1_inverse_heat_transfer_problem}
+% CHAPTER: chapter \ref{07_methods}
+%SOURCE: \cite[p. 1234]{test}
+${\Delta T}$
+\\[0.5cm]
+
+%Gleichung erstellen
+\begin{equation}
+\nabla^{2} = T 
+	\label{eq:laplace_eq}
+\end{equation}
+
+%Bild erstellen
+\begin{figure}[htb]
+	\centering  
+	\includegraphics[scale=0.2]{img/iced_wing.jpeg}
+	\caption{Ice formation on an airfoil \cite{cit-1}}
+	\label{fig:ice_formation}
+\end{figure}
+
+%Bilder nebeneinander einfügen
+\begin{figure}[htb]
+    \centering
+    \subfloat[][Star Wars\label{fig:sw}]{\includegraphics[width=.4\linewidth]{img/starwars.jpg}}\qquad
+    \subfloat[][FH Joanneum\label{fig:fh}]{\includegraphics[width=.4\linewidth]{img/FHJ_Logo_Engeeniring.png}}\qquad
+    \caption{Bild neben Bild Beispiel}
+    \label{fig:eskalation}
+\end{figure}
+
+% Tabelle erstellen
+\begin{table}[htp]
+	\begin{center}
+		\captionabove{Tabellenbeispiel}
+		\begin{tabular}{lll}
+			\toprule
+			\textbf{Teacher} & \textbf{Title} & \textbf{Year} \\
+			\midrule
+			Aragon und Sauron & First steps \LaTeX{} & 2004 \\ 
+			Gandalf & \LaTeX{} course & 2005 \\ 
+			Frodo & \LaTeX{} seminar & 2009 \\
+			\bottomrule
+		\end{tabular}
+		\label{tab:herr_der_ringe}
+	\end{center}
+\end{table}

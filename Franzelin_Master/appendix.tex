@@ -1,0 +1,41 @@
+\appendix		%Latex sagen, dass ab hier nur noch Anhänge kommen
+\chapter*{Anhänge}\thispagestyle{rmplain}	%erstelltes Kapitel welches aber nicht im Inhaltsverzeichnis aufscheint 
+\addcontentsline{toc}{chapter}{Anhänge}		%Inhaltsverzeichniseintrag ohne nummerierung für zuvor erstelles Kapitel erzeugen
+\label{anhaenge}
+
+
+\renewcommand{\thesection}{\Alph{section}}					%Sections mit Großbuchstaben durchnummerieren
+\renewcommand{\thefigure}{\Alph{section}.\arabic{figure}}	%Art der Bildbeschriftung auf Buchstaben.Nummerierung.: ändern
+
+
+\section{Name von Anhang A}\thispagestyle{rmplain}
+\label{app_a}
+\setcounter{figure}{0}		%Muss bei jeder neuen Section gesetzt werden, damit die Caption wieder bei eins zu nummerieren beginnt (z.B. A.1. A.2. ... B.1. B.2.)
+
+%Der Anhang kommt hier rein
+\begin{figure}[htb]
+	\centering  
+	\includegraphics[scale=0.5]{img/Lord_of_The_Rings_Logo.png}
+	\caption{Lord of The Rings Logo}
+	\label{fig:lotrl1}
+\end{figure}
+
+%\begin{figure}[htb]
+%	\centering  
+%	\includegraphics[scale=0.5]{img/Lord_of_The_Rings_Logo.png}
+%	\caption{Lord of The Rings Logo}
+%	\label{fig:lotrl2}
+%\end{figure}
+%\newpage
+
+%%\section{Name von Anhang B}\thispagestyle{rmplain}
+%\label{app_b}
+%\setcounter{figure}{0}		%Muss bei jeder neuen Section gesetzt werden, damit die Caption wieder bei eins zu nummerieren beginnt (z.B. A.1. A.2. ... B.1. B.2.)
+
+%Der Anhang kommt hier rein
+%\begin{figure}[htb]
+%%	\includegraphics[scale=0.5]{img/Lord_of_The_Rings_Logo.png}
+	%\caption{Lord of The Rings Logo}
+	%\label{fig:lotrl3}
+%\end{figure}
+\newpage
