@@ -5,7 +5,7 @@ As mentioned in Section~\ref{07_Untersuchungsgebiet}, the workflow was applied t
 
 In total, the code was run on 2’842 houses from the Google Open Buildings dataset. These buildings were processed, stored and rectangularized. From these, 1’633 houses were additionally processed with the complete improvement workflow. Since this step required relatively long processing times, the number of buildings was mostly limited to around 600 houses per run and per study area. The remaining 1’577 buildings were therefore only processed with the direct global regularisation algorithm (Section~xxx). During the workflow, a total of 1’283 buildings were identified as incorrect or problematic detections within the Google Open Buildings dataset.
 
-From the 1’633 houses that passed through the complete workflow, 1’263 buildings were manually evaluated, as described in Section~xxx. The number of evaluated buildings is not the same for all countries. This is mainly because some buildings from the Google Open Buildings dataset were identified as false positives and were therefore removed from the dataset. In addition, the evaluation was only possible when the original detection, the SAM result and the final post-processed polygon could clearly be matched to each other. In some cases, not all three versions could be assigned reliably, so these buildings were excluded from the manual evaluation.
+From the 1’633 houses that passed through the complete workflow, 1’256 buildings were manually evaluated, as described in Section~xxx. The number of evaluated buildings is not the same for all countries. This is mainly because some buildings from the Google Open Buildings dataset were identified as false positives and were therefore removed from the dataset. In addition, the evaluation was only possible when the original detection, the SAM result and the final post-processed polygon could clearly be matched to each other. In some cases, not all three versions could be assigned reliably, so these buildings were excluded from the manual evaluation.
 
 \begin{table}[htp]
 	\begin{center}
@@ -30,7 +30,7 @@ From the 1’633 houses that passed through the complete workflow, 1’263 build
 			\textbf{1283} &
 			\textbf{971} &
 			\textbf{588} &
-			\textbf{1263} \\
+			\textbf{1256} \\
 			\bottomrule
 		\end{tabular}
 		\label{tab:mlqa_overview}
@@ -59,9 +59,7 @@ The results also show that almost no buildings were initially classified as \tex
 
 The post-processing workflow improved the majority of evaluated building polygons in all study areas. Averaged across all five locations, \textbf{82.3\%} of the manually evaluated buildings showed an improvement after post-processing, while \textbf{12.9\%} remained largely unchanged and \textbf{4.6\%} were degraded. 
 
-The strongest overall improvements were observed in Niger and Mozambique. In Niger, \textbf{86.7\%} of the evaluated buildings improved, corresponding to 222 out of 256 manually checked samples. Mozambique showed a very similar behaviour, with \textbf{86.2\%} improved buildings (144 out of 167 samples). Liberia also produced strong results, where \textbf{85.8\%} of the evaluated polygons improved after processing (332 out of 387 buildings).
-
-Lower, but still clearly positive improvement rates were observed in Mexico and Nepal. In Mexico, \textbf{77.0\%} of the evaluated buildings improved (201 out of 261), while \textbf{17.2\%} remained unchanged and \textbf{5.7\%} degraded slightly after processing. Nepal showed the lowest overall improvement rate with \textbf{76.0\%} improved buildings (146 out of 192 samples) and also the highest degradation share, where \textbf{8.3\%} of the polygons received a worse rating after post-processing.
+The strongest overall improvements were observed in Niger and Mozambique. In Niger, \textbf{86.7\%} of the evaluated buildings improved, corresponding to 222 out of 256 manually checked samples. Mozambique showed a very similar behaviour, with \textbf{86.2\%} improved buildings (144 out of 167 samples). Liberia also produced strong results, where \textbf{85.8\%} of the evaluated polygons improved after processing (332 out of 387 buildings). Lower, but still clearly positive improvement rates were observed in Mexico and Nepal. In Mexico, \textbf{77.0\%} of the evaluated buildings improved (201 out of 261), while \textbf{17.2\%} remained unchanged and \textbf{5.7\%} degraded slightly after processing. Nepal showed the lowest overall improvement rate with \textbf{76.0\%} improved buildings (146 out of 192 samples) and also the highest degradation share, where \textbf{8.3\%} of the polygons received a worse rating after post-processing.
 
 \begin{figure}[H]
 	\centering  
