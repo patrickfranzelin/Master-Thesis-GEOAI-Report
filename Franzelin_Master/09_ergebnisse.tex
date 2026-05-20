@@ -71,7 +71,7 @@ The results also show that almost no buildings were initially classified as \tex
 
 \begin{figure}[H]
 	\centering  
-	\includegraphics[scale=0.8]{Franzelin_Master/img/02_original_to_post_transition_heatmap.png}
+	\includegraphics[scale=0.65]{Franzelin_Master/img/02_original_to_post_transition_heatmap.png}
 	\caption{Transition from original polygon quality to post-processed polygon quality based on the manual evaluation.}
 	\label{fig:transition_heatmap}
 \end{figure}
@@ -80,9 +80,9 @@ The post-processing workflow improved the majority of evaluated building polygon
 
 The strongest overall improvements were observed in Niger and Mozambique. In Niger, \textbf{86.7\%} of the evaluated buildings improved, corresponding to 222 out of 256 manually checked samples. Mozambique showed a very similar behaviour, with \textbf{86.2\%} improved buildings (144 out of 167 samples). Liberia also produced strong results, where \textbf{85.8\%} of the evaluated polygons improved after processing (332 out of 387 buildings). Lower, but still clearly positive improvement rates were observed in Mexico and Nepal. In Mexico, \textbf{77.0\%} of the evaluated buildings improved (201 out of 261), while \textbf{17.2\%} remained unchanged and \textbf{5.7\%} degraded slightly after processing. Nepal showed the lowest overall improvement rate with \textbf{76.0\%} improved buildings (146 out of 192 samples) and also the highest degradation share, where \textbf{8.3\%} of the polygons received a worse rating after post-processing.
 
-\begin{figure}[H]
+\begin{figure}[htb]
 	\centering  
-	\includegraphics[scale=0.8]{Franzelin_Master/img/postprocessingeffectbycountry.png}
+	\includegraphics[scale=0.65]{Franzelin_Master/img/postprocessingeffectbycountry.png}
 	\caption{Transition from original polygon quality to post-processed polygon quality based on the manual evaluation.}
 	\label{fig:transition_heatmap}
 \end{figure}
@@ -136,7 +136,7 @@ It should be noted that multiple error categories could be assigned simultaneous
 Since \textit{SHIFTED} was the dominant error category in the original dataset, the spatial displacement of these cases was analysed in more detail. For this purpose, centroid shift vectors were calculated between the original polygons labelled as \textit{SHIFTED} and the corresponding post-processed polygons. The aim of this analysis was to assess whether the displacement followed a homogeneous direction that could have been corrected by a simple global translation before running the workflow.
 
 
-\begin{figure}[H]
+\begin{figure}[htb]
 	\centering  
 	\includegraphics[scale=0.65]{Franzelin_Master/img/04_post_shift_vector_scatter_by_country.png}
 	\caption{.}
@@ -180,43 +180,33 @@ Postprocessed   & 1253 & 84.64 & 13.45 & 7 \\
 
 The MLQA routing classes also showed different levels of difficulty. Buildings classified as \textit{full house} reached 79.6\% good or perfect final results, with a median absolute area change of 13.5\% relative to the original footprint. Buildings classified as \textit{partial house} reached a slightly lower good/perfect share of 76.3\%, but their median absolute area change was much higher at 24.8\%. This fits the visual impression from the examples: partial-house cases can be improved, but they are less stable because the workflow first has to rediscover the complete roof structure before refining it.
 
-Table~\ref{tab:vertex_comparison} compares the average number of vertices in the original Google Open Buildings dataset and the number of vertices after applying the developed workflow. Nepal shows the strongest increase in vertex count, with a relative change of 382.5\%. Liberia and Mexico follow with increases of 154.6\% and 162.1\%, respectively. Mozambique and Niger exhibit substantially smaller changes, with increases of 43.1\% and 45.0\%.
-Overall, the average number of vertices increased from 5.27 in the original dataset to 13.45 after post-processing, corresponding to an increase of 155.2\%. This indicates that the post-processing workflow generally increased polygon complexity and introduced additional geometric detail compared to the original Google Open Buildings footprints.
+Table~\ref{tab:country_summary} summarizes several of the most important result indicators by study area, including final geometry quality, area preservation, positional correction magnitude, surrounding vegetation context, and polygon complexity changes.
+
+Nepal showed the lowest share of buildings classified as \textit{good} or \textit{perfect} after post-processing, reaching 65.6\%. It also exhibited the largest median absolute area change (33.4\%) and the largest median positional correction relative to the original Google Open Buildings polygons (5.1\,m). Furthermore, 47.4\% of the evaluated buildings had medium or high detected tree context near the polygon. Nepal also showed the strongest increase in polygon complexity, with the average vertex count increasing by 382.5\%. It should be noted that detected vegetation does not necessarily imply that the tree repair workflow was executed, as not every detected tree triggered this processing step.
+
+Liberia and Mexico performed within a similar range regarding final geometry quality, with 79.5\% and 72.4\% of buildings reaching the \textit{good} or \textit{perfect} category, respectively. Liberia showed a median absolute area change of 16.0\%, whereas Mexico reached 30.7\%, while both study areas exhibited relatively similar median positional corrections (3.1\,m and 3.7\,m). Mexico additionally showed a substantially higher proportion of detected surrounding vegetation (63.6\%) compared to Liberia (35.5\%). Both study areas also exhibited comparable increases in polygon complexity, with vertex increases of 154.6\% and 162.1\%, respectively.
+
+Niger and Mozambique achieved the strongest overall results, with 85.9\% and 83.8\% of buildings reaching the \textit{good} or \textit{perfect} categories. Both study areas also showed comparatively small median area changes and lower positional correction magnitudes. The strongest difference between these two study areas was observed in vegetation context. Mozambique showed the highest proportion of medium or high detected tree context among all study areas (68.9\%), whereas Niger exhibited the lowest proportion (11.7\%). Despite this difference, both locations showed similarly limited increases in polygon complexity compared to Nepal, Liberia, and Mexico.
 
 \begin{table}[htb]
 \centering
-\caption{Average number of polygon vertices before and after post-processing by study area.}
-\label{tab:vertex_comparison}
-\begin{tabular}{lccc}
+\caption{Summary of final geometry quality indicators and polygon complexity changes by study area.}
+\label{tab:country_summary}
+\begin{tabular}{lccccc}
 \hline
-Country & Original vertices & Postprocessed vertices & Relative change (\%) \\
+Country &
+Good/perf. (\%) &
+Area (\%) &
+Shift (m) &
+Tree (\%) &
+Vertex (\%) \\
 \hline
-Liberia     & 5.42 & 13.80 & +154.6 \\
-Mexico      & 5.31 & 13.92 & +162.1 \\
-Mozambique  & 5.18 & 7.41  & +43.1 \\
-Nepal       & 5.30 & 25.57 & +382.5 \\
-Niger       & 5.04 & 7.31  & +45.0 \\
-\hline
-Overall mean & 5.27 & 13.45 & +155.2 \\
+Liberia     & 79.5 & 16.0 & 3.1 & 35.5 & +154.6 \\
+Mexico      & 72.4 & 30.7 & 3.7 & 63.6 & +162.1 \\
+Mozambique  & 83.8 & 9.0  & 3.7 & 68.9 & +43.1 \\
+Nepal       & 65.6 & 33.4 & 5.1 & 47.4 & +382.5 \\
+Niger       & 85.9 & 14.7 & 1.7 & 11.7 & +45.0 \\
 \hline
 \end{tabular}
 \end{table}
 
-Table~\ref{tab:country_synthesis} summarizes several of the most important result indicators by study area. Niger achieved the highest share of good or perfect outputs (85.9\%) and the lowest median post-processing shift (1.7\,m). Mozambique also performed well, with a good/perfect share of 83.8\% and the smallest median absolute area change (9.0\%). Nepal was the most difficult study area, with the lowest good/perfect share (65.6\%), the highest median absolute area change (33.4\%) and the highest median post-processing shift (5.1\,m). Mexico also showed a relatively high area change and a lower good/perfect share compared to Niger, Mozambique and Liberia. These differences show that the workflow performance depends strongly on the local image and settlement conditions.
-
-\begin{table}[htb]
-\centering
-\caption{Summary of final geometry quality indicators by study area.}
-\label{tab:country_synthesis}
-\begin{tabular}{lrrrrr}
-\toprule
-Country & n & Good/perfect (\%) & Area change (\%) & Shift (m) & Medium/high tree (\%) \\
-\midrule
-Liberia    & 380 & 79.5 & 16.0 & 3.1 & 35.5 \\
-Mexico     & 261 & 72.4 & 30.7 & 3.7 & 63.6 \\
-Mozambique & 167 & 83.8 & 9.0  & 3.7 & 68.9 \\
-Nepal      & 192 & 65.6 & 33.4 & 5.1 & 47.4 \\
-Niger      & 256 & 85.9 & 14.7 & 1.7 & 11.7 \\
-\bottomrule
-\end{tabular}
-\end{table}
