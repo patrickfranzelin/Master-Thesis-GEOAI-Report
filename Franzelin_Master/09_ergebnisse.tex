@@ -245,6 +245,53 @@ Niger       & 85.9 & 14.7 & 1.7 & 11.7 & +45.0 \\
 \end{tabular}
 \end{table}
 
-\section{Qualitativ semantic error description}
+\section{Qualitative Semantic Error Description}
 
-One part of my research quetion and also the workflow is if the mllm model isable to generate semantic short human readable error descriptions of the error cause between the original polygon and the visible house of the arial image. i recognized during developing that its quite hard for the 8b model do provide constant reliable descritioon. So i had two herangehensweisen. One give the mllm predifined categories and let it choose from thwose. Second a prompt that eabled a short human readable sentence without restrictions in the prompt.
+One component of the research question and workflow was to investigate whether a multimodal large language model (MLLM) can generate short, semantic, human-readable descriptions explaining the error cause between the original building polygon and the visible building structure in aerial imagery.
+
+During the development of the workflow, it became apparent that generating constant and reliable semantic descriptions with the 8B model was challenging. Therefore, two different approaches were investigated.
+
+The first approach provided the MLLM with predefined semantic error categories and allowed it to select the categories that best matched the observed geometric discrepancy. The advantage of this approach was that it produced a standardized output syntax, enabling direct statistical evaluation and comparison with manually assigned labels.
+
+The second approach used an unrestricted prompt, allowing the model to generate short human-readable error descriptions without predefined categories. The motivation behind this approach was to obtain more interpretable semantic descriptions that resemble human explanations. However, these free-text outputs proved considerably more difficult to evaluate quantitatively due to varying wording and description detail.
+
+\subsection{Predefined error category}
+For the predefined category approach, 1256 polygon pairs were manually evaluated and compared against the MLLM-generated labels. The manually assigned labels originated from the original Google building polygons and served as reference data.
+
+Overall, only 4.2\% of all cases showed an exact category-set agreement between manual interpretation and MLLM prediction. The mean Jaccard similarity between category sets reached 0.41.
+
+Another difference was the number of assigned semantic categories per building. Manual interpretation assigned an average of 1.39 categories per building, whereas the MLQA workflow assigned 2.64 categories per building. 
+
+The semantic categories used in the workflow were:
+
+\begin{itemize}
+\item \textbf{MISALIGNED (SHIFTED)} Polygon position mismatch determined through edge comparison (top, bottom, left, right). If two or more sides are not aligned, the polygon is classified as shifted.
+\item \textbf{SHAPE MISMATCH} Incorrect building footprint geometry excluding rotational errors.
+\item \textbf{MISSING PARTS} Roof segments visible in the aerial image are not covered by the polygon.
+\item \textbf{EXTRA PARTS} Polygon includes surrounding non-building areas.
+
+\end{itemize}
+
+Among the four semantic categories, \texttt{SHIFTED} was the most frequently assigned category by the MLQA workflow. Since positional displacement was evaluated through a dedicated prompt, the category was assigned in 97.6\% of all cases, compared to 77.3\% in the manual interpretation.
+
+The largest discrepancy was observed for \texttt{EXTRA\_PARTS}. The MLQA workflow assigned this category in 72.6\% of all cases, whereas manual interpretation assigned it in only 2.5\% of buildings.
+
+
+\begin{table}[htp]
+	\begin{center}
+		\captionabove{Comparison between manually assigned semantic categories and MLQA predictions}
+		\begin{tabular}{lll}
+			\toprule
+			\textbf{Category} & \textbf{MLQA (\%)} & \textbf{Manual (\%)} \\
+			\midrule
+			SHIFTED & 97.6 & 77.3 \\
+			SHAPE\_MISMATCH & 90.8 & 37.7 \\
+			MISSING\_PARTS & 2.5 & 7.6 \\
+			EXTRA\_PARTS & 72.6 & 2.5 \\
+			\bottomrule
+		\end{tabular}
+		\label{tab:semantic_category_comparison}
+	\end{center}
+\end{table}
+
+the 
