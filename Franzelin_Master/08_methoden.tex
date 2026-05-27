@@ -509,6 +509,8 @@ extra, includes, non-building, surrounding area, surrounding ground, vegetation,
 \end{tabular}
 \end{table}
 
+In addition to the rule-based text analysis, a small manual qualitative evaluation of the generated sentences was carried out. A separate annotation interface was created for this purpose. The interface displayed the aerial image patch with the original polygon overlay and the corresponding MLQA-generated error description. The evaluator assigned one of four sentence-quality labels: \textit{Correct}, \textit{Partly correct}, \textit{Too vague}, or \textit{Wrong}. Initially, 50 examples per study area were exported for this evaluation. However, while reviewing the generated descriptions it became apparent that the model repeatedly produced very similar sentence structures and reused the same terms, especially references to missing and extra parts. Therefore, the qualitative evaluation was limited to approximately 100 sentences, as additional samples were unlikely to provide substantially new insight into the linguistic behaviour of the model.
+
 \section{Implementation Details}
 
 While the previous sections describe the methodological design of the workflow, this section summarizes the practical implementation choices required to execute the pipeline reproducibly. The implementation consists of a local Python-based geospatial processing environment, a PostgreSQL/PostGIS database for persistent spatial data management, and a remote GPU inference service for the multimodal model.
