@@ -177,7 +177,7 @@ Mozambique and Niger show more concentrated displacement patterns with lower spr
 \begin{figure}[H]
 \centering  
 	\includegraphics[scale=0.65]{Franzelin_Master/img/03_original_vs_post_area_scatter.png}
-	\caption{Comparison of original and post-processed building areas by study area.}
+	\caption{Comparison of original and post-processed building areas by study area.}s
 	\label{fig:area_comparison}
 \end{figure}
 
@@ -186,6 +186,9 @@ Figure~\ref{fig:area_comparison} compares original building areas with post-proc
 Mozambique and Niger show the strongest agreement with the identity line and the lowest variability. In Mozambique, 52.7\% of buildings remain within \(\pm10\%\) of their original area, while only 2.4\% become more than 50\% larger after post-processing. Niger also exhibits comparatively stable area preservation, with 39.1\% remaining within \(\pm10\%\).
 
 In contrast, Mexico and Nepal show broader dispersion patterns. Only 18.8\% of buildings in Mexico and 13.0\% in Nepal remain within \(\pm10\%\) of the original area. Furthermore, strong positive deviations occur more frequently, with 31.8\% of Mexican and 27.1\% of Nepalese buildings increasing by more than 50\% relative to their original footprint area. Liberia shows an intermediate pattern, with 32.1\% remaining within \(\pm10\%\), but also a considerable proportion of strong positive deviations (20.2\%).
+\subsection{Influence of Google Open Buildings Confidence}
+
+The google dataset includes a column where for each detection aso the confidence value is stored, i analysed if the confidence has a einfluss on the postprocessed quality lable. TThe corrolation with the given orignal manual score and confidence R = 0.32 so it correlty. 
 
 \subsection{Original, SAM and Post-processed Geometry Complexity}
 
@@ -242,3 +245,6 @@ Niger       & 85.9 & 14.7 & 1.7 & 11.7 & +45.0 \\
 \end{tabular}
 \end{table}
 
+\section{Qualitativ semantic error description}
+
+One part of my research quetion and also the workflow is if the mllm model isable to generate semantic short human readable error descriptions of the error cause between the original polygon and the visible house of the arial image. i recognized during developing that its quite hard for the 8b model do provide constant reliable descritioon. So i had two herangehensweisen. One give the mllm predifined categories and let it choose from thwose. Second a prompt that eabled a short human readable sentence without restrictions in the prompt.
