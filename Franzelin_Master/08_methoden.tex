@@ -468,6 +468,23 @@ Additionally, it is recorded whether postprocessing introduces new errors:
     \item \textbf{Yes:} New errors introduced during postprocessing.
 \end{itemize}
 
+\subsection{Reference-based Switzerland Test}
+\label{sec:switzerland_reference_test}
+
+In addition to the main evaluation in the five Global South study areas, a small reference-based test was carried out in Switzerland. This test was not used as the primary evaluation of the proposed workflow, because the overall research focus of this thesis is on regions without reliable reference building datasets. Instead, it served as an additional plausibility check in an area where authoritative building geometries are available.
+
+For this test, Microsoft building footprints in a Swissimage scene were processed with the same building extraction and regularisation workflow. The resulting regularized building polygons were then compared against Swiss TLM building geometries, which were used as the reference dataset. The evaluation was implemented in a separate ArcPy script and performed in the Swiss coordinate reference system CH1903+ / LV95 (EPSG:2056), so that all area and distance calculations were carried out in metres.
+
+Because the regularisation run for the Switzerland scene was interrupted, the evaluation was restricted to the subset of Microsoft buildings for which a corresponding regularized output was available. To reconstruct this processed subset, available regularized outputs were matched back to the Microsoft source polygons using a 1\,m spatial buffer. The corresponding TLM reference buildings were then selected around the processed Microsoft subset, also using a 1\,m buffer. This ensured that both the original Microsoft polygons and the regularized polygons were evaluated against the same reference subset.
+
+The comparison used polygon intersection over union (IoU) as matching criterion:
+
+\[
+\mathrm{IoU} = \frac{A_\mathrm{intersection}}{A_\mathrm{union}}
+\]
+
+Candidate-reference pairs were generated from polygon intersections and then matched greedily in descending IoU order, so that each candidate polygon and each TLM reference polygon could be used at most once. The evaluation was repeated for IoU thresholds of 0.10, 0.25 and 0.50. For each threshold, true positives, false positives and false negatives were counted, and precision, recall and F1-score were calculated. The same procedure was applied once to the regularized output and once to the corresponding Microsoft source polygons, allowing a direct comparison between the input footprints and the regularized result.
+
 \subsection{Evaluation of Semantic Error Descriptions}
 \label{sec:evaluation_semantic_error_descriptions}
 
