@@ -313,27 +313,8 @@ Strong overprediction behaviour was visible for \textit{EXTRA\_PARTS} and \texti
 
 The weakest performance was observed for \textit{OVERSIMPLIFIED}. Only one correctly identified occurrence was found across the complete evaluation dataset.
 
-\subsection{Manual Sentence Quality Evaluation}
+In addition to the rule-based keyword analysis, a smaller qualitative evaluation was performed for the generated free-text descriptions. In this step, 100 generated sentences were manually reviewed in a separate evaluation interface. The evaluation was stopped after this subset because the generated descriptions showed strong repetition. Many sentences followed nearly the same structure and repeatedly described the polygon as having \textit{missing parts}, \textit{extra parts}, or both, even when the specific visual error differed.
 
-In addition to the rule-based keyword analysis, a smaller qualitative evaluation was performed for the generated free-text descriptions. In this step, approximately 100 generated sentences were manually reviewed in a separate evaluation interface. The evaluation was stopped after this subset because the generated descriptions showed strong repetition. Many sentences followed nearly the same structure and repeatedly described the polygon as having \textit{missing parts}, \textit{extra parts}, or both, even when the specific visual error differed.
+After keeping the latest evaluation for each building, 99 unique sentence evaluations remained. Of these, only 11 sentences were classified as \textit{correct}. A further 25 were classified as \textit{partly correct}. The largest group was \textit{too vague}, with 37 cases, while 27 sentences were classified as \textit{wrong}. This means that only about one third of the reviewed descriptions were at least partially useful, whereas the majority were either too generic or incorrect.
 
-After keeping the latest evaluation for each building, 99 unique sentence evaluations remained. Of these, only 11 sentences were classified as \textit{correct}. A further 25 were classified as \textit{partly correct}. The largest group was \textit{too vague}, with 37 cases, while 26 sentences were classified as \textit{wrong}. This means that only about one third of the reviewed descriptions were at least partially useful, whereas the majority were either too generic or incorrect.
 
-\begin{table}[htp]
-	\begin{center}
-		\captionabove{Manual quality assessment of MLQA-generated free-text error descriptions}
-		\begin{tabular}{lrr}
-			\toprule
-			\textbf{Sentence quality} & \textbf{Count} & \textbf{Share (\%)} \\
-			\midrule
-			Correct & 11 & 11.1 \\
-			Partly correct & 25 & 25.3 \\
-			Too vague & 37 & 37.4 \\
-			Wrong & 26 & 26.3 \\
-			\bottomrule
-		\end{tabular}
-		\label{tab:semantic_sentence_quality}
-	\end{center}
-\end{table}
-
-These results support the findings from the keyword-based analysis. The free-text output was readable and often sounded plausible, but it was not sufficiently specific or reliable for detailed semantic error classification. The main limitation was not grammatical quality, but repetitive and generic wording that did not consistently reflect the actual visible error in the image.
