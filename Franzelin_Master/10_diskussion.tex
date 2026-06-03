@@ -1,14 +1,135 @@
 \chapter{Discussion}
 \label{09_diskussion}
 
-This thesis developed and evaluated a proof-of-concept workflow for improving existing building footprint polygons in selected study areas rather than generating a completely new building dataset from scratch. This distinction is important for geospatial data maintenance. In many practical settings, especially where automatically generated building datasets already exist, the central challenge is not only to detect buildings again, but to assess whether available polygons are fit for use and to selectively correct them where the imagery indicates geometric errors. This follows the broader idea of geodatabase updating, where modifying and improving existing spatial data can be more efficient than repeatedly creating new datasets \cite{Qin_changedetection}.
+\section{Poitioning of the Work and Interpreting the Workflow as Geodata Updating}
 
-The work therefore connects two research directions that are often treated separately. On the one hand, building footprint extraction from high-resolution imagery has been studied extensively using classical deep learning architectures such as patch-based CNNs, fully convolutional networks, SegNet, and U-Net variants \cite{Luo_overviewbuioldingfootprint, rastogi2022automatic}. On the other hand, recent research on foundation models and multimodal large language models suggests that general-purpose models can support visual reasoning, spatial interpretation, and task-specific prompting without being trained from scratch for every individual application \cite{bommasani2022opportunitiesrisksfoundationmodels, wu2023multimodallargelanguagemodels, Yin_2024MLLM}. In this thesis, these ideas are combined in a two-stage workflow: a multimodal model first evaluates the plausibility of an existing footprint in relation to the image context, and a segmentation foundation model then refines the geometry where correction appears meaningful.
+The results of this thesis should be understood as an evaluation of an update-oriented geospatial workflow rather than as a conventional building extraction benchmark. The aim was not to replace an existing building footprint dataset, but to test whether already available polygons can be assessed and selectively improved with recent vision and multimodal AI methods. This follows the logic of geodatabase updating, where the focus lies on identifying and modifying features that require correction instead of reconstructing an entire dataset from scratch \cite{Qin_changedetection}.
 
-The specific contribution of this approach lies in the separation between semantic quality assessment and geometric correction. The MLLM is used for tasks that require contextual interpretation, such as deciding whether a visible roof is present, whether the original polygon covers the complete structure, and which type of error is likely present. SAM is then used for the image-driven segmentation task, where its prompt-based design allows the model to transform the MLLM output into a refined mask \cite{kirillov2023segment}. The final polygon is not simply the raw segmentation result, but the outcome of a controlled post-processing workflow that regularises and simplifies the segmentation into a usable vector geometry.
+This perspective also distinguishes the workflow from most building footprint extraction approaches. Methods such as patch-based CNNs, fully convolutional networks, SegNet, U-Net and related segmentation architectures mainly aim to derive building footprints directly from high-resolution imagery \cite{Luo_overviewbuioldingfootprint, rastogi2022automatic}. In contrast, this work starts from existing polygons and investigates whether a multimodal large language model can assess polygon-image discrepancies, while SAM is used to generate refined geometry candidates \cite{bommasani2022opportunitiesrisksfoundationmodels, wu2023multimodallargelanguagemodels, Yin_2024MLLM, kirillov2023segment}.
 
-This setup is particularly relevant for data-scarce regions in the Global South. Global building footprint products such as Google Open Buildings provide important spatial information where authoritative datasets are often incomplete or unavailable \cite{sirko2021continentalscalebuildingdetectionhigh, CHAMBERLAIN2024102104}. At the same time, such automatically derived products contain characteristic errors related to shifts, incomplete footprints, merged structures, vegetation occlusion, and settlement-specific roof patterns. The discussion therefore focuses on whether the proposed combination of MLLM-based quality assessment, SAM-based refinement, and deterministic post-processing can meaningfully improve these existing polygons, where it fails, and what the results imply for the transferability of foundation-model-based geospatial quality assurance across different study areas.
+This is particularly relevant for heterogeneous and partly informal settlement structures in the Global South, where available building datasets can differ in completeness and geometric consistency \cite{sirko2021continentalscalebuildingdetectionhigh, CHAMBERLAIN2024102104}. The following discussion therefore focuses on where this proof-of-concept workflow produced meaningful improvements, where the MLLM or SAM introduced new errors, and what this implies for future human-in-the-loop geospatial data maintenance workflows.
 
+
+
+
+\section{Overall Effectiveness of the Improvement Workflow}
+
+Foreword: It needs also to be statet that there was a time difference between the individual tiffs downloaded from openarialimagery and the tiff used for the detection of the google open building houses, this was for sure also a limitung factor that not the same inputs could be used for the detections, but this is due to limited acess of very high resolution imagery spread across over the globe and the closed source nature of google arial imagery. Its also to state that even in the ofisioal website of google open buildings in the explorer category a shift between the underlying imagery and the polygons where visible suggesting a differnt arial image used for the workflow (search in technical report wich data was used and cite). This needs also to be stated befor the discussion so the results cna be better understood that my data came from 3 year perfiod around the data used for google and that it was always different caputered. and therefore the detected polygons are not certainly true to the real worldbut true to the imagery that i in this case of the work iu excluded because it went in the direction of remote sensing and i wanted to focus on the quality and section of vector manipulation correction etc. So the coming statments argue that the golden standert would be that its exactly ture to imagery and exlude the distursion of the imagery to other relevant topics. (maybe cite here a very popular remote sensing destorsion shift paper georeferenced with nown points on ground).
+
+Looking at the results it can be statet that in general the input polygons in all of the 5 study areas where improved and the idea worked out in total it was an increase from xx percent across the bench. but it has also to be stated that the input polygon also where very poorly with only XX percent above a rating of ok  and xx with ok or bad, also xx polygon where deleted form the starting dataset because no underlying house could be detected. 
+
+The perfomance difference between the study areas: Lets start with Niger and Mozambique here the model perfomed the best with a score of xx and xx. Both of the study areas have the advantage that the buildings have a quite simple shape but the challange of the low contrast where in case of niger it doesnt had to much problems of mllm decicion if there is a underlying house visible or not. But in the slighlty lower contrast (mabye measure the contrast differnce with python of house and ground exemplarly for all 5 study areas) a lot of the houses xx of them where deleted what with closer inspection its evidence that the mllm had problems with the identification of houses. Than the question arises its a problem of the contrast or of the pictures like the houses look like. The Qwen model that had to decide if there is a house or not needed also to be trained on this house and because maybe the houses of mozambique where the rudimentärsten it also could be a bias in the training data. Already in 2017 \cite{shankar2017classificationrepresentationassessinggeodiversity} statet that in machine learning data has a Amerocentric and Eurocentric representation bias that can reult in differences of loaction dependent.This suggests that the MLLM’s decision performance may not only depend on image quality or contrast, but also on whether the visual appearance of buildings in a specific region is well represented in the model’s training data.\cite{yin2023givlimprovinggeographicalinclusivity} show that vision-language models can exhibit geographically uneven performance because visual concepts and regional characteristics are not equally represented during pre-training. 
+
+so liberia presents a bit a own categoty in this work it has good characteristic for the object detection, it still had bad start polygons (state) but had very high contrast (xx) it had mostly alone standing houses and moreover it was the most used study area during the development of the code so a lot of small extra feature and tweaking of the prompts where made on the intermediat results of the liberai study area. But liberai has slighlty more difficult polygons with a vertice count xx higer than mozambique and xx higher than niger.
+
+lets discuss the differnces between mexico and nepal according to the others, those two performed worse and also the input was worse xx  and they where the most complex structures with the most vertices per polygon making them more challenging for the model. During visual interpretation it become clearly the for example the nepal houses have a lo of roof terassen with a small rstructure ontop of it in with a different roofing material a small additional house on the roofterasse so it struggled often if it should segment all of it or only the small roof on the roof and this sort of building style the very fluid building style of adding and adding with different material that was present espacelly in mexico an nepal let the model struggle. called incremental housing also the world bank states this word and defines as....
+
+Discuss the central result: the workflow improved most manually evaluated polygons, but not equally in every study area. This section should synthesize the quality transition and improvement-rate results.
+
+
+\section{What Types of Errors Were Corrected Successfully?}
+
+Discuss the error composition. This should focus on the strong reduction of shifted polygons and the remaining difficulties with shape mismatch, missing parts, vegetation, and overcorrection.
+
+Main points:
+\begin{itemize}
+\item shifted polygons were the most successfully corrected error type;
+\item shape mismatch was reduced but remained relevant, especially in more complex areas;
+\item vegetation and roof occlusion increased the risk of new post-processing errors;
+\item this shows that the workflow is better at positional correction than at fully reliable semantic reconstruction.
+\end{itemize}
+
+\section{Role of the MLLM in Quality Assessment}
+
+Discuss the MLLM separately from SAM. This is important because your workflow has two model roles: semantic assessment and geometric segmentation.
+
+Main points:
+\begin{itemize}
+\item the MLLM was useful for routing buildings into full-house, partial-house, and no-visible cases;
+\item it helped structure the workflow without a reference dataset;
+\item however, semantic error descriptions were not fully reliable;
+\item predefined categories were more evaluable than free-text descriptions;
+\item exact category agreement was low, so the MLLM should be seen as a weak semantic assistant rather than a reliable standalone evaluator.
+\end{itemize}
+
+\section{Role of SAM and Post-processing in Geometry Refinement}
+
+Discuss SAM and the deterministic post-processing as one connected refinement system. The raw SAM output was more detailed, while post-processing made it more usable as vector data.
+
+Main points:
+\begin{itemize}
+\item SAM introduced image-derived boundary detail;
+\item raw SAM geometries were too complex/noisy for direct GIS use;
+\item post-processing reduced complexity and produced cleaner polygons;
+\item full-house cases were more stable than partial-house cases;
+\item partial-house cases are more difficult because the complete roof first has to be rediscovered.
+\end{itemize}
+
+\section{Transferability Across Global South Study Areas}
+
+This should be one of the most important discussion sections. Compare Liberia, Mexico, Mozambique, Nepal, and Niger not only by performance, but by why performance differed.
+
+Main points:
+\begin{itemize}
+\item Niger and Mozambique had the strongest final results and more stable area preservation;
+\item Nepal had the weakest final quality, strongest area changes, and highest geometry complexity increase;
+\item Mexico and Liberia were intermediate but differed in vegetation context and area changes;
+\item transferability is possible, but strongly depends on settlement morphology, image quality, vegetation, and initial polygon quality.
+\end{itemize}
+
+\section{Comparison with the Switzerland Reference Test}
+
+Use the Switzerland test as a contrast case. This is useful because it shows that the workflow is not automatically better in high-quality data contexts. In the Switzerland test, the regularized output performed slightly worse than the Microsoft source polygons against TLM at the strictest IoU threshold.
+
+Main points:
+\begin{itemize}
+\item in high-quality, well-aligned data contexts, correction can remove relevant geometric detail;
+\item the workflow is more useful where existing data contain visible errors;
+\item this supports the interpretation that the method should be applied selectively, not globally to all polygons.
+\end{itemize}
+
+\section{Limitations of the Proof-of-Concept}
+
+This should be honest and quite concrete.
+
+Main points:
+\begin{itemize}
+\item manual evaluation is subjective and limited to a subset;
+\item not all buildings passed through all pipeline stages;
+\item no authoritative reference data existed for the Global South study areas;
+\item the MLLM sometimes overpredicts semantic error categories;
+\item free-text descriptions were often repetitive or vague;
+\item SAM outputs depend strongly on prompts and image context;
+\item post-processing can introduce new errors, especially in vegetation-rich or complex scenes.
+\end{itemize}
+
+\section{Implications for Human-in-the-loop Geospatial QA}
+
+This is the “so what?” section. It should explain what your results mean for practical GIS workflows.
+
+Main points:
+\begin{itemize}
+\item the workflow is not ready as a fully automatic replacement for human mapping;
+\item it could be useful as a candidate-generation or triage tool;
+\item the system can identify problematic polygons and suggest corrected geometries;
+\item human validation remains necessary, especially for complex cases;
+\item this fits semi-automatic data maintenance workflows.
+\end{itemize}
+
+\section{Future Work}
+
+End with concrete next steps.
+
+Main points:
+\begin{itemize}
+\item test larger samples and additional regions;
+\item include authoritative reference data where available;
+\item improve prompt engineering and model routing;
+\item fine-tune or adapt the visual model for informal settlements;
+\item improve vegetation and occlusion handling;
+\item integrate uncertainty scores before accepting automatic corrections;
+\item compare against standard segmentation baselines such as U-Net or other building extraction models.
+\end{itemize}
 
 
 
