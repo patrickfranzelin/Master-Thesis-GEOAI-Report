@@ -219,36 +219,26 @@ The building-to-surrounding contrast analysis described in Section~\ref{sec:buil
 
 \begin{table}[htb]
 \centering
-\caption{Building-to-surrounding contrast and texture separation by study area based on perfect post-processed polygons.}
+\caption{Building-to-surrounding contrast and texture difference by study area.}
 \label{tab:building_surrounding_contrast}
 \footnotesize
-\begin{tabular}{lrrrrr}
+\begin{tabular}{lrrr}
 \toprule
 Country &
 n &
-Linear Weber &
-Boundary Weber &
-\(\Delta E_{00}\) &
+Contrast &
 Texture diff. \\
 \midrule
-Liberia    & 195 & 0.838 & 0.456 & 28.0 & 28.0 \\
-Mexico     & 125 & 1.662 & 0.547 & 25.9 & 16.7 \\
-Mozambique & 120 & 0.246 & 0.095 & 10.2 & 16.8 \\
-Nepal      & 68  & 0.678 & 0.335 & 19.0 & 23.1 \\
-Niger      & 176 & 2.053 & 0.522 & 26.7 & 18.9 \\
+Liberia    & 195 & 0.838 & 28.0 \\
+Mexico     & 125 & 1.662 & 16.7 \\
+Mozambique & 120 & 0.246 & 16.8 \\
+Nepal      & 68  & 0.678 & 23.1 \\
+Niger      & 176 & 2.053 & 18.9 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-<<<<<<< HEAD
-The table focuses on four complementary measures. \textit{Linear Weber} reports the median absolute Weber contrast after sRGB linearization. \textit{Boundary Weber} reports the median absolute Weber contrast between narrow bands directly inside and outside the building boundary. \(\Delta E_{00}\) is the mean CIEDE2000 colour difference between the average building and surrounding colours. \textit{Texture diff.} is the median texture-feature distance between the building mask and the surrounding ring, based on gradient magnitude, Laplacian response and local intensity variation.
-=======
-Mozambique showed by far the lowest roof-ground separation in the automatic analysis, with a median absolute luminance difference of 21.5 and a median Michelson contrast of 0.056. Its mean RGB distance was also the lowest of all study areas at 44.2. Nepal and Liberia formed an intermediate group, with median Michelson contrast values of 0.144 and 0.146, respectively. Mexico and Niger showed substantially stronger visual separation between buildings and their surroundings. Niger had the highest median luminance difference (82.1) and the highest median Michelson contrast (0.287), followed by Mexico with a median luminance difference of 66.2 and a median Michelson contrast of 0.246.
->>>>>>> bb50e835d3e7efe820d14c68408e1fa5dc9d8d0c
-
-Mozambique showed by far the lowest roof-ground separation in the automatic analysis. It had the lowest median absolute linear Weber contrast (0.246), the weakest boundary contrast (0.095) and the lowest mean colour difference (\(\Delta E_{00}=10.2\)). This indicates that buildings and surrounding ground often had very similar brightness and colour values and that the immediate building boundary was also weakly expressed. Nepal and Liberia formed an intermediate group in the broad contrast comparison. However, Liberia showed a relatively high texture difference, suggesting that roofs and surroundings differed more in local texture even when the brightness contrast was not as high as in Niger or Mexico.
-
-Niger and Mexico showed the strongest broad roof-ground separation. Niger had the highest median absolute linear Weber contrast (2.053), while Mexico showed the strongest boundary contrast (0.547), followed closely by Niger (0.522). This suggests that the roof outlines in these two study areas were generally more clearly separated from the immediate background than in Mozambique and Nepal. The texture-difference results do not follow the same ranking as the brightness and colour metrics. This is expected because texture separability measures differences in local variation and edge structure rather than mean brightness or colour.
+The contrast value reports the median absolute Weber contrast between the building and its local surrounding ring after sRGB linearization. The texture value reports the median difference between the building and surrounding texture descriptors. Mozambique showed the lowest building-to-surrounding contrast, while Niger and Mexico showed clearly stronger brightness separation. The texture-difference values show a different pattern: Liberia and Nepal had the highest texture differences, indicating that brightness contrast and texture difference describe related but not identical image properties.
 
 \section{Study Area Comparison}
 
