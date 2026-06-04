@@ -9,11 +9,14 @@ This perspective also distinguishes the workflow from most building footprint ex
 
 This is particularly relevant for heterogeneous and partly informal settlement structures in the Global South, where available building datasets can differ in completeness and geometric consistency \cite{sirko2021continentalscalebuildingdetectionhigh, CHAMBERLAIN2024102104}. The following discussion therefore focuses on where this proof-of-concept workflow produced meaningful improvements, where the MLLM or SAM introduced new errors, and what this implies for future human-in-the-loop geospatial data maintenance workflows.
 
-\section{Overall Effectiveness of the Improvement Workflow}
+Foreword discussion:
 
 Before interpreting the results, it is important to acknowledge a limitation related to the input imagery. There was a temporal difference between the individual TIFF images downloaded from OpenAerialMap and the imagery used for the detection of the Google Open Buildings polygons. This was a relevant limiting factor, because the same image source could not be used for both the original building detection and the evaluation carried out in this thesis. This limitation is mainly caused by the restricted availability of very high-resolution imagery across different global regions and by the closed-source nature of the aerial and satellite imagery used for Google Open Buildings. It should also be noted that even in the official Google Open Buildings Explorer, visible shifts between the displayed background imagery and the building polygons can occur, suggesting that different imagery may have been used during the original detection workflow (search in technical report which data was used and cite).
 
 This aspect has to be considered before discussing the results, because the imagery used in this thesis was acquired within a time period of approximately three years around the data used by Google and was not always captured at the same time. Therefore, the evaluated polygons are not necessarily true to the real-world situation at the time of analysis, but rather true to the imagery used in this work. In this thesis, this temporal and positional uncertainty was not treated as a central research question, because this would shift the focus towards remote-sensing image acquisition, image registration, and georeferencing accuracy. Instead, the focus was placed on the quality assessment and selective correction of existing vector data. The following interpretation therefore assumes that the ideal reference would be a building polygon that is geometrically correct with respect to the evaluated imagery, while temporal mismatch, image distortion, and georeferencing uncertainty are treated as external limiting factors (maybe cite here a widely used remote-sensing paper about georeferencing distortion or positional shifts based on known ground control points).
+
+
+\section{Overall Effectiveness of the Improvement Workflow}
 
 Overall, the results indicate that the input polygons were improved in all five study areas. Across the full benchmark, the workflow increased the share of improved polygons by xx percent. However, this result has to be interpreted in relation to the initially low quality of the input data. Only XX percent of the original polygons were rated above ok, while xx percent were rated as ok or bad. In addition, xx polygons were removed from the starting dataset because no underlying house could be detected in the imagery.
 
@@ -27,9 +30,9 @@ Mexico and Nepal performed worse compared with the other study areas. Their inpu
 
 Overall, the central result is that the workflow improved most manually evaluated polygons, but not equally in every study area. The quality transition and improvement-rate results therefore have to be interpreted in relation to the initial polygon quality, image quality, local contrast, settlement morphology, and the structural complexity of the buildings.
 
-
-
 \section{What Types of Errors Were Corrected Successfully?}
+
+Here we are gonna look at the error composation and how it changed, so the starting polygons where xx percent where shifted acoording to the manually given labels, when comparing it with the tiff images from openarialimagery
 
 Discuss the error composition. This should focus on the strong reduction of shifted polygons and the remaining difficulties with shape mismatch, missing parts, vegetation, and overcorrection.
 
