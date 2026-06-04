@@ -188,7 +188,7 @@ Mozambique and Niger show the strongest agreement with the identity line and the
 In contrast, Mexico and Nepal show broader dispersion patterns. Only 18.8\% of buildings in Mexico and 13.0\% in Nepal remain within \(\pm10\%\) of the original area. Furthermore, strong positive deviations occur more frequently, with 31.8\% of Mexican and 27.1\% of Nepalese buildings increasing by more than 50\% relative to their original footprint area. Liberia shows an intermediate pattern, with 32.1\% remaining within \(\pm10\%\), but also a considerable proportion of strong positive deviations (20.2\%).
 \subsection{Influence of Google Open Buildings Confidence}
 
-The google dataset includes a column where for each detection aso the confidence value is stored, i analysed if the confidence has a einfluss on the postprocessed quality lable. TThe corrolation with the given orignal manual score and confidence R = 0.32 so it correlty. 
+The google dataset includes a column where for each detection also the confidence value is stored, i analysed if the confidence has a einfluss on the postprocessed quality lable. TThe corrolation with the given orignal manual score and confidence R = 0.32 so it correlty. 
 
 \subsection{Original, SAM and Post-processed Geometry Complexity}
 
@@ -240,7 +240,11 @@ Niger      & 176 & 2.053 & 0.522 & 26.7 & 18.9 \\
 \end{tabular}
 \end{table}
 
+<<<<<<< HEAD
 The table focuses on four complementary measures. \textit{Linear Weber} reports the median absolute Weber contrast after sRGB linearization. \textit{Boundary Weber} reports the median absolute Weber contrast between narrow bands directly inside and outside the building boundary. \(\Delta E_{00}\) is the mean CIEDE2000 colour difference between the average building and surrounding colours. \textit{Texture diff.} is the median texture-feature distance between the building mask and the surrounding ring, based on gradient magnitude, Laplacian response and local intensity variation.
+=======
+Mozambique showed by far the lowest roof-ground separation in the automatic analysis, with a median absolute luminance difference of 21.5 and a median Michelson contrast of 0.056. Its mean RGB distance was also the lowest of all study areas at 44.2. Nepal and Liberia formed an intermediate group, with median Michelson contrast values of 0.144 and 0.146, respectively. Mexico and Niger showed substantially stronger visual separation between buildings and their surroundings. Niger had the highest median luminance difference (82.1) and the highest median Michelson contrast (0.287), followed by Mexico with a median luminance difference of 66.2 and a median Michelson contrast of 0.246.
+>>>>>>> bb50e835d3e7efe820d14c68408e1fa5dc9d8d0c
 
 Mozambique showed by far the lowest roof-ground separation in the automatic analysis. It had the lowest median absolute linear Weber contrast (0.246), the weakest boundary contrast (0.095) and the lowest mean colour difference (\(\Delta E_{00}=10.2\)). This indicates that buildings and surrounding ground often had very similar brightness and colour values and that the immediate building boundary was also weakly expressed. Nepal and Liberia formed an intermediate group in the broad contrast comparison. However, Liberia showed a relatively high texture difference, suggesting that roofs and surroundings differed more in local texture even when the brightness contrast was not as high as in Niger or Mexico.
 
