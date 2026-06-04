@@ -32,7 +32,33 @@ Overall, the central result is that the workflow improved most manually evaluate
 
 \section{What Types of Errors Were Corrected Successfully?}
 
-Here we are gonna look at the error composation and how it changed, so the starting polygons where xx percent where shifted acoording to the manually given labels, when comparing it with the tiff images from openarialimagery
+Here we are gonna look at the error composation and how it changed, so the starting polygons where xx percent where shifted acoording to the manually given labels, when comparing it with the tiff images from openarialimagery. 
+
+some words regarding the shifted category as wenn seen in chapter xx this is not a systematic shift in direction or distance, even when the direction is samwhat similar the distance of the shift is still in a range from x to x meter as in niger for example. 
+\cite{Toutin01052004} listed the error cases thta to imagery of the same error cna have different outcomes or look different, based on differing die Plattform, zum Beispiel Satellit oder Flugzeug;
+den Sensor und seine Blickgeometrie;
+Änderungen in Flughöhe, Lage und Geschwindigkeit;
+Erdkrümmung, Erdrotation und Relief; also off nadir aufnahmen and states thta espacialy for high resolution images this can eappear very present.
+Furthermore \cite{Toutin01052004} says that during Orthorektifizierung this changes should be elimintaed usingdas verwendete Geländemodell;
+die Genauigkeit der Ground Control Points;
+das geometrische Sensormodell;
+die Qualität der Eingangsdaten but because all of those variables are unknown for the google open building image the shift was negelected and could not be tried to be fixed earlier in the tiff but was relied on the workflow to change the vector data.
+***********************************discuss shift remote sensing************
+
+In the technical report of open buildings google (cite) it was also stated that from the dataset imagery that was used to create the dataset different timestamps and resoltuions where used in different areas orthorectification errors can cause building footprints to be generated a few metres from their true position. So its very hard to tell what exactly introduced the shifted error but it can also be a mix of causes - google doesnt state such informations of the source tif in the building dataset. But this is again an advantage of my algorithm so if you let it rip you afterwards have it adapted to your tiff where you know all those things.
+
+
+
+Back to the gis domain and for that the workflow was able to correct that shift that is the main thing for this work because as mentioned it treades the individual tiffs as golden standart and negelects the remote sensing aspects. It was but by far the biggest hustle because this shift introduced so many problems that had to deal with the workflow, for example the main reason to introduce the seperation of the part house workflow and the full house was because many polygon where so shifted thta if i croped a patch around it the patch didnt containd all of the house.
+
+
+But now lets klammer out the shifted category and look at the other - the shape mismatch was mostly given during the manuall labeling if the polygon didnt represemnt the house cleary or very poorly, those polygon thta where labeld with shape mismatch and general quality bad would be nutzlose in practice and had nothing to do with the underlying house so it was one of the biggest jumps to eliminate those error categories that made up for some of the worse errors. 
+The oversimplify category was in the original dataset with 13.5 the second third bigest category where often not all of the details where caputred in the original dataset, i had the feeling that in the regulazation set open google building (search the literatere and what they did for litetrature) had a strong regulazition what made the poylgons stable and neatly recatangular but also quite impossible to capture small details of incrmented growthed buildings. HEre the worklfow shined, the visual model could focus on each polygon at onec and did three laps until - so the sam intermediat output had the highest level of accuracy to the imagery but buildings need to be regularizet and therefore i choose a very non intrusive regulazation step. 
+
+missing parts and extra parts increased mostly due that the start polygons often where so shifted and didnt follow at all the currennt house that the categgories where few times assigned. It was hard to identifiy other errors when the poylgon was shifted because it need to be eyebaled if the polygon if it would not be shifted it would include all part or extra parts. and often the polygon wasnt even that good that you could say in general its the right shape
+
+speaking of the postprocessing, between the sam step and the regularized endresult 210/1263 houses the regulariaztion step had a new geometric error included during regularaztaion. This step was a hard one to fine tune  because you want it so much that it filters out some error and incostenceny of the visual model but keep the small features etc
+
 
 Discuss the error composition. This should focus on the strong reduction of shifted polygons and the remaining difficulties with shape mismatch, missing parts, vegetation, and overcorrection.
 
