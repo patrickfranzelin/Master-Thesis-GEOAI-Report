@@ -528,7 +528,28 @@ extra, includes, non-building, surrounding area, surrounding ground, vegetation,
 
 In addition to the rule-based text analysis, a small manual qualitative evaluation of the generated sentences was carried out. A separate annotation interface was created for this purpose. The interface displayed the aerial image patch with the original polygon overlay and the corresponding MLQA-generated error description. The evaluator assigned one of four sentence-quality labels: \textit{Correct}, \textit{Partly correct}, \textit{Too vague}, or \textit{Wrong}. Initially, 50 examples per study area were exported for this evaluation. However, while reviewing the generated descriptions it became apparent that the model repeatedly produced very similar sentence structures and reused the same terms, especially references to missing and extra parts. Therefore, the qualitative evaluation was limited to approximately 100 sentences, as additional samples were unlikely to provide substantially new insight into the linguistic behaviour of the model.
 
-For evalution and espacialy for discussion i ran a methodology to analyse the contrast and rgb stretch of the five study areas, where i used to differnet methods, once i took all houses that wehere labeld perfect after the code run and than i compared the mask inside the polygon with a ring of xx meters around the house, the second approach was to label by hand 25 pictures - 5 per study area where i placed points approxamtely xx inside the polygon and xx outside on the surrounding ground avoiding nearby houses.
+\subsection{Building-to-Surrounding Contrast Analysis}
+\label{sec:building_surrounding_contrast}
+
+An additional image-based analysis was carried out to compare the visual contrast between buildings and their immediate surroundings in the five study areas. This analysis was included because low roof-ground contrast was expected to influence both the MLLM visibility decision and the SAM-based segmentation step. Two complementary approaches were used: an automatic polygon-ring analysis and a smaller manually controlled point-sampling check.
+
+For the automatic analysis, all post-processed buildings that received the manual quality label \textit{perfect} were selected. This restriction ensured that the analysed building mask corresponded closely to the visible roof and that the contrast measurement was not dominated by geometric errors in the polygon. For each selected building, the final post-processed polygon was transformed into patch pixel coordinates and rasterized as the building mask. A local surrounding mask was then created by buffering the polygon outward by 48 pixels and subtracting an inner 4-pixel gap around the building boundary. The gap reduces direct edge effects caused by antialiasing, shadows, or small boundary misalignments. In the final run, pixels covered by neighbouring building polygons were excluded from the surrounding mask so that the background measurement represented local ground context as far as possible. If the cleaned ring contained too few pixels, the remaining non-building pixels in the patch were used as a fallback background mask.
+
+The contrast metrics were computed on the RGB patch extracted for the building. First, luminance was calculated from the RGB values as
+
+\[
+Y = 0.2126R + 0.7152G + 0.0722B .
+\]
+
+For each building, the mean luminance inside the building mask and inside the surrounding mask was calculated. The absolute luminance difference was then used as the main contrast measure. In addition, Michelson contrast was calculated as
+
+\[
+C_M = \frac{|Y_\mathrm{building} - Y_\mathrm{surrounding}|}{Y_\mathrm{building} + Y_\mathrm{surrounding}},
+\]
+
+and the Euclidean distance between the mean RGB values of the building and surrounding masks was used as a colour-separation measure. The results were aggregated by study area using the number of analysed buildings, the mean and median absolute luminance difference, the mean and median Michelson contrast, and the mean RGB distance.
+
+As a plausibility check, a second manually controlled contrast analysis was performed on 25 example patches, with five patches per study area. In this approach, circular sample points with a radius of 14 pixels were placed manually on roof surfaces and on nearby surrounding ground. Points were placed to avoid neighbouring buildings and obvious non-ground objects where possible. The same luminance, Michelson contrast, and RGB-distance metrics were then calculated from the sampled point masks. This manual point analysis was not used as the main quantitative result because of the small sample size, but it served to check whether the automatic polygon-ring analysis was distorted by local background clutter.
 
 \section{Implementation Details}
 
