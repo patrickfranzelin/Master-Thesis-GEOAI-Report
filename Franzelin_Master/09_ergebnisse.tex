@@ -7,9 +7,9 @@ As mentioned in Section~\ref{ch:study_area}, the workflow was applied to five di
 
 \subsection{MLQA Classification and Manual Evaluation Sample}
 
-In total, the code was run on 2’842 houses from the Google Open Buildings dataset. These buildings were processed, stored and rectangularized. From these, 1’633 houses were additionally processed with the complete improvement workflow. Since this step required relatively long processing times, the number of buildings was mostly limited to around 600 houses per run and per study area. The remaining 1’577 buildings were therefore only processed with the direct global regularisation algorithm (Section~\ref{sec:rectangularization}). During the workflow, a total of 1’283 buildings were identified as incorrect or problematic detections within the Google Open Buildings dataset.
+In total, the code was run on 2,842 houses from the Google Open Buildings dataset. The mutually exclusive MLQA routing classes comprised 1,283 cases classified as \textit{No visible}, 971 as \textit{Partial house}, and 588 as \textit{Full house}. Thus, 1,559 buildings were routed as visible partial- or full-house cases. A SAM-derived polygon was available for 1,518 buildings and a post-processed polygon for 1,352 buildings.
 
-From the 1’633 houses that passed through the complete workflow, 1’256 buildings were manually evaluated, as described in Section~\ref{sec:evaluation_strategy}. The number of evaluated buildings is not the same for all countries. This is mainly because some buildings from the Google Open Buildings dataset were identified as false positives and were therefore removed from the dataset. In addition, the evaluation was only possible when the original detection, the SAM result and the final post-processed polygon could clearly be matched to each other. In some cases, not all three versions could be assigned reliably, so these buildings were excluded from the manual evaluation.
+From these outputs, 1,256 buildings were manually evaluated, as described in Section~\ref{sec:evaluation_strategy}. The number of evaluated buildings is not the same for all countries. This is mainly because some buildings from the Google Open Buildings dataset were identified as false positives and were therefore removed from the dataset. In addition, the evaluation was only possible when the original detection, the SAM result and the final post-processed polygon could clearly be matched to each other. In some cases, not all three versions could be assigned reliably, so these buildings were excluded from the manual evaluation.
 
 \begin{table}[htp]
 	\begin{center}
@@ -30,11 +30,11 @@ From the 1’633 houses that passed through the complete workflow, 1’256 build
 			Niger      & 500 & 222 & 103 & 175 & 256 \\
 			\midrule
 			\textbf{Total} &
-			\textbf{2842} &
-			\textbf{1283} &
+			\textbf{2,842} &
+			\textbf{1,283} &
 			\textbf{971} &
 			\textbf{588} &
-			\textbf{1256} \\
+			\textbf{1,256} \\
 			\bottomrule
 		\end{tabular}
 		\label{tab:mlqa_overview}
@@ -43,12 +43,12 @@ From the 1’633 houses that passed through the complete workflow, 1’256 build
 
 MLQA stands for \textit{Machine Learning Quality Assurance}. In this step, the Qwen3 8B model was used to analyse each building detection before the actual post-processing workflow was applied. The model first identified whether a building was clearly visible in the satellite image. If the building was visible, the model then generated positive and negative prompt points for the SAM segmentation and additionally produced a short qualitative description of the detected errors.
 
-Buildings classified as \textit{No visible} were automatically removed from further processing because the underlying building could not be identified reliably in the imagery. The distinction between \textit{Partial house} and \textit{Full house} is described in Section~\ref{sec:decision_logic_routing}. In this step, the model evaluated whether large parts of the visible building were cut off by the original polygon. Based on this classification, the workflow was routed differently for partially covered and fully covered houses. The column \textit{Total evaluated} represents the subset of buildings that were finally post-processed and manually evaluated.
-Based on this manually evaluated subset, the following sections compare the original detections, the directly regularised polygons and the improved post-processing results.
+Buildings classified as \textit{No visible} were generally removed from further routing because the underlying building could not be identified reliably in the imagery; three such cases nevertheless remained in the evaluated subset. The distinction between \textit{Partial house} and \textit{Full house} is described in Section~\ref{sec:decision_logic_routing}. In this step, the model evaluated whether large parts of the visible building were cut off by the original polygon. Based on this classification, the workflow was routed differently for partially covered and fully covered houses. The column \textit{Total evaluated} represents the subset of buildings that were finally post-processed and manually evaluated.
+Based on this manually evaluated subset, the following sections compare the original detections, the directly regularized polygons and the improved post-processing results.
 
 \subsection{Pipeline Output Availability}
 
-Not all buildings passed through all processing stages. Table~\ref{tab:pipeline_dropoff} shows the main drop-off between the MLQA step, the SAM-based refinement and the final post-processed output. This is important because the final manual evaluation only represents buildings for which all relevant intermediate outputs could be compared. The largest reduction occurred before the SAM output stage. This was especially visible in Mozambique and Nepal, where many input polygons were classified as not clearly visible or did not result in a usable SAM geometry. Once a SAM geometry was available, the post-processing step produced an output for most cases. In Mozambique and Niger, more than 96\% of the SAM outputs also produced a post-processed geometry.
+Not all buildings passed through all processing stages. Table~\ref{tab:pipeline_dropoff} shows the main drop-off between the MLQA step, the SAM-based refinement and the final post-processed output. This is important because the final manual evaluation only represents buildings for which all relevant intermediate outputs could be compared. The largest reduction occurred before the SAM output stage. This was especially visible in Mozambique and Nepal, where many input polygons were classified as not clearly visible or did not result in a usable SAM geometry. Once a SAM geometry was available, the post-processing step produced an output for most cases. In Mozambique and Niger, 96.0\% and 97.4\% of the SAM outputs, respectively, also produced a post-processed geometry.
 
 \begin{table}[htb]
 \centering
@@ -56,13 +56,15 @@ Not all buildings passed through all processing stages. Table~\ref{tab:pipeline_
 \label{tab:pipeline_dropoff}
 \begin{tabular}{lrrrrr}
 \toprule
-Country & MLQA & SAM output & Postprocessed & Evaluated & Post/SAM (\%) \\
+Country & MLQA & SAM output & Post-processed & Evaluated & Post/SAM (\%) \\
 \midrule
 Liberia    & 616 & 483 & 399 & 380 & 82.6 \\
 Mexico     & 500 & 331 & 291 & 261 & 87.9 \\
 Mozambique & 600 & 176 & 169 & 167 & 96.0 \\
 Nepal      & 626 & 263 & 235 & 192 & 89.4 \\
 Niger      & 500 & 265 & 258 & 256 & 97.4 \\
+\midrule
+\textbf{Total} & \textbf{2,842} & \textbf{1,518} & \textbf{1,352} & \textbf{1,256} & \textbf{89.1} \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -75,27 +77,27 @@ In general, the improvement produced by the workflow was clearly visible across 
 
 Figure~\ref{fig:transition_heatmap} shows the transition from the original polygon quality to the post-processed quality after applying the workflow. The rows represent the original rating of the building polygons, while the columns show the final rating after post-processing. The majority of buildings that originally received a \textit{bad} or \textit{ok} rating were improved towards the categories \textit{good} and especially \textit{perfect}. 
 
-Out of the 584 buildings that were originally classified as \textit{bad}, 293 were transformed into \textit{perfect} polygons after post-processing. Another 155 buildings improved to the category \textit{good}, while only 67 remained in the \textit{bad} category. Similarly, from the 659 buildings that originally received an \textit{ok} rating, 384 were improved to \textit{perfect} and 134 to \textit{good}. Only 49 buildings from this category were finally still classified as \textit{bad}. 
+Out of the 581 buildings that were originally classified as \textit{bad}, 292 were transformed into \textit{perfect} polygons after post-processing. Another 153 buildings improved to the category \textit{good}, while only 67 remained in the \textit{bad} category. Similarly, from the 656 buildings that originally received an \textit{ok} rating, 382 were improved to \textit{perfect} and 134 to \textit{good}. Only 49 buildings from this category were finally still classified as \textit{bad}.
 
-The results also show that almost no buildings were initially classified as \textit{good}. Only 20 buildings started in this category, from which 10 improved further to \textit{perfect}. No building in the manually evaluated subset was already classified as \textit{perfect} before the workflow was applied.
+The results also show that almost no buildings were initially classified as \textit{good}. Only 19 buildings started in this category, from which 10 improved further to \textit{perfect}. No building in the manually evaluated subset was already classified as \textit{perfect} before the workflow was applied. After post-processing, the distribution comprised 116 \textit{bad}, 163 \textit{ok}, 293 \textit{good}, and 684 \textit{perfect} ratings.
 
 \begin{figure}[H]
 	\centering  
 	\includegraphics[scale=0.65]{Franzelin_Master/img/02_original_to_post_transition_heatmap.png}
-	\caption{Transition from original polygon quality to post-processed polygon quality based on the manual evaluation.}
+	\caption{Transition from original polygon quality to post-processed polygon quality based on the manual evaluation (\(n=1,256\)).}
 	\label{fig:transition_heatmap}
 \end{figure}
 
 \subsection{Improvement Rates by Study Area}
 
-The post-processing workflow improved the majority of evaluated building polygons in all study areas. Averaged across all five locations, \textbf{82.3\%} of the manually evaluated buildings showed an improvement after post-processing, while \textbf{12.9\%} remained largely unchanged and \textbf{4.6\%} were degraded. 
+The post-processing workflow improved the majority of evaluated building polygons in all study areas. Across all five locations, 1,040 buildings (\textbf{82.8\%}) showed an improvement after post-processing, while 164 (\textbf{13.1\%}) remained unchanged and 52 (\textbf{4.1\%}) were degraded.
 
-The strongest overall improvements were observed in Niger and Mozambique. In Niger, \textbf{86.7\%} of the evaluated buildings improved, corresponding to 222 out of 256 manually checked samples. Mozambique showed a very similar behaviour, with \textbf{86.2\%} improved buildings (144 out of 167 samples). Liberia also produced strong results, where \textbf{85.8\%} of the evaluated polygons improved after processing (332 out of 387 buildings). Lower, but still clearly positive improvement rates were observed in Mexico and Nepal. In Mexico, \textbf{77.0\%} of the evaluated buildings improved (201 out of 261), while \textbf{17.2\%} remained unchanged and \textbf{5.7\%} degraded slightly after processing. Nepal showed the lowest overall improvement rate with \textbf{76.0\%} improved buildings (146 out of 192 samples) and also the highest degradation share, where \textbf{8.3\%} of the polygons received a worse rating after post-processing.
+The strongest overall improvements were observed in Niger and Mozambique. In Niger, \textbf{86.7\%} of the evaluated buildings improved, corresponding to 222 out of 256 manually checked samples; 9.0\% remained unchanged and 4.3\% degraded. Mozambique showed a very similar behaviour, with \textbf{86.2\%} improved buildings (144 out of 167 samples), 10.8\% unchanged, and 3.0\% degraded. Liberia also produced strong results, where \textbf{86.1\%} of the evaluated polygons improved after processing (327 out of 380 buildings), 12.6\% remained unchanged, and 1.3\% degraded. Lower, but still clearly positive improvement rates were observed in Mexico and Nepal. In Mexico, \textbf{77.0\%} of the evaluated buildings improved (201 out of 261), while \textbf{17.2\%} remained unchanged and \textbf{5.7\%} degraded slightly after processing. Nepal showed the lowest overall improvement rate with \textbf{76.0\%} improved buildings (146 out of 192 samples), 15.6\% unchanged, and \textbf{8.3\%} degraded.
 
 \begin{figure}[htb]
 	\centering  
-	\includegraphics[scale=0.65]{Franzelin_Master/img/postprocessingeffectbycountry.png}
-	\caption{Post-processing effect by study area based on the manual evaluation.}
+	\includegraphics[scale=0.65]{Franzelin_Master/img/02_country_improvement_rates.png}
+	\caption{Post-processing effect by study area based on the manual evaluation (\(n=1,256\)).}
 	\label{fig:country_improvement_rates}
 \end{figure}
 
@@ -103,45 +105,44 @@ The strongest overall improvements were observed in Niger and Mozambique. In Nig
 
 \subsection{Dominant Errors in Original and Post-processed Geometries}
 
-During the manual evaluation, geometry error categories were additionally assigned to each building polygon. The complete taxonomy is described in Section~\ref{sec:evaluation_criteria_error_taxonomy}. Five principal error categories were defined: \textit{SHIFTED}, \textit{SHAPE\_MISMATCH}, \textit{OVERSIMPLIFIED}, \textit{MISSING\_PARTS}, and \textit{EXTRA\_PARTS}. The evaluation further recorded whether the post-processing workflow introduced a new geometric error that was not present in the original polygon. Across the complete manually evaluated dataset, this occurred in \textbf{16.6\%} of all evaluated buildings.
+During the manual evaluation, geometry error categories were additionally assigned to each building polygon. The complete taxonomy is described in Section~\ref{sec:evaluation_criteria_error_taxonomy}. Five principal error categories were defined: \textit{SHIFTED}, \textit{SHAPE\_MISMATCH}, \textit{OVERSIMPLIFIED}, \textit{MISSING\_PARTS}, and \textit{EXTRA\_PARTS}. The evaluation further recorded whether the post-processing workflow introduced a new geometric error that was not present in the original polygon. Across the complete manually evaluated dataset, this occurred in 207 of 1,256 buildings (\textbf{16.5\%}).
 
 \subsection{Detected Tree Context and New Post-processing Errors}
 
-Since vegetation was one of the visible difficulties in several study areas, the relation between detected tree context and newly introduced errors was also checked at building level. This analysis does not measure confirmed tree occlusions, because the database only stores detected tree masks and not whether a tree dent was actually detected and repaired on the building boundary. It should therefore be interpreted only as a proxy for vegetation-influenced image context. Still, buildings with detected trees showed a higher share of newly introduced post-processing errors than buildings without detected trees. The new-error rate increased from 13.4\% without detected trees to 18.7\% with detected trees. In high tree-context cases, the rate reached 23.0\%. The binary association was weak (\(\phi=0.07\)), so tree context alone does not explain the failures, but it indicates that vegetation-rich scenes are more difficult for the workflow.
+Since vegetation was one of the visible difficulties in several study areas, the relation between detected tree context and newly introduced errors was also checked at building level. This analysis does not measure confirmed tree occlusions, because the database only stores detected tree masks and not whether a tree dent was actually detected and repaired on the building boundary. It should therefore be interpreted only as a proxy for vegetation-influenced image context. Cases with no tree mask were classified as \textit{no detected tree}; tree-area ratios up to 0.25 as \textit{low}, ratios above 0.25 and up to 1.0 as \textit{medium}, and ratios above 1.0 as \textit{high tree context}. Buildings with detected trees showed a higher share of newly introduced post-processing errors than buildings without detected trees. The new-error rate increased from 13.4\% without detected trees to 18.7\% among the 726 buildings in the aggregated detected-tree group. In high tree-context cases, the rate reached 23.0\%. The binary association was weak (\(\phi=0.07\)), so tree context alone does not explain the failures, but it indicates that vegetation-rich scenes are more difficult for the workflow.
 
 \begin{table}[htb]
 \centering
-\caption{Post-processing introduced errors by detected tree context.}
+\caption{Post-processing introduced errors by detected tree context for the evaluated subset (\(n=1,256\)).}
 \label{tab:new_errors_tree_context}
 \begin{tabular}{lrrrr}
 \toprule
 Tree context & n & New errors (\%) & Good/perfect (\%) & Missing parts (\%) \\
 \midrule
 No detected tree & 530 & 13.4 & 83.8 & 8.7 \\
-Tree detected    & 726 & 18.7 & 73.4 & 20.9 \\
-High tree context & 235 & 23.0 & 63.0 & 23.0 \\
+Low              & 189 & 18.0 & 82.5 & 16.9 \\
+Medium           & 302 & 15.9 & 75.8 & 21.9 \\
+High             & 235 & 23.0 & 63.0 & 23.0 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
 \begin{figure}[H]
 	\centering  
-	\includegraphics[scale=0.65]{Franzelin_Master/img/shiftinerrorcompostion2.png}
-	\caption{Distribution of geometry error categories before and after post-processing for each study area and for the complete manually evaluated dataset.}
+	\includegraphics[width=\textwidth]{Franzelin_Master/img/02_error_categories_by_location_total.png}
+	\caption{Distribution of multi-label geometry error categories before and after post-processing for each study area and for the complete manually evaluated dataset (\(n=1,256\)).}
 	\label{fig:error_profile_by_location}
 \end{figure}
 
-********in stash noch ein diagram*********think if this is the best one or table
+Figure~\ref{fig:error_profile_by_location} summarizes the distribution of error categories before and after post-processing. The dominant error type in the original Google Open Buildings dataset was \textit{SHIFTED}. Across the complete manually evaluated subset, 971 buildings (\textbf{77.3\%}) exhibited a noticeable spatial displacement between the polygon geometry and the visible roof structure in the aerial imagery. The highest prevalence of this error category was observed in Mozambique (\textbf{93.4\%}), followed by Niger (\textbf{81.6\%}) and Liberia (\textbf{77.6\%}).
 
-Figure~\ref{fig:error_profile_by_location} summarizes the distribution of error categories before and after post-processing. The dominant error type in the original Google Open Buildings dataset was \textit{SHIFTED}. Across the complete manually evaluated subset, \textbf{77.4\%} of all buildings exhibited a noticeable spatial displacement between the polygon geometry and the visible roof structure in the aerial imagery. The highest prevalence of this error category was observed in Mozambique (\textbf{93.4\%}), followed by Niger (\textbf{81.6\%}) and Liberia (\textbf{78.0\%}).
+The post-processing workflow reduced the occurrence of shifted polygons in all study areas. Across the complete dataset, the proportion of buildings classified as shifted decreased from 971 (\textbf{77.3\%}) to 54 (\textbf{4.3\%}). The largest reduction was observed in Mozambique, where the share of shifted polygons decreased from \textbf{93.4\%} to \textbf{3.6\%}. Comparable reductions were observed in Liberia (\textbf{77.6\%} to \textbf{5.8\%}) and Niger (\textbf{81.6\%} to \textbf{5.1\%}).
 
-The post-processing workflow reduced the occurrence of shifted polygons in all study areas. Across the complete dataset, the proportion of buildings classified as shifted decreased from \textbf{77.4\%} to \textbf{4.4\%}. The largest reduction was observed in Mozambique, where the share of shifted polygons decreased from \textbf{93.4\%} to \textbf{3.6\%}. Comparable reductions were observed in Liberia (\textbf{78.0\%} to \textbf{5.9\%}) and Niger (\textbf{81.6\%} to \textbf{5.1\%}).
+The second most frequent error category in the original dataset was \textit{SHAPE\_MISMATCH}, which decreased from 474 buildings (\textbf{37.7\%}) to 164 (\textbf{13.1\%}). This category describes cases in which the polygon geometry did not adequately follow the visible building outline. Nepal showed the highest proportion of shape mismatch errors, affecting \textbf{61.5\%} of the evaluated buildings. Although the post-processing workflow reduced this error category in all study areas, it remained comparatively frequent in Nepal after processing (\textbf{25.0\%}).
 
-The second most frequent error category in the original dataset was \textit{SHAPE\_MISMATCH}. This category describes cases in which the polygon geometry did not adequately follow the visible building outline. Nepal showed the highest proportion of shape mismatch errors, affecting \textbf{61.5\%} of the evaluated buildings. Although the post-processing workflow reduced this error category in all study areas, it remained comparatively frequent in Nepal after processing (\textbf{25.0\%}).
+In contrast, the relative occurrence of the categories \textit{MISSING\_PARTS} and \textit{EXTRA\_PARTS} increased after post-processing. Across the full manually evaluated dataset, missing parts increased from 95 buildings (\textbf{7.6\%}) to 198 (\textbf{15.8\%}), while extra parts increased from 31 (\textbf{2.5\%}) to 134 (\textbf{10.7\%}). These error types are primarily associated with segmentation artefacts introduced during the SAM-based reconstruction and with geometric simplifications applied during the polygon regularization stage. In such cases, roof sections were either omitted or additional geometry was introduced beyond the visible building outline.
 
-In contrast, the relative occurrence of the categories \textit{MISSING\_PARTS} and \textit{EXTRA\_PARTS} increased after post-processing. Across the full manually evaluated dataset, the proportion of polygons containing missing parts increased from \textbf{7.5\%} to \textbf{15.8\%}, while the proportion containing extra parts increased from \textbf{2.5\%} to \textbf{10.6\%}. These error types are primarily associated with segmentation artefacts introduced during the SAM-based reconstruction and with geometric simplifications applied during the polygon regularisation stage. In such cases, roof sections were either omitted or additional geometry was introduced beyond the actual building outline.
-
-The category \textit{OVERSIMPLIFIED} was comparatively rare both before and after processing. Across the complete dataset, its frequency decreased from \textbf{13.6\%} in the original dataset to \textbf{2.1\%} after post-processing.
+The category \textit{OVERSIMPLIFIED} was comparatively rare both before and after processing. Across the complete dataset, its frequency decreased from 171 buildings (\textbf{13.6\%}) in the original dataset to 27 (\textbf{2.1\%}) after post-processing.
 
 It should be noted that multiple error categories could be assigned simultaneously to a single building polygon. Consequently, the cumulative percentages within a study area may exceed 100\%. Furthermore, polygons classified as \textit{perfect} after post-processing were not assigned any remaining geometry error category and therefore do not contribute to the post-processing error distributions shown in Figure~\ref{fig:error_profile_by_location}.
 
@@ -157,19 +158,19 @@ It should be noted that multiple error categories could be assigned simultaneous
 
 \subsection{Magnitude and Direction of Positional Corrections}
 
-Since \textit{SHIFTED} was the dominant error category in the original dataset, the spatial displacement of these cases was analysed in more detail. For this purpose, centroid shift vectors were calculated between the original polygons labelled as \textit{SHIFTED} and the corresponding post-processed polygons. The aim of this analysis was to assess whether the displacement followed a homogeneous direction that could have been corrected by a simple global translation before running the workflow.
+Since \textit{SHIFTED} was the dominant error category in the original dataset, the spatial displacement of these 971 cases was analysed in more detail. For this purpose, centroid shift vectors were calculated between the original polygons labelled as \textit{SHIFTED} and the corresponding post-processed polygons using PostGIS geography distances in metres. The aim of this analysis was to assess whether the displacement followed a homogeneous direction that could have been corrected by a simple global translation before running the workflow.
 
 
 \begin{figure}[htb]
 	\centering  
 	\includegraphics[scale=0.65]{Franzelin_Master/img/04_post_shift_vector_scatter_by_country.png}
-	\caption{Centroid displacement vectors for originally shifted buildings by study area.}
+	\caption{Centroid displacement vectors for originally shifted buildings by study area (\(n=971\)).}
 	\label{fig:error_profile_shift}
 \end{figure}
 
-The scatterplots in Figure~\ref{fig:error_profile_shift} show that centroid displacement patterns differ substantially between study areas. Liberia, Mexico, and Nepal exhibit broadly distributed shift vectors, with considerable variation in both displacement magnitude and direction. Nepal shows the largest spread (\(sd_{dx}=2.61\,\mathrm{m}\), \(sd_{dy}=3.80\,\mathrm{m}\), \(p90=8.88\,\mathrm{m}\)), followed by Mexico (\(sd_{dx}=1.95\,\mathrm{m}\), \(sd_{dy}=2.94\,\mathrm{m}\), \(p90=7.20\,\mathrm{m}\)). Liberia exhibits a lower but still noticeable variability (\(sd_{dx}=1.29\,\mathrm{m}\), \(sd_{dy}=1.61\,\mathrm{m}\), \(p90=4.68\,\mathrm{m}\)).
+The scatterplots in Figure~\ref{fig:error_profile_shift} show that centroid displacement patterns differ substantially between study areas. Liberia, Mexico, and Nepal exhibit broadly distributed shift vectors, with considerable variation in both displacement magnitude and direction. Nepal shows the largest spread (\(n=124\), \(sd_{dx}=2.61\,\mathrm{m}\), \(sd_{dy}=3.80\,\mathrm{m}\), \(p90=8.88\,\mathrm{m}\)), followed by Mexico (\(n=187\), \(sd_{dx}=1.95\,\mathrm{m}\), \(sd_{dy}=2.94\,\mathrm{m}\), \(p90=7.20\,\mathrm{m}\)). Liberia exhibits a lower but still noticeable variability (\(n=295\), \(sd_{dx}=1.29\,\mathrm{m}\), \(sd_{dy}=1.61\,\mathrm{m}\), \(p90=4.68\,\mathrm{m}\)).
 
-Mozambique and Niger show more concentrated displacement patterns with lower spread values (Mozambique: \(sd_{dx}=0.79\,\mathrm{m}\), \(sd_{dy}=0.86\,\mathrm{m}\); Niger: \(sd_{dx}=0.85\,\mathrm{m}\), \(sd_{dy}=0.78\,\mathrm{m}\)). However, despite this clustering, displacement directions and magnitudes still vary within both countries.
+Mozambique and Niger show more concentrated displacement patterns with lower spread values (Mozambique: \(n=156\), \(sd_{dx}=0.79\,\mathrm{m}\), \(sd_{dy}=0.86\,\mathrm{m}\); Niger: \(n=209\), \(sd_{dx}=0.85\,\mathrm{m}\), \(sd_{dy}=0.78\,\mathrm{m}\)). However, despite this clustering, displacement directions and magnitudes still vary within both countries.
 
 \section{Geometric Changes After Refinement}
 
@@ -179,22 +180,22 @@ Mozambique and Niger show more concentrated displacement patterns with lower spr
 \begin{figure}[H]
 \centering  
 	\includegraphics[scale=0.65]{Franzelin_Master/img/03_original_vs_post_area_scatter.png}
-	\caption{Comparison of original and post-processed building areas by study area.}s
+	\caption{Comparison of original and post-processed building areas by study area.}
 	\label{fig:area_comparison}
 \end{figure}
 
-Figure~\ref{fig:area_comparison} compares original building areas with post-processed building areas across all study areas. A positive relationship between original and post-processed area is visible in all countries, indicating that the workflow generally preserves building size characteristics. However, the spread around the 1:1 reference line differs between study areas.
+Figure~\ref{fig:area_comparison} compares original building areas with post-processed building areas across all study areas. The signed area change was calculated as \(100(A_{post}/A_{original}-1)\), and the analysis included the 1,253 buildings with available post-processed geometry. For readability, values above the 98th percentile of either axis are omitted from the scatterplot, while the reported percentages use all 1,253 buildings. A positive relationship between original and post-processed area is visible in all countries, indicating that the workflow generally preserves building size characteristics. However, the spread around the 1:1 reference line differs between study areas.
 
 Mozambique and Niger show the strongest agreement with the identity line and the lowest variability. In Mozambique, 52.7\% of buildings remain within \(\pm10\%\) of their original area, while only 2.4\% become more than 50\% larger after post-processing. Niger also exhibits comparatively stable area preservation, with 39.1\% remaining within \(\pm10\%\).
 
 In contrast, Mexico and Nepal show broader dispersion patterns. Only 18.8\% of buildings in Mexico and 13.0\% in Nepal remain within \(\pm10\%\) of the original area. Furthermore, strong positive deviations occur more frequently, with 31.8\% of Mexican and 27.1\% of Nepalese buildings increasing by more than 50\% relative to their original footprint area. Liberia shows an intermediate pattern, with 32.1\% remaining within \(\pm10\%\), but also a considerable proportion of strong positive deviations (20.2\%).
 \subsection{Influence of Google Open Buildings Confidence}
 
-The google dataset includes a column where for each detection also the confidence value is stored, i analysed if the confidence has a einfluss on the postprocessed quality lable. TThe corrolation with the given orignal manual score and confidence R = 0.32 so it correlty. 
+The Google Open Buildings dataset includes a confidence value for each detection. This confidence was compared with the original manual quality score for all 1,256 evaluated buildings. Pearson's correlation was \(r=0.32\), while Spearman's rank correlation was \(\rho=0.31\).
 
 \subsection{Original, SAM and Post-processed Geometry Complexity}
 
-The intermediate SAM geometry was also analysed separately from the final post-processed geometry. This shows the role of the two processing steps more clearly. The raw SAM output had a much higher average vertex count than both the original Google polygons and the final post-processed polygons. On average, the original polygons had 5.27 vertices, the SAM polygons had 40.81 vertices and the final post-processed polygons had 13.45 vertices. This indicates that SAM introduced detailed image-derived boundaries, while the post-processing step reduced this complexity again. The final geometries were therefore still more detailed than the original polygons, but considerably less noisy than the raw SAM masks.
+The intermediate SAM geometry was also analysed separately from the final post-processed geometry. This shows the role of the two processing steps more clearly. Vertex counts were calculated with \texttt{ST\_NPoints} on valid geometries and include all rings, multipart components, and ring-closing coordinates. The raw SAM output had a much higher average vertex count than both the original Google polygons and the final post-processed polygons. On average, the original polygons had 5.27 vertices, the SAM polygons had 40.81 vertices and the final post-processed polygons had 13.45 vertices. The three post-processed geometries unavailable for this calculation were Liberia cases without a stored regularized geometry, resulting in \(n=1,253\) for the final stage. This indicates that SAM introduced detailed image-derived boundaries, while the post-processing step reduced this complexity again. The final geometries were therefore still more detailed than the original polygons, but considerably less noisy than the raw SAM masks.
 
 \begin{table}[htb]
 \centering
@@ -204,20 +205,20 @@ The intermediate SAM geometry was also analysed separately from the final post-p
 \toprule
 Stage & n & Mean area (m$^2$) & Mean vertices & Median vertices \\
 \midrule
-Original Google & 1256 & 73.02 & 5.27  & 5 \\
-SAM             & 1256 & 77.65 & 40.81 & 39 \\
-Postprocessed   & 1253 & 84.64 & 13.45 & 7 \\
+Original Google & 1,256 & 73.02 & 5.27  & 5 \\
+SAM-derived     & 1,256 & 77.65 & 40.81 & 39 \\
+Post-processed  & 1,253 & 84.64 & 13.45 & 7 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
 \subsection{Full-house and Partial-house Cases}
 
-The MLQA routing classes also showed different levels of difficulty. Buildings classified as \textit{full house} reached 79.6\% good or perfect final results, with a median absolute area change of 13.5\% relative to the original footprint. Buildings classified as \textit{partial house} reached a slightly lower good/perfect share of 76.3\%, but their median absolute area change was much higher at 24.8\%. This fits the visual impression from the examples: partial-house cases can be improved, but they are less stable because the workflow first has to rediscover the complete roof structure before refining it.
+The MLQA routing classes also showed different levels of difficulty. The comparison included 1,253 full- or partial-house cases; the remaining three evaluated cases were classified as \textit{No visible}. Buildings classified as \textit{full house} (\(n=530\)) reached 79.6\% good or perfect final results, with a median absolute area change of 13.5\% relative to the original footprint. Buildings classified as \textit{partial house} (\(n=723\)) reached a slightly lower good/perfect share of 76.3\%, but their median absolute area change was much higher at 24.8\%. The partial-house area statistic used the 720 cases with available post-processed geometry because the three missing regularized geometries were partial-house cases from Liberia. This fits the visual impression from the examples: partial-house cases can be improved, but they are less stable because the workflow first has to rediscover the complete roof structure before refining it.
 
 \section{Building-to-Surrounding Contrast}
 
-The building-to-surrounding contrast analysis described in Section~\ref{sec:building_surrounding_contrast} showed clear differences between the five study areas. The automatic polygon-ring analysis was applied to all post-processed buildings that were manually labelled as \textit{perfect}. The number of available samples therefore differs by country and reflects the number of high-quality final polygons available for this additional image analysis.
+The building-to-surrounding contrast analysis described in Section~\ref{sec:building_surrounding_contrast} showed clear differences between the five study areas. The automatic polygon-ring analysis was applied to all 684 post-processed buildings that were manually labelled as \textit{perfect}. The number of available samples therefore differs by country and reflects the number of high-quality final polygons available for this additional image analysis.
 
 \begin{table}[htb]
 \centering
@@ -240,21 +241,21 @@ Niger      & 176 & 2.053 & 18.9 \\
 \end{tabular}
 \end{table}
 
-The contrast value reports the median absolute Weber contrast between the building and its local surrounding ring after sRGB linearization. The texture value reports the median difference between the building and surrounding texture descriptors. Mozambique showed the lowest building-to-surrounding contrast, while Niger and Mexico showed clearly stronger brightness separation. The texture-difference values show a different pattern: Liberia and Nepal had the highest texture differences.
+The contrast value reports the median absolute linear Weber contrast between the building and its local surrounding ring after sRGB linearization. The texture value reports the median Euclidean distance between the building and surrounding texture descriptors. Mozambique showed the lowest building-to-surrounding contrast, while Niger and Mexico showed clearly stronger brightness separation. The texture-difference values show a different pattern: Liberia and Nepal had the highest texture differences.
 
 \section{Study Area Comparison}
 
 Table~\ref{tab:country_summary} summarizes several of the most important result indicators by study area, including final geometry quality, area preservation, positional correction magnitude, surrounding vegetation context, and polygon complexity changes.
 
-Nepal showed the lowest share of buildings classified as \textit{good} or \textit{perfect} after post-processing, reaching 65.6\%. It also exhibited the largest median absolute area change (33.4\%) and the largest median positional correction relative to the original Google Open Buildings polygons (5.1\,m). Furthermore, 47.4\% of the evaluated buildings had medium or high detected tree context near the polygon. Nepal also showed the strongest increase in polygon complexity, with the average vertex count increasing by 382.5\%. It should be noted that detected vegetation does not necessarily imply that the tree repair workflow was executed, as not every detected tree triggered this processing step.
+Nepal showed the lowest share of buildings classified as \textit{good} or \textit{perfect} after post-processing, reaching 65.6\%. It also exhibited the largest median absolute area change (33.4\%) and the largest median positional correction relative to the original Google Open Buildings polygons (5.1\,m). Furthermore, 47.4\% of the evaluated buildings had medium or high detected tree context near the polygon. Nepal also showed the strongest increase in polygon complexity, with the average vertex count increasing by 382.7\%. It should be noted that detected vegetation does not necessarily imply that the tree repair workflow was executed, as not every detected tree triggered this processing step.
 
-Liberia and Mexico performed within a similar range regarding final geometry quality, with 79.5\% and 72.4\% of buildings reaching the \textit{good} or \textit{perfect} category, respectively. Liberia showed a median absolute area change of 16.0\%, whereas Mexico reached 30.7\%, while both study areas exhibited relatively similar median positional corrections (3.1\,m and 3.7\,m). Mexico additionally showed a substantially higher proportion of detected surrounding vegetation (63.6\%) compared to Liberia (35.5\%). Both study areas also exhibited comparable increases in polygon complexity, with vertex increases of 154.6\% and 162.1\%, respectively.
+Liberia and Mexico performed within a similar range regarding final geometry quality, with 79.5\% and 72.4\% of buildings reaching the \textit{good} or \textit{perfect} category, respectively. Liberia showed a median absolute area change of 16.0\%, whereas Mexico reached 30.7\%, while both study areas exhibited relatively similar median positional corrections (3.1\,m and 3.7\,m). Mexico additionally showed a substantially higher proportion of detected surrounding vegetation (63.6\%) compared to Liberia (35.5\%). Both study areas also exhibited comparable increases in polygon complexity, with vertex increases of 154.7\% and 161.9\%, respectively.
 
 Niger and Mozambique achieved the strongest overall results, with 85.9\% and 83.8\% of buildings reaching the \textit{good} or \textit{perfect} categories. Both study areas also showed comparatively small median area changes and lower positional correction magnitudes. The strongest difference between these two study areas was observed in vegetation context. Mozambique showed the highest proportion of medium or high detected tree context among all study areas (68.9\%), whereas Niger exhibited the lowest proportion (11.7\%). Despite this difference, both locations showed similarly limited increases in polygon complexity compared to Nepal, Liberia, and Mexico.
 
 \begin{table}[htb]
 \centering
-\caption{Summary of final geometry quality indicators and polygon complexity changes by study area.}
+\caption{Summary of final geometry quality indicators and polygon complexity changes by study area. Good/perfect is the share with a final manual rating of \textit{good} or \textit{perfect}; area is the median absolute percentage change from the original polygon; shift is the median original-to-post-processed centroid displacement; tree is the share classified as medium or high tree context; vertex is the increase in mean vertex count from original to post-processed geometry.}
 \label{tab:country_summary}
 \begin{tabular}{lccccc}
 \hline
@@ -265,11 +266,11 @@ Shift (m) &
 Tree (\%) &
 Vertex (\%) \\
 \hline
-Liberia     & 79.5 & 16.0 & 3.1 & 35.5 & +154.6 \\
-Mexico      & 72.4 & 30.7 & 3.7 & 63.6 & +162.1 \\
+Liberia     & 79.5 & 16.0 & 3.1 & 35.5 & +154.7 \\
+Mexico      & 72.4 & 30.7 & 3.7 & 63.6 & +161.9 \\
 Mozambique  & 83.8 & 9.0  & 3.7 & 68.9 & +43.1 \\
-Nepal       & 65.6 & 33.4 & 5.1 & 47.4 & +382.5 \\
-Niger       & 85.9 & 14.7 & 1.7 & 11.7 & +45.0 \\
+Nepal       & 65.6 & 33.4 & 5.1 & 47.4 & +382.7 \\
+Niger       & 85.9 & 14.7 & 1.7 & 11.7 & +44.9 \\
 \hline
 \end{tabular}
 \end{table}
@@ -286,9 +287,9 @@ The supplementary Switzerland test compared the regularized building footprints 
 \toprule
 \textbf{Candidate} & \textbf{IoU} & \textbf{TP} & \textbf{FP} & \textbf{FN} & \textbf{Precision} & \textbf{Recall} & \textbf{F1} \\
 \midrule
-ImprovmentWorkflow & 0.10 & 387 & 38 & 101 & 0.911 & 0.793 & 0.848 \\
-ImprovmentWorkflow & 0.25 & 377 & 48 & 111 & 0.887 & 0.773 & 0.826 \\
-ImprovmentWorkflow & 0.50 & 340 & 85 & 148 & 0.800 & 0.697 & 0.745 \\
+Workflow output & 0.10 & 387 & 38 & 101 & 0.911 & 0.793 & 0.848 \\
+Workflow output & 0.25 & 377 & 48 & 111 & 0.887 & 0.773 & 0.826 \\
+Workflow output & 0.50 & 340 & 85 & 148 & 0.800 & 0.697 & 0.745 \\
 Microsoft   & 0.10 & 393 & 43 & 95  & 0.901 & 0.805 & 0.851 \\
 Microsoft   & 0.25 & 383 & 53 & 105 & 0.878 & 0.785 & 0.829 \\
 Microsoft   & 0.50 & 354 & 82 & 134 & 0.812 & 0.725 & 0.766 \\
@@ -296,9 +297,9 @@ Microsoft   & 0.50 & 354 & 82 & 134 & 0.812 & 0.725 & 0.766 \\
 \end{tabular}
 \end{table}
 
-The results show that both datasets achieved high precision and moderate to high recall against the TLM reference subset. At the strictest IoU threshold of 0.50, the regularized output reached a precision of \textbf{0.80}, a recall of \textbf{0.70} and an F1-score of \textbf{0.745}. The Microsoft source polygons performed slightly better at the same threshold, with a precision of \textbf{0.812}, a recall of \textbf{0.725} and an F1-score of \textbf{0.766}.
+The results show that both datasets achieved high precision and moderate to high recall against the TLM reference subset. At the strictest IoU threshold of 0.50, the workflow output reached a precision of \textbf{0.800}, a recall of \textbf{0.697} and an F1-score of \textbf{0.745}. The Microsoft source polygons performed slightly better at the same threshold, with a precision of \textbf{0.812}, a recall of \textbf{0.725} and an F1-score of \textbf{0.766}.
 
-This indicates that the regularisation step did not improve the footprint agreement with the authoritative Swiss reference data in this test. Instead, it slightly reduced recall and F1-score compared to the Microsoft source polygons.
+This indicates that the regularization step did not improve the footprint agreement with the authoritative Swiss reference data in this test. Instead, it slightly reduced recall and F1-score compared to the Microsoft source polygons.
 
 \section{MLLM Outputs: Semantic Descriptions and Spatial Prompts}
 \label{sec:results_mllm_outputs}
@@ -313,9 +314,9 @@ The second approach used an unrestricted prompt, allowing the model to generate 
 
 \subsection{Predefined Error Categories}
 \label{sec:results_predefined_error_categories}
-For the predefined category approach, 1256 polygon pairs were manually evaluated and compared against the MLLM-generated labels. The manually assigned labels originated from the original Google building polygons and served as reference data.
+For the predefined category approach, 1,256 polygon pairs were manually evaluated and compared against the MLLM-generated labels. The manually assigned labels originated from the original Google building polygons and served as reference data.
 
-Overall, only 4.2\% of all cases showed an exact category-set agreement between manual interpretation and MLLM prediction. The mean Jaccard similarity between category sets reached 0.41.
+Overall, only 53 cases (4.2\%) showed an exact category-set agreement between manual interpretation and MLLM prediction. The mean Jaccard similarity between category sets reached 0.408, with a median of 0.333.
 
 Another difference was the number of assigned semantic categories per building. Manual interpretation assigned an average of 1.39 categories per building, whereas the MLQA workflow assigned 2.64 categories per building. 
 
@@ -330,7 +331,7 @@ The semantic categories used in the workflow were:
 \end{itemize}
 
 
-Among the four semantic categories, \texttt{SHIFTED} was the most frequently assigned category by the MLQA workflow. Since positional displacement was evaluated through a dedicated prompt, the category was assigned in 97.6\% of all cases, compared to 77.3\% in the manual interpretation.
+The model output \texttt{MISALIGNED} was normalized to the manual category \texttt{SHIFTED}. The structured prompt did not request \texttt{OVERSIMPLIFIED}, which consequently had no structured MLQA predictions in this comparison. Among the requested semantic categories, \texttt{SHIFTED} was the most frequently assigned category by the MLQA workflow. Since positional displacement was evaluated through a dedicated prompt, the category was assigned in 97.6\% of all cases, compared to 77.3\% in the manual interpretation.
 
 The largest discrepancy was observed for \texttt{EXTRA\_PARTS}. The MLQA workflow assigned this category in 72.6\% of all cases, whereas manual interpretation assigned it in only 2.5\% of buildings.
 
@@ -344,6 +345,7 @@ The largest discrepancy was observed for \texttt{EXTRA\_PARTS}. The MLQA workflo
 			\midrule
 			SHIFTED & 97.6 & 77.3 \\
 			SHAPE\_MISMATCH & 90.8 & 37.7 \\
+			OVERSIMPLIFIED & 0.0 & 13.6 \\
 			MISSING\_PARTS & 2.5 & 7.6 \\
 			EXTRA\_PARTS & 72.6 & 2.5 \\
 			\bottomrule
@@ -361,22 +363,22 @@ In addition to the predefined semantic category approach, unrestricted free-text
 
 As described in Section~\ref{sec:evaluation_semantic_error_descriptions}, the generated descriptions were mapped back into the predefined semantic taxonomy using a rule-based keyword extraction procedure.
 
-After filtering placeholder outputs and parsing failures, approximately 1250 building cases remained available for evaluation. Across the complete dataset, only \textbf{1.3\%} of all buildings showed an exact category-set agreement between manual interpretation and semantic categories extracted from the generated free-text descriptions. The mean Jaccard similarity reached \textbf{0.22}, with a median similarity of \textbf{0.25}.
+After filtering placeholder outputs and parsing failures, 1,250 building cases remained available for evaluation. Across the complete dataset, only 16 cases (\textbf{1.3\%}) showed an exact category-set agreement between manual interpretation and semantic categories extracted from the generated free-text descriptions. The mean Jaccard similarity reached \textbf{0.22}, with a median similarity of \textbf{0.25}.
 
 The extracted semantic descriptions also assigned more categories per building than the manual evaluation. Manual interpretation assigned an average of \textbf{1.39} categories per building, whereas the free-text extraction assigned \textbf{2.38} categories on average.
 
-The strongest performance was observed for the category \textit{SHIFTED}, which reached a precision of \textbf{0.80}, a recall of \textbf{0.51}, and an F1-score of \textbf{0.62}. Moderate performance was observed for \textit{SHAPE\_MISMATCH}, with precision and recall values of approximately \textbf{0.42} and \textbf{0.43}, respectively.
+The strongest performance was observed for the category \textit{SHIFTED}, which reached a precision of \textbf{0.801}, a recall of \textbf{0.509}, and an F1-score of \textbf{0.623}. \textit{SHAPE\_MISMATCH} reached an F1-score of \textbf{0.426}.
 
 Strong overprediction behaviour was visible for \textit{EXTRA\_PARTS} and \textit{MISSING\_PARTS}. The extraction procedure assigned \textit{EXTRA\_PARTS} 956 times although manual interpretation identified only 31 occurrences. Similarly, \textit{MISSING\_PARTS} was extracted 898 times compared to 95 manually assigned cases.
 
-The weakest performance was observed for \textit{OVERSIMPLIFIED}. Only one correctly identified occurrence was found across the complete evaluation dataset.
+The weakest performance was observed for \textit{OVERSIMPLIFIED}. Only one correctly identified occurrence was found across the complete evaluation dataset, resulting in an F1-score of 0.010.
 
-In addition to the rule-based keyword analysis, a smaller qualitative evaluation was performed for the generated free-text descriptions. In this step, 100 generated sentences were manually reviewed in a separate evaluation interface. The evaluation was stopped after this subset because the generated descriptions showed strong repetition. Many sentences followed nearly the same structure and repeatedly described the polygon as having \textit{missing parts}, \textit{extra parts}, or both, even when the specific visual error differed.
+In addition to the rule-based keyword analysis, a smaller qualitative evaluation was performed for the generated free-text descriptions in a separate evaluation interface. The evaluation was stopped after this subset because the generated descriptions showed strong repetition. Many sentences followed nearly the same structure and repeatedly described the polygon as having \textit{missing parts}, \textit{extra parts}, or both, even when the specific visual error differed.
 
-After keeping the latest evaluation for each building, 99 unique sentence evaluations remained. Of these, only 11 sentences were classified as \textit{correct}. A further 25 were classified as \textit{partly correct}. The largest group was \textit{too vague}, with 37 cases, while 27 sentences were classified as \textit{wrong}. This means that only about one third of the reviewed descriptions were at least partially useful, whereas the majority were either too generic or incorrect.
+After keeping the latest evaluation for each building, 99 unique sentence evaluations remained. Of these, only 11 sentences were classified as \textit{correct}. A further 25 were classified as \textit{partly correct}. The largest group was \textit{too vague}, with 37 cases, while 26 sentences were classified as \textit{wrong}. Thus, 36 of 99 descriptions were at least partly correct.
 
 \subsection{Spatial Accuracy of MLLM Point Prompts}
 \label{sec:results_mllm_point_prompts}
 
-The point-in-polygon analysis was possible for 320 manually rated \textit{perfect} full-house buildings. Across these cases, 885 of 960 positive points were located inside or on the boundary of the corresponding polygon, resulting in a point-level agreement of 92.19\%. At the stricter building level, all positive points were correctly placed for 80.00\% of the analysed buildings. Negative points showed a similar reliability, with 881 of 963 points correctly located outside the building polygons, corresponding to 91.48\%. The third positive point was the weakest of the three generated roof points, with an agreement of 88.44\%. Most errors were small boundary-related deviations: 51 of the 75 missed positive points were located within 0.5\,m of the polygon boundary.
+The point-in-polygon analysis was possible for 320 manually rated \textit{perfect} full-house buildings. Across these cases, 885 of 960 positive points were located inside or on the boundary of the corresponding polygon, resulting in a point-level agreement of 92.19\%. At the stricter building level, all three positive points were correctly placed for 256 buildings (80.00\%). Agreement was 91.56\% for the first positive point, 96.56\% for the second, and 88.44\% for the third. Most errors were small boundary-related deviations: 51 of the 75 missed positive points were located within 0.5\,m of the polygon boundary. The negative-point analysis contained 963 points because one additional Mexico case retained a three-point negative prompt set but no corresponding positive prompt set. Of these, 881 were correctly located outside the building polygons (91.48\%).
 
