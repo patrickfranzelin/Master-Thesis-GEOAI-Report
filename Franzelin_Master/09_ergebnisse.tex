@@ -23,11 +23,11 @@ From these outputs, 1,256 buildings were manually evaluated, as described in Sec
 			\textbf{\textit{Full house}} &
 			\textbf{Total evaluated} \\
 			\midrule
+			Niger      & 500 & 222 & 103 & 175 & 256 \\
+			Mozambique & 600 & 424 & 122 & 54  & 167 \\
 			Liberia    & 616 & 111 & 324 & 181 & 380 \\
 			Mexico     & 500 & 167 & 224 & 109 & 261 \\
-			Mozambique & 600 & 424 & 122 & 54  & 167 \\
 			Nepal      & 626 & 359 & 198 & 69  & 192 \\
-			Niger      & 500 & 222 & 103 & 175 & 256 \\
 			\midrule
 			\textbf{Total} &
 			\textbf{2,842} &
@@ -48,7 +48,7 @@ Based on this manually evaluated subset, the following sections compare the orig
 
 \subsection{Pipeline Output Availability}
 
-Not all buildings passed through all processing stages. Table~\ref{tab:pipeline_dropoff} shows the main drop-off between the MLQA step, the SAM-based refinement, and the final post-processed output. This is important because the final manual evaluation only represents buildings for which all relevant intermediate outputs could be compared. The largest reduction occurred before the SAM-derived output stage. This was especially visible in Mozambique and Nepal, where many input polygons were classified as not clearly visible or did not result in a usable SAM-derived geometry. Once a SAM-derived geometry was available, the post-processing step produced an output for most cases. In Mozambique and Niger, 96.0\% and 97.4\% of the SAM-derived outputs, respectively, also produced a post-processed geometry.
+Not all buildings passed through all processing stages. Table~\ref{tab:pipeline_dropoff} shows the main drop-off between the MLQA step, the SAM-based refinement, and the final post-processed output. This is important because the final manual evaluation only represents buildings for which all relevant intermediate outputs could be compared. The largest reduction occurred before the SAM-derived output stage. This was especially visible in Mozambique and Nepal, where many input polygons were classified as not clearly visible or did not result in a usable SAM-derived geometry. Once a SAM-derived geometry was available, the post-processing step produced an output for most cases. In Niger and Mozambique, 97.4\% and 96.0\% of the SAM-derived outputs, respectively, also produced a post-processed geometry.
 
 \begin{table}[htb]
 \centering
@@ -58,11 +58,11 @@ Not all buildings passed through all processing stages. Table~\ref{tab:pipeline_
 \toprule
 Country & MLQA & SAM-derived & Post-processed & Evaluated & Post/SAM (\%) \\
 \midrule
+Niger      & 500 & 265 & 258 & 256 & 97.4 \\
+Mozambique & 600 & 176 & 169 & 167 & 96.0 \\
 Liberia    & 616 & 483 & 399 & 380 & 82.6 \\
 Mexico     & 500 & 331 & 291 & 261 & 87.9 \\
-Mozambique & 600 & 176 & 169 & 167 & 96.0 \\
 Nepal      & 626 & 263 & 235 & 192 & 89.4 \\
-Niger      & 500 & 265 & 258 & 256 & 97.4 \\
 \midrule
 \textbf{Total} & \textbf{2,842} & \textbf{1,518} & \textbf{1,352} & \textbf{1,256} & \textbf{89.1} \\
 \bottomrule
@@ -174,7 +174,7 @@ Since \texttt{SHIFTED} was the dominant error category in the original dataset, 
 
 The scatterplots in Figure~\ref{fig:error_profile_shift} show that centroid displacement patterns differ substantially between study areas. Liberia, Mexico, and Nepal exhibit broadly distributed shift vectors, with considerable variation in both displacement magnitude and direction. Nepal shows the largest spread (\(n=124\), \(sd_{dx}=2.61\,\mathrm{m}\), \(sd_{dy}=3.80\,\mathrm{m}\), \(p90=8.88\,\mathrm{m}\)), followed by Mexico (\(n=187\), \(sd_{dx}=1.95\,\mathrm{m}\), \(sd_{dy}=2.94\,\mathrm{m}\), \(p90=7.20\,\mathrm{m}\)). Liberia exhibits a lower but still noticeable variability (\(n=295\), \(sd_{dx}=1.29\,\mathrm{m}\), \(sd_{dy}=1.61\,\mathrm{m}\), \(p90=4.68\,\mathrm{m}\)).
 
-Mozambique and Niger show more concentrated displacement patterns with lower spread values (Mozambique: \(n=156\), \(sd_{dx}=0.79\,\mathrm{m}\), \(sd_{dy}=0.86\,\mathrm{m}\); Niger: \(n=209\), \(sd_{dx}=0.85\,\mathrm{m}\), \(sd_{dy}=0.78\,\mathrm{m}\)). However, despite this clustering, displacement directions and magnitudes still vary within both countries.
+Niger and Mozambique show more concentrated displacement patterns with lower spread values (Niger: \(n=209\), \(sd_{dx}=0.85\,\mathrm{m}\), \(sd_{dy}=0.78\,\mathrm{m}\); Mozambique: \(n=156\), \(sd_{dx}=0.79\,\mathrm{m}\), \(sd_{dy}=0.86\,\mathrm{m}\)). However, despite this clustering, displacement directions and magnitudes still vary within both countries.
 
 \section{Geometric Changes After Refinement}
 
@@ -190,9 +190,9 @@ Mozambique and Niger show more concentrated displacement patterns with lower spr
 
 Figure~\ref{fig:area_comparison} compares original building areas with post-processed building areas across all study areas. The signed area change was calculated as \(100(A_{post}/A_{original}-1)\), and the analysis included the 1,253 buildings with available post-processed geometry. For readability, values above the 98th percentile of either axis are omitted from the scatterplot, while the reported percentages use all 1,253 buildings. The scatterplot shows a positive relationship between original and post-processed building area in all countries. However, the spread around the 1:1 reference line differs between study areas.
 
-Mozambique and Niger show the strongest agreement with the identity line and the lowest variability. In Mozambique, 52.7\% of buildings remain within \(\pm10\%\) of their original area, while only 2.4\% become more than 50\% larger after post-processing. Niger also exhibits comparatively stable area preservation, with 39.1\% remaining within \(\pm10\%\).
+Niger and Mozambique show the strongest agreement with the identity line and the lowest variability. Niger exhibits comparatively stable area preservation, with 39.1\% remaining within \(\pm10\%\). In Mozambique, 52.7\% of buildings remain within \(\pm10\%\) of their original area, while only 2.4\% become more than 50\% larger after post-processing.
 
-In contrast, Mexico and Nepal show broader dispersion patterns. Only 18.8\% of buildings in Mexico and 13.0\% in Nepal remain within \(\pm10\%\) of the original area. Furthermore, strong positive deviations occur more frequently, with 31.8\% of Mexican and 27.1\% of Nepalese buildings increasing by more than 50\% relative to their original footprint area. Liberia shows an intermediate pattern, with 32.1\% remaining within \(\pm10\%\), but also a considerable proportion of strong positive deviations (20.2\%).
+Liberia shows an intermediate pattern, with 32.1\% remaining within \(\pm10\%\), but also a considerable proportion of strong positive deviations (20.2\%). In contrast, Mexico and Nepal show broader dispersion patterns. Only 18.8\% of buildings in Mexico and 13.0\% in Nepal remain within \(\pm10\%\) of the original area. Furthermore, strong positive deviations occur more frequently, with 31.8\% of Mexican and 27.1\% of Nepalese buildings increasing by more than 50\% relative to their original footprint area.
 \subsection{Influence of Google Open Buildings Confidence}
 
 The Google Open Buildings dataset includes a confidence value for each detection. This confidence was compared with the original manual quality score for all 1,256 evaluated buildings. Pearson's correlation was \(r=0.32\), while Spearman's rank correlation was \(\rho=0.31\). This indicates that higher Google confidence values tended to be associated with better original polygon quality, although the relationship was only moderate.
@@ -236,11 +236,11 @@ n &
 Contrast &
 Texture diff. \\
 \midrule
+Niger      & 176 & 2.053 & 18.9 \\
+Mozambique & 120 & 0.246 & 16.8 \\
 Liberia    & 195 & 0.838 & 28.0 \\
 Mexico     & 125 & 1.662 & 16.7 \\
-Mozambique & 120 & 0.246 & 16.8 \\
 Nepal      & 68  & 0.678 & 23.1 \\
-Niger      & 176 & 2.053 & 18.9 \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -251,11 +251,11 @@ The contrast value reports the median absolute linear Weber contrast between the
 
 Table~\ref{tab:country_summary} summarizes several of the most important result indicators by study area, including final geometry quality, area preservation, positional correction magnitude, surrounding vegetation context, and polygon complexity changes.
 
-Nepal showed the lowest share of buildings classified as \textit{good} or \textit{perfect} after post-processing, reaching 65.6\%. It also exhibited the largest median absolute area change (33.4\%) and the largest median positional correction relative to the original Google Open Buildings polygons (5.1\,m). Furthermore, 47.4\% of the evaluated buildings had medium or high detected tree context near the polygon. Nepal also showed the strongest increase in polygon complexity, with the average vertex count increasing by 382.7\%. It should be noted that detected vegetation does not necessarily imply that the tree repair workflow was executed, as not every detected tree triggered this processing step.
+Niger and Mozambique achieved the strongest overall results, with 85.9\% and 83.8\% of buildings reaching the \textit{good} or \textit{perfect} categories. Both study areas also showed comparatively small median area changes and lower positional correction magnitudes. The strongest difference between these two study areas was observed in vegetation context. Mozambique showed the highest proportion of medium or high detected tree context among all study areas (68.9\%), whereas Niger exhibited the lowest proportion (11.7\%). Despite this difference, both locations showed similarly limited increases in polygon complexity compared to Liberia, Mexico, and Nepal.
 
 Liberia and Mexico performed within a similar range regarding final geometry quality, with 79.5\% and 72.4\% of buildings reaching the \textit{good} or \textit{perfect} category, respectively. Liberia showed a median absolute area change of 16.0\%, whereas Mexico reached 30.7\%, while both study areas exhibited relatively similar median positional corrections (3.1\,m and 3.7\,m). Mexico additionally showed a substantially higher proportion of detected surrounding vegetation (63.6\%) compared to Liberia (35.5\%). Both study areas also exhibited comparable increases in polygon complexity, with vertex increases of 154.7\% and 161.9\%, respectively.
 
-Niger and Mozambique achieved the strongest overall results, with 85.9\% and 83.8\% of buildings reaching the \textit{good} or \textit{perfect} categories. Both study areas also showed comparatively small median area changes and lower positional correction magnitudes. The strongest difference between these two study areas was observed in vegetation context. Mozambique showed the highest proportion of medium or high detected tree context among all study areas (68.9\%), whereas Niger exhibited the lowest proportion (11.7\%). Despite this difference, both locations showed similarly limited increases in polygon complexity compared to Nepal, Liberia, and Mexico.
+Nepal showed the lowest share of buildings classified as \textit{good} or \textit{perfect} after post-processing, reaching 65.6\%. It also exhibited the largest median absolute area change (33.4\%) and the largest median positional correction relative to the original Google Open Buildings polygons (5.1\,m). Furthermore, 47.4\% of the evaluated buildings had medium or high detected tree context near the polygon. Nepal also showed the strongest increase in polygon complexity, with the average vertex count increasing by 382.7\%. It should be noted that detected vegetation does not necessarily imply that the tree repair workflow was executed, as not every detected tree triggered this processing step.
 
 \begin{table}[htb]
 \centering
@@ -270,11 +270,11 @@ Country &
 \shortstack{Medium/high tree\\context (\%)} &
 \shortstack{Mean vertex\\increase (\%)} \\
 \midrule
+Niger       & 85.9 & 14.7 & 1.7 & 11.7 & +44.9 \\
+Mozambique  & 83.8 & 9.0  & 3.7 & 68.9 & +43.1 \\
 Liberia     & 79.5 & 16.0 & 3.1 & 35.5 & +154.7 \\
 Mexico      & 72.4 & 30.7 & 3.7 & 63.6 & +161.9 \\
-Mozambique  & 83.8 & 9.0  & 3.7 & 68.9 & +43.1 \\
 Nepal       & 65.6 & 33.4 & 5.1 & 47.4 & +382.7 \\
-Niger       & 85.9 & 14.7 & 1.7 & 11.7 & +44.9 \\
 \bottomrule
 \end{tabular}
 \end{table}

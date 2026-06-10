@@ -26,7 +26,7 @@ This section examines how the composition of geometric errors changed during the
 
 \textbf{Positional shifts and remote-sensing uncertainty.}
 
-The \textit{SHIFTED} category should not be interpreted as evidence of a single systematic displacement affecting all polygons equally. As shown in the spatial shift analysis in Figure~\ref{fig:error_profile_shift}, the observed shifts did not follow a consistent direction or distance. Liberia, Mexico, and Nepal showed broadly distributed shift vectors, while Mozambique and Niger were more concentrated but still not homogeneous. Nepal had the largest displacement spread, with a 90th percentile of 8.88\,m, followed by Mexico at 7.20\,m and Liberia at 4.68\,m. A simple global translation of the complete dataset would therefore not have been sufficient to align all polygons with the imagery.
+The \textit{SHIFTED} category should not be interpreted as evidence of a single systematic displacement affecting all polygons equally. As shown in the spatial shift analysis in Figure~\ref{fig:error_profile_shift}, the observed shifts did not follow a consistent direction or distance. Liberia, Mexico, and Nepal showed broadly distributed shift vectors, while Niger and Mozambique were more concentrated but still not homogeneous. Nepal had the largest displacement spread, with a 90th percentile of 8.88\,m, followed by Mexico at 7.20\,m and Liberia at 4.68\,m. A simple global translation of the complete dataset would therefore not have been sufficient to align all polygons with the imagery.
 
 Differences between vector geometries and visible building locations can be introduced at several stages of the remote-sensing image acquisition and processing chain. \cite{Toutin01052004} describes how geometric distortions may vary depending on the acquisition platform, sensor and viewing geometry, platform altitude, attitude and velocity, terrain relief, Earth curvature, and Earth rotation. These effects are particularly relevant for high-resolution and off-nadir imagery, where even relatively small geometric inconsistencies can become clearly visible at the scale of individual buildings.
 
@@ -105,7 +105,7 @@ The Qwen model was responsible for deciding whether a visible house was present.
 
 Liberia represents a somewhat separate case within this work. The study area had favourable characteristics for object detection, although the starting polygons were still dominated by low and medium manual quality ratings. Liberia showed moderate visual contrast, with a median contrast value of 0.838, and the highest texture difference between buildings and surroundings, with a median texture-difference value of 28.0 (Table~\ref{tab:building_surrounding_contrast}). Many buildings also appeared as individually standing structures rather than as densely attached buildings.
 
-In addition, Liberia was the study area most frequently used during the development of the code. Several small workflow adjustments, additional features, and prompt refinements were developed based on intermediate results from the Liberia study area. This may have slightly favoured the results for Liberia. At the same time, Liberia was geometrically more demanding than the two best-performing study areas: the average vertex count increased by 154.6\% after post-processing, compared with 43.1\% in Mozambique and 45.0\% in Niger (Table~\ref{tab:country_summary}). The Liberia results should therefore be interpreted as partly influenced by favourable image and settlement characteristics, but also by the fact that the workflow was developed and visually inspected more often in this area.
+In addition, Liberia was the study area most frequently used during the development of the code. Several small workflow adjustments, additional features, and prompt refinements were developed based on intermediate results from the Liberia study area. This may have slightly favoured the results for Liberia. At the same time, Liberia was geometrically more demanding than the two best-performing study areas: the average vertex count increased by 154.6\% after post-processing, compared with 45.0\% in Niger and 43.1\% in Mozambique (Table~\ref{tab:country_summary}). The Liberia results should therefore be interpreted as partly influenced by favourable image and settlement characteristics, but also by the fact that the workflow was developed and visually inspected more often in this area.
 
 \textbf{Mexico and Nepal.}
 
@@ -119,8 +119,8 @@ Overall, the central result is that the workflow improved most manually evaluate
 
 \begin{itemize}
     \item Niger and Mozambique had the strongest final results and more stable area preservation.
+    \item Liberia and Mexico were intermediate but differed in vegetation context, texture contrast, and area changes.
     \item Nepal had the weakest final quality, strongest area changes, and highest geometry complexity increase.
-    \item Mexico and Liberia were intermediate but differed in vegetation context, texture contrast, and area changes.
     \item Transferability is possible, but strongly depends on settlement morphology, image quality, vegetation, and initial polygon quality.
 \end{itemize}
 
