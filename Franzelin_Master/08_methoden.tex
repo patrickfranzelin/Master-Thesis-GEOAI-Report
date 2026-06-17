@@ -158,6 +158,9 @@ First, the model determines whether a visually identifiable roof structure is pr
 Second, the MLLM evaluates whether the polygon captures the majority of the visible building structure. This distinction is critical for downstream processing. If the polygon contains most of the building extent, refinement can be performed relative to the existing footprint. However, if the polygon captures only a small portion of the building, the initial bounding box derived from the footprint may be too restrictive. In such cases, a discovery-oriented refinement strategy must be applied to identify the full building extent prior to geometric correction.
 
 Third, the model generates a semantic error assessment using a separate error-analysis prompt chain. The first prompt evaluates whether the polygon is spatially misaligned, the second prompt assigns predefined geometric error tags such as \texttt{SHAPE\_MISMATCH}, \texttt{MISSING\_PARTS}, and \texttt{EXTRA\_PARTS}, and the final prompt returns a short JSON field containing a human-readable error description. The resulting tags and description are stored with the MLLM decision output.
+
+The MLLM tasks were intentionally split into smaller prompt chains instead of being handled in one combined instruction. This design follows the idea of task decomposition, where complex reasoning tasks are broken down into simpler subproblems that can be answered sequentially \citep{zhou2022least}. A similar strategy has also been shown to improve reliability in zero-shot visual question-answering by separating a complex visual task into individual sub-prompts \citep{Zaid_prompt_decompisiton}.
+
 The result of this stage is a decision object containing three key attributes:
 
 \begin{itemize}
