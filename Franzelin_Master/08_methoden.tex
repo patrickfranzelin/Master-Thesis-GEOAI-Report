@@ -350,7 +350,7 @@ In contrast, the \textit{PartialHousePipeline} addresses situations in which the
 
 \end{figure}
 
-For this discovery step, a text-based prompt such as ``house'' or ``building'' is used. The multimodal prompting capability of SAM3 allows the model to use semantic information in addition to spatial prompts. When a text prompt is provided, the model first converts the text into a numerical representation using a text encoder. This representation captures the semantic meaning of the prompt and is aligned with the visual features extracted from the input image. The image encoder extracts visual features from the image patch, such as edges, textures, and geometric structures. The representation of the text prompt is then compared with these visual features inside the model. In this way, the segmentation model can identify image regions whose visual characteristics correspond to the concept described in the prompt, for example building structures when the prompt ``house'' is used. The resulting attention to relevant image regions is then passed to the mask decoder, which produces the final segmentation mask of the detected building \citep{papersam3}.
+For this discovery step, a text-based prompt such as ``house'' or ``building'' is used. The multimodal prompting capability of SAM3 allows the model to use semantic information in addition to spatial prompts.
 
 This mechanism allows the model to detect complete building structures even when the initial footprint represents only a partial observation of the building. Once the candidate building regions have been identified, the segmentation process proceeds with additional spatial prompts to produce the final refined building mask.
 \subsection{Iterative Segmentation and Context Expansion}
