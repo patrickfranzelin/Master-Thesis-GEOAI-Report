@@ -4,7 +4,7 @@
 
 \section{Scope and Overall Effectiveness of the Refinement Workflow}
 
-The results of this thesis should be understood as an evaluation of the update-oriented workflow introduced in Section~\ref{sec:introduction} \citep{Qin_changedetection}, rather than as a conventional building-footprint extraction benchmark. The aim was not to create a new building dataset from scratch or to replace existing global building-footprint products. Instead, the objective was to test whether already available polygons can be visually assessed and selectively improved using recent vision and multimodal AI methods.
+The results of this thesis should be understood as an evaluation of the update-oriented workflow introduced in Section~\ref{Introduction} \citep{Qin_changedetection}, rather than as a conventional building-footprint extraction benchmark. The aim was not to create a new building dataset from scratch or to replace existing global building-footprint products. Instead, the objective was to test whether already available polygons can be visually assessed and selectively improved using recent vision and multimodal AI methods.
 
 This perspective distinguishes the proposed workflow from most building-footprint extraction approaches. Whereas many existing methods derive building footprints directly from high-resolution imagery \citep{Luo_overviewbuioldingfootprint,rastogi2022automatic}, this work starts from an existing polygon dataset. The workflow therefore focuses on local correction: a multimodal large language model is used to support image-based quality assessment and workflow decisions, while SAM is used to generate refined geometry candidates for polygons that show visible disagreement with the target imagery.
 
