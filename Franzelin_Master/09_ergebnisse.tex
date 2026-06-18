@@ -257,18 +257,28 @@ Liberia and Mexico performed within a similar range regarding final geometry qua
 
 Nepal showed the lowest share of buildings classified as \textit{good} or \textit{perfect} after post-processing, reaching 65.6\%. It also exhibited the largest median absolute area change (33.4\%) and the largest median positional correction relative to the original Google Open Buildings polygons (5.1\,m). Furthermore, 47.4\% of the evaluated buildings had medium or high detected tree context near the polygon. Nepal also showed the strongest increase in polygon complexity, with the average vertex count increasing by 382.7\%. It should be noted that detected vegetation does not necessarily imply that the tree repair workflow was executed, as not every detected tree triggered this processing step.
 
+
+\label{tab:country_summary}
 \begin{table}[htb]
 \centering
-\caption{Summary of final geometry quality indicators and polygon complexity changes by study area. Good/perfect denotes the share with a final manual rating of \textit{good} or \textit{perfect}; median absolute area change is measured relative to the original polygon; median centroid displacement is measured from the original to the post-processed polygon; medium/high tree context denotes the corresponding tree-context classes; and mean vertex increase compares the original and post-processed geometries.}
+\caption{Summary of final geometry quality indicators and polygon complexity changes by study area.}
 \label{tab:country_summary}
-\begin{tabular}{lccccc}
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.15}
+\begin{tabularx}{\textwidth}{l
+>{\centering\arraybackslash}X
+>{\centering\arraybackslash}X
+>{\centering\arraybackslash}X
+>{\centering\arraybackslash}X
+>{\centering\arraybackslash}X}
 \toprule
 Country &
-\shortstack{Good/perfect\\(\%)} &
-\shortstack{Median absolute\\area change (\%)} &
-\shortstack{Median centroid\\displacement (m)} &
-\shortstack{Medium/high tree\\context (\%)} &
-\shortstack{Mean vertex\\increase (\%)} \\
+\shortstack{Good/\\perfect\\(\%)} &
+\shortstack{Median abs.\\area change\\(\%)} &
+\shortstack{Median centroid\\displacement\\(m)} &
+\shortstack{Medium/high\\tree context\\(\%)} &
+\shortstack{Mean vertex\\increase\\(\%)} \\
 \midrule
 Niger       & 85.9 & 14.7 & 1.7 & 11.7 & +44.9 \\
 Mozambique  & 83.8 & 9.0  & 3.7 & 68.9 & +43.1 \\
@@ -276,8 +286,15 @@ Liberia     & 79.5 & 16.0 & 3.1 & 35.5 & +154.7 \\
 Mexico      & 72.4 & 30.7 & 3.7 & 63.6 & +161.9 \\
 Nepal       & 65.6 & 33.4 & 5.1 & 47.4 & +382.7 \\
 \bottomrule
-\end{tabular}
+\end{tabularx}
+
+\vspace{0.3em}
+\raggedright
+\scriptsize
+Good/perfect denotes the share with a final manual rating of \textit{good} or \textit{perfect}. Median absolute area change is measured relative to the original polygon. Median centroid displacement is measured from the original to the post-processed polygon. Medium/high tree context denotes the corresponding tree-context classes. Mean vertex increase compares original and post-processed geometries.
 \end{table}
+
+
 
 \section{Reference-based Switzerland Test}
 

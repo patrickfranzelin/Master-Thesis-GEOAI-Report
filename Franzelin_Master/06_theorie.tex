@@ -30,22 +30,6 @@ Deep learning evolved out of machine learning and has gained significant momentu
 
 Neural networks are the conceptual foundation of modern deep learning techniques and therefore essential for understanding the methods used in this thesis. As a simplified example, a neural network can be compared to learning the visual difference between apples and oranges. The model receives many examples and gradually learns patterns such as colour, texture, shape, and size. In a neural network, these patterns are not manually defined but learned as internal representations from the training data.
 
-\begin{table}[htp]
-    \begin{center}
-        \captionabove{Comparison of Fruit Characteristics}
-        \begin{tabular}{lll}
-            \toprule
-            \textbf{Characteristic} & \textbf{Apple} & \textbf{Orange} \\
-            \midrule
-            Color   & Red/Green & Orange \\
-            Texture & Smooth    & Rough  \\
-            Shape   & Round     & Round-ish \\
-            Weight  & Medium    & Medium \\
-            \bottomrule
-        \end{tabular}
-        \label{tab:fruit_comparison}
-    \end{center}
-\end{table} 
 The learning process of a neural network functions in the same way. For example, when the network receives an image of an orange, it extracts information such as pixel values, color patterns (orange hues), texture (rough), and shape edges (round-ish). These values enter the input layer, which feeds the information into one or several hidden layers, depending on the architecture. If the network contains more than one hidden layer, it is considered deep \citep{Montesinos2022Multivariate}.
 
 Within these hidden layers, the network performs representation learning: each layer adds a new level of abstraction and complexity to the understanding of the input \citep{chollet2018deep}. Early layers typically detect simple patterns such as edges and colors, intermediate layers identify shapes such as roundness or the contour of a leaf, and deeper layers learn high-level concepts, for example distinguishing that a combination of color, texture, and shape features corresponds to an orange rather than an apple.
@@ -160,7 +144,7 @@ The purpose of a pooling layer is to downsample the feature maps without introdu
 \node at (9,0.5) {\textbf{Output (Max Pooling)}};
 
 \end{tikzpicture}
-\caption{Example of \(2 \times 2\) max pooling with stride 2.}
+\caption{Illustration of $2 \times 2$ max pooling with stride 2. Each output value corresponds to the maximum value within one non-overlapping $2 \times 2$ region of the input feature map.}
 \label{fig:maxpool_example}
 \end{figure}
 
@@ -181,8 +165,7 @@ Using an embedding lookup table, each ID \(\mathrm{id}_i\) is converted into a d
 \begin{figure}[htb]
 	\centering
 	\includegraphics[scale=0.7]{Franzelin_Master/img/Tokinarization.jpg}
-	\caption{Illustration of tokenization and mapping tokens to integer IDs (and their token embeddings).}
-	\label{fig:tokenization}
+\caption{Schematic illustration of tokenization and embedding lookup. Input text is divided into tokens, mapped to vocabulary IDs, and converted into dense vector embeddings used as input to the transformer encoder.} \label{fig:tokenization_embedding}
 \end{figure}
 
 \textbf{Positional embeddings:} Since self-attention alone does not encode the order of tokens, positional information is added to the token embeddings so the model can represent the relative or absolute position of each token in the sequence \citep{tunstall2022naturaltransformer, VaswaniTransformerBase}.
@@ -227,8 +210,6 @@ In the scaled dot-product formulation, attention scores are computed by comparin
 
 For example, consider the token sequence \(x_1=\) ``The'', \(x_2=\) ``orange'', \(x_3=\) ``is'', \(x_4=\) ``sweet'', as illustrated in Figure~\ref{fig:self_attention}. When updating the representation of \(x_2\) (``orange''), the model may assign a relatively large attention weight \(w_{2,4}\) to \(x_4\) (``sweet''), since the adjective conveys an important attribute of the noun, while assigning a smaller weight to \(x_1\) (``The''), which contributes little semantic information about the object. Conversely, when updating \(x_4\) (``sweet''), the model can attend strongly to \(x_2\) (``orange'') (i.e., a high \(w_{4,2}\)) to attach the
 property ``sweet'' to the correct entity rather than spreading it across less relevant tokens.
-
-
 
 
 % TODO: Improve or redraw the self-attention illustration if needed.
@@ -281,7 +262,7 @@ From a technological standpoint, foundation models do not fundamentally differ f
 \begin{figure}[htb]
 	\centering  
 	\includegraphics[scale=0.6]{Franzelin_Master/img/foundationmodel.drawio.png}
-	\caption{Illustration used to explain the concept of foundation models and downstream adaptation.}
+\caption{Schematic illustration of the foundation model paradigm. A model pretrained on large-scale heterogeneous data can be adapted to specific downstream tasks through fine-tuning, zero-shot learning, few-shot learning, or prompting.}
 	\label{fig:foundation_model_overview}
 \end{figure}
 Foundation models are typically trained using self-supervised learning on very large and diverse datasets. This training strategy allows the model to learn general representations of the data without requiring manually labeled annotations. Instead, the model is trained using proxy tasks, such as predicting the next token in a sequence for language models or reconstructing masked regions in images for vision models. Through these objectives, the model gradually learns semantic structures and patterns present in the training data \citep{bommasani2022opportunitiesrisksfoundationmodels}.
@@ -323,7 +304,7 @@ This design is employed by several widely used models such as LLaVA and GPT-4V, 
 	\caption{General architecture of a multimodal large language model integrating textual and multimodal inputs through modality-specific encoders and a language model backbone.}
 	\label{fig:mllm_adapter_architecture}
 \end{figure}
-
+%\TODO: Draw it myself
 
 First, a \textbf{modality-specific encoder} converts raw inputs, such as images, into feature embeddings that can be processed by the model. 
 Typical implementations include vision encoders such as Vision Transformers (ViT) or convolutional neural network (CNN) backbones \citep{liang2025comprehensivesurveyguidemultimodal}.
@@ -346,70 +327,89 @@ Geospatial reasoning is required for understanding the spatial structure of buil
 
 The selection of the model was primarily based on recent benchmark studies evaluating vision–language models for remote sensing tasks. In particular, the CHOICE benchmark \citep{an2025choicebenchmarkingremotesensing} evaluates several multimodal models on tasks relevant to geospatial reasoning and spatial understanding in remote sensing imagery. As shown in Table~\ref{tab:choice_results}, Qwen2-VL-72B performs strongly across several key capabilities that are relevant to the tasks in this thesis. For example, the model ranks first in spatial relationship reasoning and achieves top-three performance in object localization and visual grounding tasks. These capabilities are directly related to reasoning about building footprints, spatial relationships between objects, and coordinate-level predictions.
 
-\begin{table}[h]
+
+\begin{table}[htb]
 \centering
-\caption{Performance of Vision-Language Models on selected tasks from the CHOICE \citep{an2025choicebenchmarkingremotesensing} and GEOBench-VLM \citep{danish2025geobenchvlmbenchmarkingvisionlanguagemodels} benchmarks relevant for geospatial reasoning and building footprint analysis.}
+\caption{Performance of selected vision-language models on CHOICE and GEOBench-VLM tasks relevant for geospatial reasoning and building-footprint analysis.}
 \label{tab:choice_results}
-\begin{tabular}{p{3cm} p{4cm} p{5cm} c c}
-\hline
-\textbf{Benchmark} & \textbf{Capability Dimension} & \textbf{Task Description} & \textbf{Model (Score)} \\
-\hline
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.15}
+\begin{tabularx}{\textwidth}{
+p{0.18\textwidth}
+p{0.23\textwidth}
+X
+p{0.24\textwidth}
+}
+\toprule
+\textbf{Benchmark} &
+\textbf{Capability dimension} &
+\textbf{Task description} &
+\textbf{Model (score)} \\
+\midrule
 
-\multirow{3}{3cm}{CHOICE} 
-& \multirow{3}{4cm}{Geospatial Determination (GD)}
-& \multirow{3}{5cm}{Inferring geographic context from remote sensing imagery}
- & GLM-4V-9B (0.990) \\
-& &  & Gemini-1.5-Pro (0.985) \\
-& &  & Qwen2-VL-72B (0.980) \\
+\multirow{3}{=}{CHOICE}
+& \multirow{3}{=}{Geospatial Determination (GD)}
+& \multirow{3}{=}{Inferring geographic context from remote sensing imagery}
+& GLM-4V-9B (0.990) \\
+& & & Gemini-1.5-Pro (0.985) \\
+& & & Qwen2-VL-72B (0.980) \\
 
-\hline
+\midrule
 
-\multirow{3}{3cm}{CHOICE}
-& \multirow{3}{4cm}{Spatial Relationship (SR)}
-& \multirow{3}{5cm}{Reasoning about spatial relations between objects}
- & Qwen2-VL-72B (0.610) \\
-& &  & GPT-4o-2024-11-20 (0.567) \\
-& &  & InternVL2-40B (0.500) \\
+\multirow{3}{=}{CHOICE}
+& \multirow{3}{=}{Spatial Relationship (SR)}
+& \multirow{3}{=}{Reasoning about spatial relations between objects}
+& Qwen2-VL-72B (0.610) \\
+& & & GPT-4o-2024-11-20 (0.567) \\
+& & & InternVL2-40B (0.500) \\
 
-\hline
+\midrule
 
-\multirow{3}{3cm}{CHOICE}
-& \multirow{3}{4cm}{Object Localization (OL)}
-& \multirow{3}{5cm}{Identifying object positions in an image}
- & VHM (0.872) \\
-& &  & Qwen2-VL-72B (0.840) \\
-& &  & InternVL2-40B (0.770) \\
+\multirow{3}{=}{CHOICE}
+& \multirow{3}{=}{Object Localization (OL)}
+& \multirow{3}{=}{Identifying object positions in an image}
+& VHM (0.872) \\
+& & & Qwen2-VL-72B (0.840) \\
+& & & InternVL2-40B (0.770) \\
 
-\hline
+\midrule
 
-\multirow{3}{3cm}{GEOBench-VLM}
-& \multirow{3}{4cm}{Scene Understanding}
-& \multirow{3}{5cm}{Identifying scene types in aerial imagery}
- & EarthDial (0.7705) \\
-& &  & GPT-4o (0.7114) \\
+\multirow{3}{=}{GEOBench-VLM}
+& \multirow{3}{=}{Scene Understanding}
+& \multirow{3}{=}{Identifying scene types in aerial imagery}
+& EarthDial (0.7705) \\
+& & & GPT-4o (0.7114) \\
 & & & Qwen2-VL (0.6761) \\
 
-\hline
+\midrule
 
-\multirow{3}{3cm}{GEOBench-VLM}
-& \multirow{3}{4cm}{Object Classification}
-& \multirow{3}{5cm}{Recognizing object categories in remote sensing images}
- & GPT-4o (0.5863) \\
+\multirow{3}{=}{GEOBench-VLM}
+& \multirow{3}{=}{Object Classification}
+& \multirow{3}{=}{Recognizing object categories in remote sensing images}
+& GPT-4o (0.5863) \\
 & & & LLaVA-OneVision (0.4593) \\
 & & & Qwen2-VL (0.4560) \\
 
-\hline
+\midrule
 
-\multirow{3}{3cm}{GEOBench-VLM}
-& \multirow{3}{4cm}{Object Localization \& Counting}
-& \multirow{3}{5cm}{Detecting and counting objects in aerial imagery}
- & LLaVA-OneVision (0.4377) \\
-& &  & Qwen2-VL (0.4019) \\
-& &  & GPT-4o (0.3965) \\
+\multirow{3}{=}{GEOBench-VLM}
+& \multirow{3}{=}{Object Localization \& Counting}
+& \multirow{3}{=}{Detecting and counting objects in aerial imagery}
+& LLaVA-OneVision (0.4377) \\
+& & & Qwen2-VL (0.4019) \\
+& & & GPT-4o (0.3965) \\
 
-\hline
-\end{tabular}
+\bottomrule
+\end{tabularx}
+
+\vspace{0.3em}
+\raggedright
+\scriptsize
+CHOICE results are based on \citet{an2025choicebenchmarkingremotesensing}; GEOBench-VLM results are based on \citet{danish2025geobenchvlmbenchmarkingvisionlanguagemodels}.
 \end{table}
+
+
 
 In addition to the CHOICE benchmark, the GEOBench-VLM benchmark \citep{danish2025geobenchvlmbenchmarkingvisionlanguagemodels} evaluates vision–language models across a range of geospatial tasks including scene understanding, object classification, and object localization. The results summarized in Table~\ref{tab:choice_results} show that general-purpose multimodal models achieve competitive performance across many geospatial reasoning tasks. Although Qwen2-VL does not always rank first, it consistently performs among the top models across several categories.
 
@@ -423,28 +423,26 @@ However, benchmark performance does not imply that an MLLM can reliably solve al
 
 Another limitation concerns geographic representation in training data. Machine-learning datasets can contain regional representation biases, for example Amerocentric or Eurocentric biases, which may lead to location-dependent model performance \citep{shankar2017classificationrepresentationassessinggeodiversity}. Similarly, vision-language models can show geographically uneven performance when visual concepts and regional characteristics are not equally represented during pre-training \citep{yin2023givlimprovinggeographicalinclusivity}. This is relevant for geospatial QA because buildings in different regions may differ substantially in material, roof type, settlement structure, and visual contrast.
  
+
 \subsection{Visual Foundation Models and Usability for Geospatial Interpretation}
 
-Visual foundation models are trained on large and diverse image datasets and can be adapted to many downstream vision tasks. In geospatial applications, they are relevant because they may reduce the need for task-specific training data and can support segmentation, object localization, and prompt-based image interpretation.
+Visual foundation models are increasingly researched in the domain of remote sensing. \cite{lu2025visionfoundationmodelsremote} provide a survey of recent vision foundation models for remote sensing and list 58 models released between June 2021 and June 2024. These models are particularly relevant for geospatial applications because they can learn transferable visual representations from large and diverse datasets. This may reduce the dependence on task-specific labeled training data, which is often expensive and time-consuming to produce in remote sensing. As a result, foundation models can be adapted to a wide range of downstream tasks, including image classification, semantic segmentation, object detection, and change detection \citep{lu2025visionfoundationmodelsremote}.
 
-% TODO: Add short paragraph on limitations of visual foundation models in aerial or satellite imagery, including resolution, occlusion, domain shift, and viewing geometry.
+This development is also connected to the broader shift from task-specific deep-learning models toward reusable pretrained models. Traditional remote-sensing models are often designed for one specific task, dataset, or sensor type, which limits their ability to generalize across different regions and image conditions. Foundation models address this limitation by using large-scale pretraining, often based on self-supervised or multimodal learning, to extract more general image representations \citep{lu2025visionfoundationmodelsremote, huang2025surveyremotesensingfoundation}. 
 
+Recent work further shows that remote-sensing foundation models are moving from purely visual models toward multimodal systems. While visual foundation models mainly process image information, multimodal models can combine optical imagery, radar data, LiDAR, textual descriptions, geographic information, or coordinates. \citep{huang2025surveyremotesensingfoundation}.
+
+However, the use of visual foundation models in aerial and satellite imagery is not straightforward. Remote-sensing images differ from natural-image datasets in terms of scale, perspective, sensor characteristics, spatial resolution, and object appearance. These differences can lead to domain shift and reduced model generalization when a model is applied to new regions or sensor types \citep{huang2025surveyremotesensingfoundation}.
 
 \subsubsection{Segment Anything Model (SAM)}
 
-The Segment Anything Model (SAM) is a promptable visual segmentation foundation model introduced by Meta AI \citep{kirillov2023segment}. SAM was trained on the large-scale SA-1B dataset, which contains more than one billion masks, and is designed to produce segmentation masks from prompts such as points, boxes, or masks.
+The Segment Anything Model (SAM) is a promptable visual segmentation foundation model introduced by Meta AI \citep{kirillov2023segment}. It was trained on the large-scale SA-1B dataset, which contains more than one billion segmentation masks, and is designed to generate masks from user-provided prompts such as points, bounding boxes, or mask inputs. During the development of this thesis, SAM 3 became available as a further extension of the SAM model family \citep{papersam3}. In contrast to earlier versions, SAM 3 introduces concept-based segmentation, referred to as Promptable Concept Segmentation (PCS). This allows the model to detect and segment all instances of a visual concept specified by a short noun phrase, image exemplar, or a combination of both. As a result, SAM 3 combines open-vocabulary detection with segmentation, enabling prompts such as \textit{building}, \textit{small house}, or \textit{metal roof} to guide the segmentation process.
 
-For building-footprint refinement, SAM is relevant because it can generate local segmentation masks for individual buildings based on prompts derived from existing polygons or MLLM-generated points. However, SAM produces raster-like masks rather than clean vector geometries. Building-footprint applications therefore require an additional polygonization and regularization step before the output can be used as GIS-ready vector data.
+Architecturally, the original SAM consists of three main components: an image encoder, a prompt encoder, and a mask decoder \citep{kirillov2023segment}. The image encoder, based on a Vision Transformer, converts the input image into a dense visual embedding. The prompt encoder represents user-provided prompts, such as points, bounding boxes, or mask inputs, in an embedding space that can be combined with the image representation. Finally, a lightweight mask decoder uses the image and prompt embeddings to predict one or several segmentation masks together with confidence scores. This design allows the computationally expensive image encoding step to be performed once, while different prompts can be evaluated interactively and efficiently.
 
-A further limitation for building-footprint refinement is that SAM can only segment visual evidence present in the image; when roofs are partly covered by trees, shadows, or other objects, the hidden footprint geometry cannot be inferred reliably without additional assumptions or adapted methods for occluded building segmentation \citep{tai2025segment}.
+For building-footprint refinement, SAM is relevant because it can generate local segmentation masks for individual buildings based on prompts derived from existing polygons or from MLLM-generated point prompts. However, the direct output of SAM is a raster-like segmentation mask rather than a clean vector geometry. Therefore, building-footprint applications require additional polygonization and geometric regularization before the output can be used as a GIS-ready vector polygon.
 
-% TODO: Add one short sentence about SAM3/text-prompted segmentation if this is discussed in the Methods chapter.
-
-
-
-
-
-
+A further limitation is that SAM can only segment visual evidence that is present in the image. If parts of a roof or building outline are occluded by trees, shadows, or other objects, the hidden footprint geometry cannot be inferred reliably from the image alone. In such cases, additional assumptions, contextual information, or methods specifically designed for occluded object segmentation are required \citep{tai2025segment}.
 
 \section{Building Footprints}
 \label{sec:building_footprints}
@@ -499,7 +497,7 @@ As discussed in Section~\ref{sec:geospatial_data_quality}, the quality of geospa
 
 A representative example of classical deterministic QA is provided by \cite{ahmed2023qualitymanagement}, who presents specification-driven quality control workflows for GIS databases based on predefined acceptance criteria, geometric and topological consistency rules, attribute validation, edge matching, and structured QA/QC checklists. His framework combines automated validation (e.g., schema conformity, positional accuracy, and attribute completeness) with manual visual inspection and random sampling, reflecting a rule-based approach in which data quality is assessed against explicit standards and thresholds.
 
-More recently, research has begun to explore data-driven alternatives to traditional deterministic quality assurance methods, where machine learning and AI are employed to identify errors and inconsistencies in large datasets. Pysmennyi et al.~\cite{Pysmennyi_2025AI_quality} investigate AI-driven quality assurance in software systems and show that rule-based inspections with fixed acceptance criteria break down under increasing system complexity, rapid development cycles, and growing data volumes. Similarly, in the context of visual quality assurance, Hoffmann and Reich~\cite{Hoffmann_VisualQualityAssurance} show that contemporary visual quality assurance is dominated by deep-learning approaches, particularly CNN-based classification, segmentation, and anomaly detection, largely replacing traditional manual inspection and rule-based computer vision pipelines.
+More recently, research has begun to explore data-driven alternatives to traditional deterministic quality assurance methods, where machine learning and AI are employed to identify errors and inconsistencies in large datasets. \cite{Pysmennyi_2025AI_quality} investigate AI-driven quality assurance in software systems and show that rule-based inspections with fixed acceptance criteria break down under increasing system complexity, rapid development cycles, and growing data volumes. Similarly, in the context of visual quality assurance, Hoffmann and Reich~\cite{Hoffmann_VisualQualityAssurance} show that contemporary visual quality assurance is dominated by deep-learning approaches, particularly CNN-based classification, segmentation, and anomaly detection, largely replacing traditional manual inspection and rule-based computer vision pipelines.
 
 Building-footprint quality assessment often focuses on comparing the dataset under evaluation with a reference dataset. For example, \cite{Hongchao_QualityAssesmentOSM} evaluated the OSM building footprint dataset for Munich by comparison with ATKIS, the authoritative German topographic database. Similarly, \cite{Brovelli_OSM_SpatialAccuracy} validated OSM building footprints for the Lombardy region in northern Italy against an authoritative reference dataset, the Lombardy Regional Topographical Database. However, this reference-based evaluation paradigm raises a fundamental question: how can building footprint quality be assessed in regions where no high-quality authoritative reference dataset is available? One recent study that attempts this for automatically derived global datasets is presented by \cite{okyere2025evaluating}, who compare Google Open Buildings and Microsoft building footprints against OSM across five cities — Accra, Nairobi, Caracas, Berlin, and Houston using metrics such as overlap analysis, relative positional accuracy, and Intersection over Union to identify differences in completeness and spatial alignment without relying on an authoritative cadastral reference layer.
 
