@@ -43,7 +43,7 @@ Each transfer from one neuron to another is governed by weights, which determine
 
 \end{figure}
 
-Each neuron calculates a weighted sum of all the incoming inputs and adds a bias. Then a non-linear activation function is applied. In Figure~\ref{fig:ann_chart}, the arrows represent the weights $W^{(l)}_{ji}$, the circles represent the activations $h^{(l)}_{j}$, and the labels bias $b^{(l)}$ indicating the bias associated with each neuron. Input patches from the orange image correspond to $h^{(0)}_{i}$. The forward pass can be written as \citep{Montesinos2022Multivariate}:
+Each neuron calculates a weighted sum of all the incoming inputs and adds a bias. Then a non-linear activation function is applied. In Figure~\ref{fig:ann_chart}, the arrows represent the weights $W^{(l)}_{ji}$, the circles represent the activations $h^{(l)}_{j}$, and the labels bias $b^{(l)}$ indicating the bias associated with each neuron. Input patches from the orange image correspond to $h^{(0)}_{i}$. The forward pass is shown in Equation~\ref{eq:neuron_forward_pass} \citep{Montesinos2022Multivariate}:
 
 \begin{equation}
 h^{(l)}_{j} = g^{(l)}\!\left( \sum_{i} W^{(l)}_{ji}\, h^{(l-1)}_{i} + b^{(l)}_{j} \right)
@@ -58,9 +58,9 @@ This layered representation learning is the core mechanism that underlies all mo
 As an illustrative example for explaining artificial neural networks (ANNs), the classification of an image of an orange was used. However, this example only serves to introduce the general principles of representation learning; in practice, simple fully connected ANNs are not suited to processing raw image data efficiently \citep{o2015introduction}. Image interpretation requires architectures that explicitly exploit spatial structure, most prominently Convolutional Neural Networks (CNNs) \citep{o2015introduction, Li2021Asurvey}.
 
 CNNs build on the same basic principles as ANNs but introduce architectural constraints that make them capable of handling image-specific tasks \citep{o2015introduction}. The core challenge lies in the high dimensionality of image data \citep{zhang2023dive}. For example, a 1-megapixel image corresponds to 1{,}000{,}000 input features; mapping these to 1{,}000 hidden units in a fully connected layer would require
-\[
+\begin{equation*}
 10^{6} \times 10^{3} = 10^{9},
-\]
+\end{equation*}
 parametersâ€”computationally infeasible to train \citep{zhang2023dive}.
 
 CNNs overcome this limitation by preserving the spatial structure of an image. Instead of flattening the image into a one-dimensional vector, they represent it as a three-dimensional volume defined by height, width, and depth, where the depth corresponds to the learned feature maps \citep{o2015introduction}.
@@ -80,14 +80,12 @@ The input layer can be understood as a data container that holds the raw inputâ€
 \textbf{Convolutional layer:}
 
 
-Convolutions reduce the complexity and size of the input by optimizing how information is processed and represented \citep{o2015introduction}. A filter (a small square matrix), also called a kernel, slides across the image from top-left to bottom-right and detects local patterns in the pixel values of the input image \citep{Montesinos2022Multivariate}. When the values in the image patch and the kernel align well, the resulting dot product is large; when they differ, the response remains low as shown in Equation~\ref{eq:conv_example}
-. The collection of these responses across all positions forms the activation map (also known as the feature map) \citep{Montesinos2022Multivariate}.
+Convolutions reduce the complexity and size of the input by optimizing how information is processed and represented \citep{o2015introduction}. A filter (a small square matrix), also called a kernel, slides across the image from top-left to bottom-right and detects local patterns in the pixel values of the input image \citep{Montesinos2022Multivariate}. When the values in the image patch and the kernel align well, the resulting dot product is large; when they differ, the response remains low as shown in Equation~\ref{eq:conv_example}. The collection of these responses across all positions forms the activation map (also known as the feature map) \citep{Montesinos2022Multivariate}.
 
 \begin{equation}
-\text{Response} 
-= 
-\sum 
-\left(
+\begin{aligned}
+\text{Response}
+&= \sum \left(
 \underbrace{
 \begin{bmatrix}
 100 & 103 & 100 \\
@@ -103,8 +101,9 @@ Convolutions reduce the complexity and size of the input by optimizing how infor
 1 & 0 & -1
 \end{bmatrix}
 }_{\text{Kernel}}
-\right)
-= 2
+\right) \\
+&= 2
+\end{aligned}
 \label{eq:conv_example}
 \end{equation}
 
@@ -168,9 +167,9 @@ Using an embedding lookup table, each ID \(\mathrm{id}_i\) is converted into a d
 \textbf{Positional embeddings:} Since self-attention alone does not encode the order of tokens, positional information is added to the token embeddings so the model can represent the relative or absolute position of each token in the sequence \citep{tunstall2022naturaltransformer, VaswaniTransformerBase}.
 Concretely, each position \(i\) is associated with a positional embedding \(p_i \in \mathbb{R}^{d_{\text{model}}}\).
 The final input embedding for the encoder is then obtained by combining token and position information, typically via element-wise addition:
-\begin{equation}
+\begin{equation*}
 x_i^{(0)} = e_i + p_i \,, \qquad i=1,\dots,n \, .
-\end{equation}
+\end{equation*}
 
 \begin{figure}[htb]
 	\centering
@@ -180,7 +179,7 @@ x_i^{(0)} = e_i + p_i \,, \qquad i=1,\dots,n \, .
 \end{figure}
 
 
-\textbf{Self-attention:} The self-attention layer assigns a different amount of weight (or attention) to each token embedding by comparing every token to every other token in the same sequence \citep{tunstall2022naturaltransformer}. For each token \(x_i\), self-attention computes weights \(w_{ji}\) that quantify how strongly token \(j\) should contribute to the update of token \(i\), yielding a contextualized representation \citep{tunstall2022naturaltransformer}
+\textbf{Self-attention:} The self-attention layer assigns a different amount of weight (or attention) to each token embedding by comparing every token to every other token in the same sequence \citep{tunstall2022naturaltransformer}. For each token \(x_i\), self-attention computes weights \(w_{ji}\) that quantify how strongly token \(j\) should contribute to the update of token \(i\), yielding the contextualized representation shown in Equation~\ref{eq:self_attention_weighted_sum} \citep{tunstall2022naturaltransformer}:
 \begin{equation}
 x_i^{(1)} = \sum_{j=1}^{n} w_{ij}\, x_j^{(0)} \, .
 \label{eq:self_attention_weighted_sum}
@@ -191,9 +190,10 @@ From an information-retrieval perspective, attention can be seen as a \emph{soft
 In this sense, the query \(Q\) encodes what a token is looking for, the key \(K\) describes what a token offers for matching, and the value \(V\) contains the information that is mixed into the resulting representation \citep{tunstall2022naturaltransformer}.
 
 In the scaled dot-product formulation, attention scores are computed by comparing queries and keys (typically via dot products), scaled, and then normalized with a softmax to obtain weights that sum to one \citep{VaswaniTransformerBase}.
-\cite{VaswaniTransformerBase} express this in matrix form as
+\cite{VaswaniTransformerBase} express this in matrix form in Equation~\ref{eq:scaled_dot_product_attention}:
 \begin{equation}
 \mathrm{Attention}(Q,K,V) \;=\; \mathrm{softmax}\!\left(\frac{QK^{\top}}{\sqrt{d_k}}\right) V \, .
+\label{eq:scaled_dot_product_attention}
 \end{equation}
 
 \begin{figure}[htb]
@@ -220,21 +220,21 @@ parallel heads, where each head has its own learned projections and computes att
 Residual connections and layer normalization are key components in transformer architectures that stabilize training and improve information flow \citep{VaswaniTransformerBase, ba2016layernormalization, he2015deepresiduallearningimage}.
 
 Residual connections introduce shortcut paths by adding the input of a sublayer to its output, i.e.,
-\[
+\begin{equation*}
 x + \mathrm{Sublayer}(x) \, .
-\]
+\end{equation*}
 Originally introduced in deep residual networks \citep{he2015deepresiduallearningimage}, this mechanism facilitates gradient propagation, mitigates the vanishing gradient problem, and helps preserve information across layers. In transformers, residual connections are applied around each sublayer \citep{VaswaniTransformerBase}.
 
 Layer normalization stabilizes activations by normalizing them to zero mean and unit variance, followed by a learnable scaling and shifting \citep{ba2016layernormalization}. This reduces numerical instability and accelerates convergence, particularly in sequence models such as transformers \citep{VaswaniTransformerBase}.
 
 Two common arrangements exist. In the original \emph{Post-LN} formulation used in the transformer, normalization is applied after the residual addition:
-\[
+\begin{equation*}
 \mathrm{LayerNorm}(x + \mathrm{Sublayer}(x)) \, .
-\]
+\end{equation*}
 Modern architectures often use \emph{Pre-LN}, where normalization is applied before the sublayer:
-\[
+\begin{equation*}
 x + \mathrm{Sublayer}(\mathrm{LayerNorm}(x)) \, ,
-\]
+\end{equation*}
 which generally improves training stability and simplifies optimization in deep transformer models \citep{ba2016layernormalization}.
 
 \subsection{Transformer Architectures in Computer Vision}
