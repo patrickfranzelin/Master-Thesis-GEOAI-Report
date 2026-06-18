@@ -222,7 +222,7 @@ The full-house/partial-house quality comparison included 1,253 evaluated cases, 
 
 \section{Building-to-Surrounding Contrast}
 
-The building-to-surrounding contrast analysis described in Section~\ref{sec:building_surrounding_contrast} showed differences between the five study areas. The automatic polygon-ring analysis was applied to all 684 post-processed buildings that were manually labeled as \textit{perfect}. The number of available samples therefore differs by country and reflects the number of high-quality final polygons available for this additional image analysis. Because this analysis was restricted to polygons rated as \textit{perfect}, the values describe image conditions for successfully refined buildings rather than all processed buildings.
+The building-to-surrounding contrast analysis described in Section~\ref{sec:building_surrounding_contrast} showed clear differences between the five study areas. The automatic polygon-ring analysis was applied to all 684 post-processed buildings that were manually labeled as \textit{perfect}. The number of available samples therefore differs by country and reflects the number of high-quality final polygons available for this additional image analysis. Since the analysis was restricted to polygons rated as \textit{perfect}, the values describe image conditions for successfully refined buildings rather than the image conditions of all processed buildings.
 
 \begin{table}[htb]
 \centering
@@ -245,7 +245,10 @@ Nepal      & 68  & 0.678 & 23.1 \\
 \end{tabular}
 \end{table}
 
-The contrast value reports the median absolute linear Weber contrast between the building and its local surrounding ring after sRGB linearization. The texture value reports the median Euclidean distance between the building and surrounding texture descriptors. Mozambique showed the lowest building-to-surrounding contrast, while Niger and Mexico showed clearly stronger brightness separation. The texture-difference values show a different pattern: Liberia and Nepal had the highest texture differences.
+The contrast value reports the median absolute linear Weber contrast between the building and its local surrounding ring after sRGB linearization. The texture value reports the median Euclidean distance between the building and surrounding texture descriptors. The strongest brightness separation was observed in Niger, followed by Mexico, Liberia, Nepal, and Mozambique. Mozambique showed by far the lowest building-to-surrounding contrast, suggesting that building roofs and surrounding surfaces were often more similar in brightness. In contrast, Niger and Mexico showed much stronger brightness separation between buildings and their local surroundings.
+
+The texture-difference values show a different pattern. Liberia and Nepal had the highest texture differences, while Mexico and Mozambique had the lowest values. This indicates that visual separability between buildings and their surroundings was not only controlled by brightness contrast, but also by differences in local texture. For example, Liberia showed only moderate brightness contrast but the highest texture difference, which is consistent with buildings being visually distinguishable from vegetated surroundings through texture and surface structure rather than brightness alone. Overall, the results suggest that the visual conditions for building extraction differed substantially between the study areas and that brightness contrast and texture contrast captured complementary aspects of building visibility.
+
 
 \section{Study Area Comparison}
 
