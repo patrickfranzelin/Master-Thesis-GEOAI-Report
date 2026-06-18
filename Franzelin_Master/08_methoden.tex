@@ -259,15 +259,16 @@ The refinement stage consists of four main components:
 \item conversion of segmentation masks into geospatial vector geometries.
 \end{itemize}
 
+For the geometric refinement stage, the Segment Anything Model (SAM) developed by Meta AI was used as the visual segmentation backbone \citep{kirillov2023segment}. The model was installed within the project’s virtual environment as an editable package using the official open-source implementation provided by Meta.
+
+
+\subsection{Segmentation Model and Prompting Interfaces}
 \begin{wrapfigure}{r}{0.45\textwidth}
 \centering
 \includegraphics[width=\linewidth]{Franzelin_Master/img/Flowchart_SAMStage.png}
 \caption{Visual model refinement workflow.}
 \label{fig:sam_stage}
 \end{wrapfigure}
-\subsection{Segmentation Model and Prompting Interfaces}
-
-For the geometric refinement stage, the Segment Anything Model (SAM) developed by Meta AI was used as the visual segmentation backbone \citep{kirillov2023segment}. The model was installed within the project’s virtual environment as an editable package using the official open-source implementation provided by Meta.
 
 In this thesis, the term SAM-based refinement refers to the visual segmentation component used for prompt-based building-mask generation. Point- and box-guided refinement was performed with the SAM-based segmentation backend, whereas the text-prompted discovery step in the \textit{PartialHousePipeline} used the SAM3 text-prompted backend. Preliminary fine-tuning experiments with SAM2 were tested but were not used in the final workflow.
 
