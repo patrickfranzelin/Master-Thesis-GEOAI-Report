@@ -90,15 +90,14 @@ The raster window is read and resized to a standardized resolution of $512 \time
 
 Simultaneously, the building geometry is transformed into the coordinate system of the extracted patch through the following transformation chain:
 
-\[
+\begin{equation}
+\begin{aligned}
 \text{Vector CRS}
-\rightarrow
-\text{Raster CRS}
-\rightarrow
-\text{Window Pixel Space}
-\rightarrow
-512 \times 512 \text{ Patch Space}
-\]
+&\longrightarrow \text{Raster CRS}
+\longrightarrow \text{window pixel space} \\
+&\longrightarrow 512 \times 512\ \text{patch space}.
+\end{aligned}
+\end{equation}
 
 To support different stages of the workflow, three different patch representations are generated. 
 Each representation contains only the information required for the corresponding processing step. 
@@ -380,21 +379,21 @@ The post-processing pipeline addresses these issues step by step, combining geom
 
 \subsection{Tree Occlusion}
 
-Tree occlusions are handled by analyzing the spatial relationship between buildings and nearby trees. Let \( B \) be a building polygon and \( T \) the combined geometry of nearby trees.
+Tree occlusions are handled by analyzing the spatial relationship between buildings and nearby trees. Let \(B\) be a building polygon and \(T\) the combined geometry of nearby trees.
 
-First, a \textit{tree influence zone} is defined as a small area around the trees. This is done by slightly enlarging the tree geometry and subtracting a smaller inner buffer:
+First, a \textit{tree influence zone} is defined as a small area around the trees. This is done by slightly enlarging the tree geometry and subtracting a smaller inner buffer, where \(r_1\) and \(r_2\) denote the outer and inner tree-buffer radii, respectively:
 
-\[
-\text{Tree zone} = \text{buffer}(T, r_1) - \text{buffer}(T, r_2)
-\]
+\begin{equation}
+Z_T = \operatorname{buffer}(T, r_1) \setminus \operatorname{buffer}(T, r_2).
+\end{equation}
 
-This zone represents the area where trees are likely to distort the building outline.
+The tree influence zone \(Z_T\) represents the area where trees are likely to distort the building outline.
 
-Next, possible occlusions are identified by intersecting this zone with the building boundary:
+Next, possible occlusions are identified by intersecting this zone with the building boundary. The resulting candidate dent segments \(D_{\mathrm{cand}}\) are defined as:
 
-\[
-\text{candidate dents} = \text{boundary}(B) \cap \text{tree zone}
-\]
+\begin{equation}
+D_{\mathrm{cand}} = \operatorname{boundary}(B) \cap Z_T.
+\end{equation}
 
 These candidate segments are split into smaller parts based on changes in direction. A segment is considered a candidate occlusion if it satisfies parameterized thresholds for distance to the tree boundary, minimum segment length, and deviation from a straight line.
 
@@ -408,11 +407,12 @@ Two simple cases are considered:
     \item \textbf{Corner}: If the directions differ, the edges are extended until they meet, forming a new corner point.
 \end{itemize}
 
-To avoid unrealistic changes, the corrected polygon is only accepted if it remains similar to the original one. This is measured using the Intersection-over-Union (IoU):
+To avoid unrealistic changes, the corrected polygon is only accepted if it remains similar to the original one. This is measured using the Intersection-over-Union (IoU), where \(B\) denotes the original polygon and \(B'\) the corrected polygon:
 
-\[
-\text{IoU} = \frac{\text{overlap area}}{\text{total area}}
-\]
+\begin{equation}
+\operatorname{IoU}(B, B') =
+\frac{\operatorname{area}(B \cap B')}{\operatorname{area}(B \cup B')}.
+\end{equation}
 
 The correction is applied only if this value is above a threshold.
 
@@ -427,11 +427,11 @@ Although this step is related to rectangularization, it does not enforce a singl
 
 As a baseline, the Python package \textit{Building-Regulariser} is used. However, this method was primarily developed for structured urban environments in highly planned regions, where buildings often follow consistent orientations and regular shapes. In such contexts, the algorithm applies strong assumptions, including a dominant global orientation and hard snapping of edges to predefined angles. These assumptions are less suitable for many regions in the Global South, where building layouts are often more irregular and do not follow a single dominant orientation. Applying a strict global alignment in such cases can lead to unrealistic distortions. To address this, a modified approach is used. Instead of enforcing a global orientation for each building, a local strategy is applied. Each edge of the polygon is analyzed individually and compared to the nearest orthogonal direction (i.e., 0°, 90°, 180°, or 270°). If an edge is already close to one of these directions, it is adjusted slightly towards it. This adjustment is performed using a soft correction:
 
-\[
-\theta_{\mathrm{new}} = \theta + \lambda(\theta_{\mathrm{target}} - \theta)
-\]
+\begin{equation}
+\theta_{\mathrm{new}} = \theta + \lambda(\theta_{\mathrm{target}} - \theta).
+\end{equation}
 
-where \( \theta \) is the current edge direction, \( \theta_{\mathrm{target}} \) is the nearest orthogonal direction, and \( \lambda \in [0,1] \) controls the strength of the adjustment. The weight \( \lambda \) depends on how close the edge is to the target direction. Edges that are already nearly aligned are corrected strongly, while edges with large deviations remain mostly unchanged. After adjusting all edges, the polygon is reconstructed by reconnecting the modified edges and ensuring geometric validity.
+where \(\theta\) is the current edge direction, \(\theta_{\mathrm{target}}\) is the nearest orthogonal direction, and \(\lambda \in [0,1]\) controls the strength of the adjustment. The weight \(\lambda\) depends on how close the edge is to the target direction. Edges that are already nearly aligned are corrected strongly, while edges with large deviations remain mostly unchanged. After adjusting all edges, the polygon is reconstructed by reconnecting the modified edges and ensuring geometric validity.
 
 \section{Evaluation Strategy}
 \label{sec:evaluation_strategy}
@@ -543,11 +543,14 @@ An additional image-based analysis was carried out to compare the visual contras
 
 For the automatic analysis, all post-processed buildings that received the manual quality label \textit{perfect} were selected. For each selected building, the final post-processed polygon was transformed into patch pixel coordinates and rasterized as the building mask. A local surrounding mask was then created by buffering the polygon outward by 48 pixels and subtracting an inner 4-pixel gap around the building boundary. The gap reduces direct edge effects caused by antialiasing, shadows, or small boundary misalignments. Pixels covered by neighbouring building polygons were excluded from the surrounding mask so that the background measurement represented local ground context as far as possible. If the cleaned ring contained too few pixels, the remaining non-building pixels in the patch were used as a fallback background mask.
 
-For each building, the mean brightness inside the building mask and inside the surrounding ring was calculated. The RGB values were first converted to linearized luminance so that the brightness comparison was not based directly on gamma-encoded image values. The final contrast value used in the results is the absolute Weber contrast:
+For each building, the mean brightness inside the building mask and inside the surrounding ring was calculated. The RGB values were first converted to linearized luminance so that the brightness comparison was not based directly on gamma-encoded image values. Denoting these luminance values by \(Y_{\mathrm{building}}\) and \(Y_{\mathrm{surrounding}}\), respectively, the final contrast value \(C\) used in the results is the absolute Weber contrast:
 
-\[
-C = \left|\frac{Y_\mathrm{building} - Y_\mathrm{surrounding}}{Y_\mathrm{surrounding}}\right| .
-\]
+\begin{equation}
+C = \left|
+\frac{Y_{\mathrm{building}} - Y_{\mathrm{surrounding}}}
+{Y_{\mathrm{surrounding}}}
+\right|.
+\end{equation}
 
 This value describes how strongly the building differs in brightness from its local background, independent of whether the roof is brighter or darker than the surroundings. In addition, a simple texture-difference value was calculated using the same building and ring masks. The texture value combines three local image descriptors: Sobel gradient magnitude, absolute Laplacian response, and local standard deviation in a \(9 \times 9\) window. The Euclidean distance between the building texture descriptor and the surrounding texture descriptor was used as the final texture-difference value. It should be interpreted as a compact indicator of whether roof and background differ in edge density and local image variation.
 
