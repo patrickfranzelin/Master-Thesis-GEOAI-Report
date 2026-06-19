@@ -7,7 +7,7 @@ This section presents the overall system architecture developed to enhance the q
 \begin{figure}[htbp]
 	\centering  
 	\includegraphics[scale=0.075]{Franzelin_Master/img/Flowchart_Main.png}
-	\caption{Overview of the proposed workflow for multimodal building footprint validation and refinement.}
+	\caption{Overview of the proposed workflow for multimodal building footprint validation and refinement. Own illustration.}
 	\label{fig:workflow}
 \end{figure}
 
@@ -133,7 +133,7 @@ Therefore, separate patch variants are created for the same building in order to
     \caption{Debug patch}
 \end{subfigure}
 
-\caption{Example patch representations generated during preprocessing. The raw patch contains the original RGB imagery used for segmentation, the clean patch overlays the original building footprint used for MLLM reasoning, and the debug patch includes a centroid reference marker used during prompt generation. All patches are normalized to a resolution of $512 \times 512$ pixels.}\label{fig:patch_types}
+\caption{Example patch representations generated during preprocessing. The raw patch contains the original RGB imagery used for segmentation, the clean patch overlays the original building footprint used for MLLM reasoning, and the debug patch includes a centroid reference marker used during prompt generation. All patches are normalized to a resolution of $512 \times 512$ pixels. Own illustration.}\label{fig:patch_types}
 
 \end{figure}
 
@@ -212,7 +212,7 @@ To avoid this limitation, the system expands the spatial context around the buil
     \caption{Expanded context used for structure discovery}
 \end{subfigure}
 
-\caption{Example of a partial building detection requiring context expansion.}
+\caption{Example of a partial building detection requiring context expansion. Own illustration.}
 \label{fig:partial_pipeline}
 
 \end{figure}
@@ -266,7 +266,7 @@ For the geometric refinement stage, the Segment Anything Model (SAM) developed b
 \begin{wrapfigure}{r}{0.45\textwidth}
 \centering
 \includegraphics[width=\linewidth]{Franzelin_Master/img/Flowchart_SAMStage.png}
-\caption{Visual model refinement workflow.}
+\caption{Visual model refinement workflow. Own illustration.}
 \label{fig:sam_stage}
 \end{wrapfigure}
 
@@ -306,7 +306,7 @@ In the \textit{FullHousePipeline}, the model receives structured spatial prompts
     \caption{Refined segmentation result}
 \end{subfigure}
 
-\caption{FullHousePipeline refinement process. The existing building footprint provides spatial prompts that guide the segmentation model. Positive points, negative points, and a bounding box constrain the segmentation to refine the original footprint while preserving its approximate spatial extent.}
+\caption{FullHousePipeline refinement process. The existing building footprint provides spatial prompts that guide the segmentation model. Positive points, negative points, and a bounding box constrain the segmentation to refine the original footprint while preserving its approximate spatial extent. Own illustration.}
 \label{fig:full_pipeline}
 
 \end{figure}
@@ -345,7 +345,7 @@ In contrast, the \textit{PartialHousePipeline} addresses situations in which the
     \caption{Refined building mask}
 \end{subfigure}
 
-\caption{PartialHousePipeline workflow. When the original footprint captures only part of the building, the spatial context is expanded and the segmentation model first performs a discovery step to identify the complete building structure before generating the final refined footprint.}
+\caption{PartialHousePipeline workflow. When the original footprint captures only part of the building, the spatial context is expanded and the segmentation model first performs a discovery step to identify the complete building structure before generating the final refined footprint. Own illustration.}
 
 \label{fig:partial_pipeline_sam}
 
@@ -446,7 +446,7 @@ In addition to the overall quality assessment, specific error types are recorded
 \begin{figure}[htb]
 	\centering  
 	\includegraphics[scale=0.5]{Franzelin_Master/img/evaluation_tool.png}
-	\caption{Annotation interface used for manual evaluation of original, SAM-derived, and post-processed building geometries.}
+	\caption{Annotation interface used for manual evaluation of original, SAM-derived, and post-processed building geometries. Own illustration.}
 	\label{fig:evaluation_tool}
 \end{figure}
 \subsection{Evaluation Criteria and Error Taxonomy}

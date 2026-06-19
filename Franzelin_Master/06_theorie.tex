@@ -38,7 +38,8 @@ Each transfer from one neuron to another is governed by weights, which determine
 \begin{figure}[htb]
 	\centering  
 	\includegraphics[scale=0.7]{Franzelin_Master/img/ANN_Chart.png}
-    \caption{Schematic structure of a fully connected artificial neural network.}
+\caption{Schematic representation of a fully connected artificial neural network, illustrating how input features are transformed through hidden layers into a final classification output.}
+
     \label{fig:ann_chart}
 
 \end{figure}
@@ -68,7 +69,7 @@ CNNs overcome this limitation by preserving the spatial structure of an image. I
 \begin{figure}[htb]
 	\centering  
 	\includegraphics[scale=0.4]{Franzelin_Master/img/CNN_Chart.png}
-    \caption{Overview of a Convolutional Neural Network (CNN) architecture.}
+    \caption{Schematic overview of a convolutional neural network (CNN), showing how convolution and pooling layers transform an RGB image into feature maps used for classification.Own illustration based on \citet{o2015introduction} and \citet{Li2021Asurvey}.}
     \label{fig:cnn_chart}
 
 \end{figure}
@@ -161,7 +162,9 @@ Using an embedding lookup table, each ID \(\mathrm{id}_i\) is converted into a d
 \begin{figure}[htb]
 	\centering
 	\includegraphics[scale=0.7]{Franzelin_Master/img/Tokinarization.jpg}
-\caption{Schematic illustration of tokenization and embedding lookup. Input text is divided into tokens, mapped to vocabulary IDs, and converted into dense vector embeddings used as input to the transformer encoder.} \label{fig:tokenization_embedding}
+\caption[Schematic illustration of tokenization and embedding lookup]{
+Schematic illustration of tokenization and embedding lookup. Input text is divided into tokens, mapped to vocabulary IDs, and converted into dense token embeddings used as input to the transformer encoder. Own illustration based on \citet{tunstall2022naturaltransformer} and \citet{VaswaniTransformerBase}.
+} \label{fig:tokenization_embedding}
 \end{figure}
 
 \textbf{Positional embeddings:} Since self-attention alone does not encode the order of tokens, positional information is added to the token embeddings so the model can represent the relative or absolute position of each token in the sequence \citep{tunstall2022naturaltransformer, VaswaniTransformerBase}.
@@ -174,7 +177,7 @@ x_i^{(0)} = e_i + p_i \,, \qquad i=1,\dots,n \, .
 \begin{figure}[htb]
 	\centering
 	\includegraphics[scale=0.7]{Franzelin_Master/img/InputEmbeding.jpg}
-	\caption{Input embedding construction: the token embedding \(e_i\) is combined with the positional embedding \(p_i\) to form the encoder input \(x_i^{(0)}\).}
+	\caption{Input embedding construction: the token embedding \(e_i\) is combined with the positional embedding \(p_i\) to form the encoder input \(x_i^{(0)}\).Own illustration based on \citet{tunstall2022naturaltransformer} and \citet{VaswaniTransformerBase}.}
 	\label{fig:input_embedding}
 \end{figure}
 
@@ -198,8 +201,14 @@ In the scaled dot-product formulation, attention scores are computed by comparin
 
 \begin{figure}[htb]
 	\centering  
-	\includegraphics[scale=0.7]{Franzelin_Master/img/SelfAttention.png}
-    \caption{Illustration used to explain self-attention between tokens.}
+	\includegraphics[scale=0.65]{Franzelin_Master/img/Attention.drawio.png}
+\caption[Schematic illustration of scaled dot-product self-attention]{
+	Schematic illustration of scaled dot-product self-attention. 
+	Input embeddings \(X\) are linearly projected into queries \(Q\), keys \(K\), and values \(V\). 
+	Queries and keys are compared to compute scaled attention scores \(QK^{\top}/\sqrt{d_k}\), which are normalized with a softmax function to obtain attention weights \(A=[w_{ij}]\). 
+	These weights are then multiplied with the value representations \(V\) to produce contextualized hidden states \(X^{(1)}\). 
+	Own illustration based on \citet{VaswaniTransformerBase}.
+	}
     \label{fig:self_attention}
 
 \end{figure}
@@ -259,7 +268,7 @@ From a technological standpoint, foundation models do not fundamentally differ f
 \begin{figure}[htb]
 	\centering  
 	\includegraphics[scale=0.6]{Franzelin_Master/img/foundationmodel.drawio.png}
-\caption{Schematic illustration of the foundation model paradigm. A model pretrained on large-scale heterogeneous data can be adapted to specific downstream tasks through fine-tuning, zero-shot learning, few-shot learning, or prompting.}
+\caption{Schematic illustration of the foundation model paradigm. A model pretrained on large-scale heterogeneous data can be adapted to specific downstream tasks through fine-tuning, zero-shot learning, few-shot learning, or prompting. Own illustration.}
 	\label{fig:foundation_model_overview}
 \end{figure}
 Foundation models are typically trained using self-supervised learning on very large and diverse datasets. This training strategy allows the model to learn general representations of the data without requiring manually labeled annotations. Instead, the model is trained using proxy tasks, such as predicting the next token in a sequence for language models or reconstructing masked regions in images for vision models. Through these objectives, the model gradually learns semantic structures and patterns present in the training data \citep{bommasani2022opportunitiesrisksfoundationmodels}.
@@ -277,8 +286,10 @@ The development of modern LLMs was enabled by the introduction of the transforme
 
 \begin{figure}[htb]
 	\centering  
-	\includegraphics[scale=0.8]{Franzelin_Master/img/mllm_differentarchitectures.png}
-	\caption{General architecture of a multimodal large language model integrating textual and multimodal inputs through modality-specific encoders and a language model backbone.}
+	\includegraphics[scale=0.9]{Franzelin_Master/img/mllm_differentarchitectures.png}
+	\caption[Overview of four architecture styles for vision-language foundation models]{
+	Overview of four architecture styles for vision-language foundation models: dual-encoder, fusion-based, encoder--decoder, and adapted LLM architectures. Reproduced from \citet[Fig.~2]{awais2023foundationalmodelsdefiningnew}.
+	}
 	\label{fig:mllm_architecture_overview}
 \end{figure}
 
@@ -297,8 +308,8 @@ This design is employed by several widely used models such as LLaVA and GPT-4V, 
 
 \begin{figure}[htb]
 	\centering  
-	\includegraphics[scale=0.8]{Franzelin_Master/img/mllmarchitecture.png}
-	\caption{General architecture of a multimodal large language model integrating textual and multimodal inputs through modality-specific encoders and a language model backbone.}
+	\includegraphics[scale=0.8]{Franzelin_Master/img/MLLM_structure.png}
+	\caption{General architecture of a multimodal large language model integrating textual and multimodal inputs through modality-specific encoders and a language model backbone. Own illustration.}
 	\label{fig:mllm_adapter_architecture}
 \end{figure}
 %\TODO: Draw it myself
@@ -455,7 +466,7 @@ In image-based extraction workflows, the visible roof outline is often used as a
 \begin{figure}[htb]
 	\centering  
 	\includegraphics[scale=0.7]{Franzelin_Master/img/Building_Footprint.png}
-    \caption{Illustration used to support the discussion of building footprints.}
+    \caption{Example illustrating the difference between visible roof outlines and building footprints, highlighting how shadows, occlusion, roof overhangs, and complex settlement structures can complicate footprint delineation. Own illustration.}
     \label{fig:building_footprint}
 
 \end{figure}
@@ -485,7 +496,8 @@ A recurring challenge in building extraction is the transition from image-based 
 \begin{figure}[htb]
 	\centering  
 	\includegraphics[scale=0.7]{Franzelin_Master/img/googleopenbuildingerrors.png}
-    \caption{Illustration used to support the discussion of typical Google Open Buildings errors.}
+    \caption{Examples of typical error cases in the Google Open Buildings dataset, including complex roofs, touching buildings, tree occlusion, ambiguous segmentation, and non-building features. Reproduced from the Google Open Buildings technical report \citep{sirko2021continentalscalebuildingdetectionhigh}.}
+    
     \label{fig:google_open_buildings_errors}
 
 \end{figure}
