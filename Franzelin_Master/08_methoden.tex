@@ -225,8 +225,7 @@ If the building is classified as partial or uncertain, a discovery-oriented refi
 
 Figure~\ref{fig:partial_pipeline} illustrates this situation. In some cases the original footprint only covers a subset of the visible building structure. If the building were directly processed by the standard refinement pipeline, the prompts and bounding boxes provided to the segmentation model would restrict the segmentation to this limited region. As a result, the segmentation model would only refine the already detected subsection of the building instead of reconstructing the full structure.
 
-To avoid this limitation, the system expands the spatial context around the building. %TODOhow? for example, what is the defined parameters for expansion, e.g. expand the window x4?
-A larger image window is extracted that contains additional surrounding structures. This extended context enables the pipeline to detect additional building segments and to reconstruct the full building extent before performing the geometric refinement.
+To avoid this limitation, the system expands the spatial context around the building before applying the discovery-oriented refinement step. While the standard assessment and full-house refinement patches are generated with a context factor of 1.5, partial-house cases are re-extracted with a larger context factor of 4.0. This enlarged window allows the discovery step to search beyond the limited original footprint extent and to identify additional visible building parts before the final SAM-based refinement is performed.
 
 \begin{figure}[htbp]
 \centering
