@@ -108,6 +108,7 @@ Therefore, separate patch variants are created for the same building in order to
 \begin{itemize}
     \item \texttt{Raw patch:} Plain RGB image without overlays, used as input for segmentation.
     \item \texttt{Clean patch:} Image with the original building polygon overlaid, used for MLLM-based semantic reasoning.
+    %TODO any better names for clean and debug patch? so it is easier to relate its name to its usage? e.g. segmented patch, promptable patch???
     \item \texttt{Debug patch:} Image with a centered reference marker indicating the footprint centroid, used for structured prompt generation.
 \end{itemize}
 
@@ -151,6 +152,7 @@ The MLLM-based quality assessment was performed using Qwen3-VL-8B-Instruct serve
 In the third stage of the workflow, a multimodal large language model (MLLM) is used to perform semantic quality assessment of the extracted building patch. The MLLM receives the clean patch representation (image with polygon overlay) and produces a structured, machine-readable evaluation.
 
 The assessment consists of three core reasoning tasks.
+%TODOsince this is the key step of the pipeline, explain it more: for example, show example of the text prompts for 3 reasoning tasks.you can just show some texts used in your codes
 
 First, the model determines whether a visually identifiable roof structure is present within the polygon boundary. If no building structure is detected, the footprint is excluded from further processing and only the quality assessment result is stored. This prevents unnecessary refinement of non-building objects or false positives.
 
@@ -194,7 +196,8 @@ If the building is classified as partial or uncertain, a discovery-oriented refi
 
 Figure~\ref{fig:partial_pipeline} illustrates this situation. In some cases the original footprint only covers a subset of the visible building structure. If the building were directly processed by the standard refinement pipeline, the prompts and bounding boxes provided to the segmentation model would restrict the segmentation to this limited region. As a result, the segmentation model would only refine the already detected subsection of the building instead of reconstructing the full structure.
 
-To avoid this limitation, the system expands the spatial context around the building. A larger image window is extracted that contains additional surrounding structures. This extended context enables the pipeline to detect additional building segments and to reconstruct the full building extent before performing the geometric refinement.
+To avoid this limitation, the system expands the spatial context around the building. %TODOhow? for example, what is the defined parameters for expansion, e.g. expand the window x4?
+A larger image window is extracted that contains additional surrounding structures. This extended context enables the pipeline to detect additional building segments and to reconstruct the full building extent before performing the geometric refinement.
 
 \begin{figure}[htbp]
 \centering
