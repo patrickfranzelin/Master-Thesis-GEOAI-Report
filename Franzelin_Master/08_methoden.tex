@@ -153,6 +153,35 @@ In the third stage of the workflow, a multimodal large language model (MLLM) is 
 The assessment consists of three core reasoning tasks.
 %TODOsince this is the key step of the pipeline, explain it more: for example, show example of the text prompts for 3 reasoning tasks.you can just show some texts used in your codes
 
+Because this stage determines the downstream routing and refinement strategy, the MLLM-based assessment was implemented as a sequence of task-specific prompts rather than as a single combined instruction. Each prompt addresses one clearly defined reasoning step and returns a structured JSON field that can be parsed automatically by the pipeline \citep{Zaid_prompt_decompisiton}. The full prompt content and JSON schema are documented in Appendix~\ref{app:mllm_prompts} and Appendix~\ref{app:mllm_json_schema}. Table~\ref{tab:mllm_reasoning_tasks} summarizes the main reasoning tasks used for semantic quality assessment.
+
+
+\begin{table}[htb]
+\centering
+\small
+\caption{MLLM reasoning tasks used for semantic quality assessment and routing. The prompt objectives are summarized from the operational prompts documented in Appendix~\ref{app:mllm_prompts}.}
+\label{tab:mllm_reasoning_tasks}
+\begin{tabular}{p{0.23\linewidth}p{0.46\linewidth}p{0.21\linewidth}}
+\toprule
+\textbf{Reasoning task} & \textbf{Prompt objective} & \textbf{Parsed output} \\
+\midrule
+
+Building presence &
+Determine whether a visually identifiable roof or man-made building structure is present inside the overlaid polygon. &
+\texttt{house\_present} \\
+
+Footprint coverage &
+Evaluate whether the polygon captures the majority of the visible roof or only a partial section of the building. &
+\texttt{full\_house\_present} \\
+
+Geometric error analysis &
+Assess spatial misalignment and identify semantic geometry errors such as \texttt{SHAPE\_MISMATCH}, \texttt{MISSING\_PARTS}, and \texttt{EXTRA\_PARTS}. &
+\texttt{error\_tags}, \texttt{error\_description} \\
+
+\bottomrule
+\end{tabular}
+\end{table}
+
 First, the model determines whether a visually identifiable roof structure is present within the polygon boundary. If no building structure is detected, the footprint is excluded from further processing and only the quality assessment result is stored. This prevents unnecessary refinement of non-building objects or false positives.
 
 Second, the MLLM evaluates whether the polygon captures the majority of the visible building structure. This distinction is critical for downstream processing. If the polygon contains most of the building extent, refinement can be performed relative to the existing footprint. However, if the polygon captures only a small portion of the building, the initial bounding box derived from the footprint may be too restrictive. In such cases, a discovery-oriented refinement strategy must be applied to identify the full building extent prior to geometric correction.
@@ -161,12 +190,13 @@ Third, the model generates a semantic error assessment using a separate error-an
 
 The MLLM tasks were intentionally split into smaller prompt chains instead of being handled in one combined instruction. This design follows the idea of task decomposition, where complex reasoning tasks are broken down into simpler subproblems that can be answered sequentially \citep{zhou2022least}. A similar strategy has also been shown to improve reliability in zero-shot visual question-answering by separating a complex visual task into individual sub-prompts \citep{Zaid_prompt_decompisiton}.
 
-The result of this stage is a decision object containing three key attributes:
+The result of this stage is a decision object containing four key attributes:
 
 \begin{itemize}
-    \item \texttt{house\_present}: Boolean indicator of building presence,
-    \item \texttt{full\_house\_present}: Boolean or null indicator distinguishing full versus partial coverage,
+    \item \texttt{house\_present}: Boolean indicator of building presence.
+    \item \texttt{full\_house\_present}: Boolean or null indicator distinguishing full versus partial building coverage.
     \item \texttt{error\_description}: Structured semantic explanation of detected inconsistencies.
+    \item \texttt{error\_tags}: List of predefined semantic geometry error categories assigned by the MLLM, such as \texttt{SHIFTED}, \texttt{SHAPE\_MISMATCH}, \texttt{MISSING\_PARTS}, \texttt{EXTRA\_PARTS}, or \texttt{OVERSIMPLIFIED}.
 \end{itemize}
 
 Invalid or unparsable model outputs were stored as failed outputs. Cases with uncertain full-building status were routed conservatively to the \textit{PartialHousePipeline}.
@@ -264,19 +294,19 @@ For the geometric refinement stage, the Segment Anything Model (SAM) developed b
 
 
 \subsection{Segmentation Model and Prompting Interfaces}
-\begin{wrapfigure}{r}{0.45\textwidth}
-\centering
-\includegraphics[width=\linewidth]{Franzelin_Master/img/Flowchart_SAMStage_IncreaseFont.png}
-\caption{Visual model refinement workflow. Own illustration.}
-\label{fig:sam_stage}
-\end{wrapfigure}
+
 
 In this thesis, the term SAM-based refinement refers to the visual segmentation component used for prompt-based building-mask generation. Point- and box-guided refinement was performed with the SAM-based segmentation backend, whereas the text-prompted discovery step in the \textit{PartialHousePipeline} used the SAM3 text-prompted backend. Preliminary fine-tuning experiments with SAM2 were tested but were not used in the final workflow.
 
 In this work, the pretrained SAM-based backend was used without further architectural modifications. Preliminary experiments were conducted to fine-tune a previous model version (SAM2) using building footprint data derived from two datasets: the Inria Aerial Image Labeling dataset and the SpaceNet 2 dataset for the Khartoum area. Approximately 1000 training patches were generated from these datasets. The two datasets represent different architectural contexts: the Inria dataset predominantly contains buildings from Western urban environments with pitched or heterogeneous roof structures, whereas the Khartoum dataset primarily consists of flat concrete roofs typical for dense settlements in Sudan.
 
 Despite these experiments, the fine-tuned model did not improve segmentation performance. Instead, it showed clear signs of overfitting to specific roof textures and building patterns present in the training data. In particular, the model tended to over-segment roofs and to introduce artificial boundaries within single buildings, especially when roof materials varied within the same structure.
-
+\begin{wrapfigure}{r}{0.45\textwidth}
+\centering
+\includegraphics[width=\linewidth]{Franzelin_Master/img/Flowchart_SAMStage_IncreaseFont.png}
+\caption{Visual model refinement workflow. Own illustration.}
+\label{fig:sam_stage}
+\end{wrapfigure}
 As a consequence, the model frequently produced overly detailed masks that fragmented individual buildings into multiple segments. This effect was particularly visible when applying the model to imagery outside the training regions, indicating poor generalization across different architectural styles and roof materials. Due to this degradation in generalization performance, the fine-tuning approach was abandoned and the pretrained SAM-based backend was used for the final workflow.
 
 \subsection{Segmentation Model Usage in the Refinement Pipelines}
