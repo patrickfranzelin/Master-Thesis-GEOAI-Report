@@ -1,41 +1,211 @@
-\appendix		%Latex sagen, dass ab hier nur noch Anhänge kommen
-\chapter*{Anhänge}\thispagestyle{rmplain}	%erstelltes Kapitel welches aber nicht im Inhaltsverzeichnis aufscheint 
-\addcontentsline{toc}{chapter}{Anhänge}		%Inhaltsverzeichniseintrag ohne nummerierung für zuvor erstelles Kapitel erzeugen
+\appendix
+\chapter*{Appendices}\thispagestyle{rmplain}
+\addcontentsline{toc}{chapter}{Appendices}
 \label{anhaenge}
 
+\renewcommand{\thesection}{\Alph{section}}
+\renewcommand{\thefigure}{\Alph{section}.\arabic{figure}}
+\renewcommand{\thetable}{\Alph{section}.\arabic{table}}
 
-\renewcommand{\thesection}{\Alph{section}}					%Sections mit Großbuchstaben durchnummerieren
-\renewcommand{\thefigure}{\Alph{section}.\arabic{figure}}	%Art der Bildbeschriftung auf Buchstaben.Nummerierung.: ändern
+\section{MLLM Prompts}\thispagestyle{rmplain}
+\label{app:mllm_prompts}
+\setcounter{figure}{0}
+\setcounter{table}{0}
 
+The MLLM stage used separate prompts for building presence, footprint coverage,
+geometric error analysis, and point-prompt generation. All prompts instructed the
+model to return valid JSON only. The condensed prompt content below documents the
+operational task definitions used in the implementation.
 
-\section{Name von Anhang A}\thispagestyle{rmplain}
-\label{app_a}
-\setcounter{figure}{0}		%Muss bei jeder neuen Section gesetzt werden, damit die Caption wieder bei eins zu nummerieren beginnt (z.B. A.1. A.2. ... B.1. B.2.)
+\subsection*{Building Presence and Coverage}
+\begin{lstlisting}[basicstyle=\ttfamily\small,breaklines=true]
+Presence system:
+You are an expert geospatial analyst specializing in aerial imagery.
+Detect man-made roof structures within specified polygon boundaries.
+Output only valid JSON.
 
-%Der Anhang kommt hier rein
-\begin{figure}[htb]
-	\centering  
-	\includegraphics[scale=0.5]{img/Lord_of_The_Rings_Logo.png}
-	\caption{Lord of The Rings Logo}
-	\label{fig:lotrl1}
-\end{figure}
+Presence user:
+Inspect strictly inside the green polygon. Look for visual evidence of a
+roof or man-made structure, such as metal sheets, shingles, concrete slabs,
+or uniform geometric roof textures. Ignore surrounding vegetation, water,
+or ground unless it is part of a structure.
 
-%\begin{figure}[htb]
-%	\centering  
-%	\includegraphics[scale=0.5]{img/Lord_of_The_Rings_Logo.png}
-%	\caption{Lord of The Rings Logo}
-%	\label{fig:lotrl2}
-%\end{figure}
-%\newpage
+Return:
+{ "house_present": true }
+or
+{ "house_present": false }
 
-%%\section{Name von Anhang B}\thispagestyle{rmplain}
-%\label{app_b}
-%\setcounter{figure}{0}		%Muss bei jeder neuen Section gesetzt werden, damit die Caption wieder bei eins zu nummerieren beginnt (z.B. A.1. A.2. ... B.1. B.2.)
+Coverage system:
+You are an expert geospatial analyst specializing in building footprint
+coverage. Evaluate if a polygon captures the main body of a visible roof
+and whether the whole building is visible in the patch.
 
-%Der Anhang kommt hier rein
-%\begin{figure}[htb]
-%%	\includegraphics[scale=0.5]{img/Lord_of_The_Rings_Logo.png}
-	%\caption{Lord of The Rings Logo}
-	%\label{fig:lotrl3}
-%\end{figure}
+Coverage user:
+Return true if the polygon covers the majority (>50%) of the visible roof
+area, all roof edges are visible, and the roof is complete within the image.
+Return false if a significant part lies outside the polygon, the polygon
+segments only a small roof part, or the image cuts off the building.
+
+Return:
+{ "full_house_present": true }
+or
+{ "full_house_present": false }
+\end{lstlisting}
+
+\subsection*{Geometric Error Analysis}
+\begin{lstlisting}[basicstyle=\ttfamily\small,breaklines=true]
+Alignment prompt:
+Compare the green polygon edges with the roof edges on the top, bottom,
+left, and right side. For each side decide whether the edge is aligned or
+not aligned. If two or more sides are not aligned, return:
+{ "misaligned": true }
+Otherwise return:
+{ "misaligned": false }
+
+Tag prompt:
+Classify geometric error types of the green polygon while ignoring the
+general shift and focusing on non-position errors.
+
+Prompted error tags:
+SHAPE_MISMATCH, ORIENTATION_MISMATCH, MISSING_PARTS, EXTRA_PARTS
+
+The parser also accepts:
+STRUCTURE_MATCH, ORIENTATION_MATCH, OVERSIMPLIFIED
+
+Return:
+{ "tags": ["..."] }
+
+Description prompt:
+Compare the polygon outline with the building outline and summarize the
+geometric errors in a short sentence, including shift, missing parts,
+shape correctness, extra parts, level of detail, and orientation.
+
+Return:
+{ "description": "..." }
+\end{lstlisting}
+
+\subsection*{Spatial Point Prompts}
+\begin{lstlisting}[basicstyle=\ttfamily\small,breaklines=true]
+Positive point prompt:
+A blue star marks the center of the target house. Identify the roof of the
+marked house and select exactly one new point on a different visible roof
+part. The point should be away from already placed points and cover a roof
+region not yet represented.
+
+Return:
+{ "inside": [[x,y]] }
+
+Negative point prompt:
+A blue star marks the center of the target house. Select three points
+outside the roof on ground, vegetation, roads, or shadows. Points must not
+lie on roof pixels and should be spatially spread apart.
+
+Return:
+{ "outside": [[x,y],[x,y],[x,y]] }
+
+Coordinate convention:
+(0,0) is the top-left of the patch and (1000,1000) is the bottom-right.
+The returned coordinates are converted to pixel coordinates afterwards.
+\end{lstlisting}
+
+\newpage
+
+\section{MLLM JSON Schema}\thispagestyle{rmplain}
+\label{app:mllm_json_schema}
+\setcounter{figure}{0}
+\setcounter{table}{0}
+
+The following schema summarizes the JSON objects produced by the MLLM calls and
+the fields persisted for downstream routing, SAM prompting, and evaluation.
+
+\begin{lstlisting}[basicstyle=\ttfamily\small,breaklines=true]
+{
+  "house_present": boolean,
+  "full_house_present": boolean,
+
+  "misaligned": boolean,
+  "tags": [
+    "MISALIGNED",
+    "STRUCTURE_MATCH",
+    "SHAPE_MISMATCH",
+    "ORIENTATION_MATCH",
+    "ORIENTATION_MISMATCH",
+    "MISSING_PARTS",
+    "EXTRA_PARTS",
+    "OVERSIMPLIFIED"
+  ],
+  "description": string,
+
+  "inside": [[x_pixel, y_pixel], ...],
+  "outside": [[x_pixel, y_pixel], ...]
+}
+\end{lstlisting}
+
+\begin{table}[htb]
+\centering
+\small
+\begin{tabular}{|p{0.27\textwidth}|p{0.62\textwidth}|}
+\hline
+\textbf{Field} & \textbf{Use in the pipeline} \\
+\hline
+\texttt{house\_present} & Decides whether a building is visible inside the polygon. If false, SAM refinement is skipped and the case is stored as no building detected. \\
+\hline
+\texttt{full\_house\_present} & Routes visible buildings to the full-house pipeline when true and to the partial-house pipeline when false or uncertain. \\
+\hline
+\texttt{errors} / \texttt{tags} & Stores categorical geometric errors. \texttt{MISALIGNED} is added explicitly when the alignment prompt returns true. \\
+\hline
+\texttt{error\_description} & Stores the free-text geometric error summary returned by the description prompt. \\
+\hline
+\texttt{inside\_pts} & Positive SAM point prompts on visible roof pixels. \\
+\hline
+\texttt{outside\_pts} & Negative SAM point prompts outside the roof. \\
+\hline
+\end{tabular}
+\caption{MLLM output fields used by the routing and segmentation workflow.}
+\label{tab:mllm_schema}
+\end{table}
+
+\newpage
+
+\section{Core Parameters}\thispagestyle{rmplain}
+\label{app:core_parameters}
+\setcounter{figure}{0}
+\setcounter{table}{0}
+
+\begin{table}[htb]
+\centering
+\small
+\begin{tabular}{|p{0.34\textwidth}|p{0.55\textwidth}|}
+\hline
+\textbf{Parameter} & \textbf{Value used in the implementation} \\
+\hline
+MLLM model & \texttt{qwen3vl8b} served through an OpenAI-compatible RunPod/vLLM endpoint. \\
+\hline
+MLLM temperature & \texttt{0} for all MLLM calls. \\
+\hline
+MLLM token limits & Presence and coverage: \texttt{1024}; alignment and tags: \texttt{200}; description: \texttt{100}; positive point prompt: \texttt{128}; negative point prompt: \texttt{256}. \\
+\hline
+Initial assessment patch & Square \texttt{512 x 512} pixel patch with context factor \texttt{1.5}. \\
+\hline
+Full-house refinement & Starts with context factor \texttt{1.5}; expands by factor \texttt{1.5} when the selected SAM polygon touches the patch border; maximum \texttt{3} expansion attempts. \\
+\hline
+Partial-house context & Starts with a larger context factor of \texttt{4.0} for candidate discovery before refinement. \\
+\hline
+SAM refinement loop & Maximum \texttt{3} iterations; initial bounding-box scale \texttt{0.35}; border-touch margin \texttt{3} pixels. \\
+\hline
+SAM mask post-processing & Morphological close/open with kernel \texttt{12} during refinement; binary threshold \texttt{127}; largest contour converted to polygon and simplified with tolerance \texttt{2.0}. \\
+\hline
+Point prompts & Default \texttt{3} positive roof points and \texttt{3} negative outside-roof points; MLLM coordinates are normalized to \texttt{0--1000} and then converted to patch pixels. \\
+\hline
+Global discovery & Prompt \texttt{roof}; tile size \texttt{1024}; overlap \texttt{128}; polygons below $500~\mathrm{px}^{2}$ final area are removed. \\
+\hline
+New-building matching & Candidate is treated as already known when IoU with an existing refined polygon is greater than \texttt{0.3}. \\
+\hline
+Post-processing and regularization & Merge buffer \texttt{0.3}; merge IoU threshold \texttt{0.2}; regularization simplify tolerance \texttt{0.3}; parallel threshold \texttt{2}; circles allowed with threshold \texttt{0.9}; 45-degree angles and neighbor alignment disabled. \\
+\hline
+\end{tabular}
+\caption{Core implementation parameters for the MLLM-assisted building refinement workflow.}
+\label{tab:core_parameters}
+\end{table}
+
 \newpage
