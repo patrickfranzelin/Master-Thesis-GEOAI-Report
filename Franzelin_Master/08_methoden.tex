@@ -107,7 +107,7 @@ Therefore, separate patch variants are created for the same building in order to
 
 \begin{itemize}
     \item \texttt{Segmentation patch:} Plain RGB image without overlays, used as input for segmentation.
-    \item \texttt{Assessment patch:} Image with the original building polygon overlaid, used for MLLM-based semantic reasoning.
+    \item \texttt{Assessment patch:} Image with the original building polygon overlaid, used for MLLM-based semantic reasoning to determine whether a visible building is present beneath the polygon and whether the footprint should be routed to the full- or partial-building refinement pipeline.
     \item \texttt{Prompt-reference patch:} Image with a centered reference marker indicating the footprint centroid, used for structured prompt generation.
 \end{itemize}
 
