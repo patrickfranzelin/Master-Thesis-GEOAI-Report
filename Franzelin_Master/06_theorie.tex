@@ -8,7 +8,7 @@ This chapter introduces the core concepts underlying this thesis, including geos
 
 Geospatial data quality describes the degree to which spatial data are suitable for a given purpose, and therefore depends not only on the dataset itself but also on the application context in which it is used.
 \cite{veregin1999data} states that quality usually refers to a high degree of craftsmanship; however, this concept becomes more difficult to apply to data, which lack physical characteristics. Instead, geospatial data quality is commonly described through abstract properties such as accuracy, completeness, consistency, and resolution \citep{veregin1999data}.
-These concepts are formalized in the international standard \textit{Geographic information — Data quality} (ISO~19157-1:2023), which defines a structured framework for describing and documenting geospatial data quality \citep{ISO19157-1:2023}. The standard specifies five core quality elements: completeness, logical consistency, positional accuracy, temporal quality, and thematic quality. For building-footprint data, these dimensions are closely related to practical questions such as whether buildings are missing, spatially displaced, geometrically simplified, temporally outdated, or unsuitable for a specific mapping task. Related work often uses slightly different terminology. For example, \citep{Vieira_dataqualityindicators} and \cite{dataqualityinEarthobservation} refer to completeness, logical consistency, positional accuracy, temporal accuracy, and attribute accuracy, while also emphasizing the importance of lineage or provenance as an additional quality indicator.
+These concepts are formalized in the international standard \textit{Geographic information — Data quality} (ISO~19157-1:2023), which defines a structured framework for describing and documenting geospatial data quality \citep{ISO19157-1:2023}. The standard specifies five core quality elements: completeness, logical consistency, positional accuracy, temporal quality, and thematic quality. For building-footprint data, these dimensions are closely related to practical questions such as whether buildings are missing, spatially displaced, geometrically simplified, temporally outdated, or unsuitable for a specific mapping task. Related work often uses slightly different terminology. For example, \cite{Vieira_dataqualityindicators} and \cite{dataqualityinEarthobservation} refer to completeness, logical consistency, positional accuracy, temporal accuracy, and attribute accuracy, while also emphasizing the importance of lineage or provenance as an additional quality indicator.
 
 Across several studies on geospatial data quality, the concept of \emph{fitness-for-use} is introduced \citep{dataqualityinEarthobservation, veregin1999data, Chrisman_Theerrorcomponent, Vieira_dataqualityindicators}. Originating from quality engineering, this concept was later adopted in GIScience and describes a shift in responsibility from data producers to data consumers. Rather than assuming the existence of universally “high-quality” datasets, geospatial data are evaluated relative to their intended application, meaning that a dataset may be sufficient for regional planning but insufficient for detailed feature-level mapping or damage assessment. In this view, errors are considered inevitable, and data quality is understood as a multidimensional and task-dependent property. Consequently, transparent documentation of limitations, uncertainty, and provenance becomes essential. \cite{caprioli2003rules} further emphasize that GIS environments typically integrate spatial datasets of different origins and quality levels, often leaving the overall system accuracy undefined. They argue that while standards support interoperability and documentation, compliance alone does not guarantee quality, since standards cannot account for all application contexts. Instead, spatial data quality must ultimately be evaluated in terms of fitness-for-use, requiring both producer metadata and user-driven assessment. The authors also highlight practical challenges in GIS workflows, including quality loss during data conversion, scalability issues, and the difficulty of maintaining consistent accuracy across heterogeneous datasets.
 
@@ -35,6 +35,7 @@ Within these hidden layers, the network performs representation learning: each l
 
 Each transfer from one neuron to another is governed by weights, which determine how strongly an input contributes to the next layer. In addition, each neuron contains a bias term, which shifts the activation threshold and allows the neuron to fire even when the weighted input is small. Together, weights and biases control how information propagates through the network and are continuously adjusted during training to improve the model’s performance \citep{Montesinos2022Multivariate}.
 
+
 \begin{figure}[htb]
 	\centering  
 	\includegraphics[scale=0.7]{Franzelin_Master/img/ANN_Chart.png}
@@ -44,14 +45,17 @@ Each transfer from one neuron to another is governed by weights, which determine
 
 \end{figure}
 
-Each neuron calculates a weighted sum of all the incoming inputs and adds a bias. Then a non-linear activation function is applied. In Figure~\ref{fig:ann_chart}, the arrows represent the weights $W^{(l)}_{ji}$, the circles represent the activations $h^{(l)}_{j}$, and the labels bias $b^{(l)}$ indicating the bias associated with each neuron. Input patches from the orange image correspond to $h^{(0)}_{i}$. The forward pass is shown in Equation~\ref{eq:neuron_forward_pass} \citep{Montesinos2022Multivariate}:
+Each neuron calculates a weighted sum of all the incoming inputs and adds a bias. Then a non-linear activation function is applied. In Figure~\ref{fig:ann_chart}, the arrows represent the weights $W^{(l)}*{ji}$, the circles represent the activations $h^{(l)}*{j}$, and the labels bias $b^{(l)}$ indicating the bias associated with each neuron. Input patches from the orange image correspond to $h^{(0)}_{i}$. The forward pass is shown in Equation~\ref{eq:neuron_forward_pass} \citep{Montesinos2022Multivariate}:
 
 \begin{equation}
-h^{(l)}_{j} = g^{(l)}\!\left( \sum_{i} W^{(l)}_{ji}\, h^{(l-1)}_{i} + b^{(l)}_{j} \right)
+h^{(l)}*{j} = g^{(l)}!\left( \sum*{i} W^{(l)}*{ji}, h^{(l-1)}*{i} + b^{(l)}_{j} \right)
 \label{eq:neuron_forward_pass}
 \end{equation}
 
+Here, $g^{(l)}$ denotes the activation function of layer $l$. Activation functions introduce non-linearity into the network and are therefore essential for learning complex relationships in the data. Without such non-linear functions, multiple stacked layers would mathematically collapse into a single linear transformation, meaning that the network could not benefit from depth in the same way \citep{chollet2018deep, Montesinos2022Multivariate}.
+
 This layered representation learning is the core mechanism that underlies all modern deep learning architectures: from convolutional neural networks (CNNs) to transformer-based models, and further to large visual foundation models and multimodal models used in this work.
+
 
 \subsection{Convolutional Neural Networks (CNNs)}
 \label{sec:cnn_foundations}
@@ -62,9 +66,12 @@ CNNs build on the same basic principles as ANNs but introduce architectural cons
 \begin{equation*}
 10^{6} \times 10^{3} = 10^{9},
 \end{equation*}
-parameters—computationally infeasible to train \citep{zhang2023dive}.
+parameters -- computationally infeasible to train \citep{zhang2023dive}.
 
-CNNs overcome this limitation by preserving the spatial structure of an image. Instead of flattening the image into a one-dimensional vector, they represent it as a three-dimensional volume defined by height, width, and depth, where the depth corresponds to the learned feature maps \citep{o2015introduction}.
+CNNs overcome this limitation by using local connectivity and shared convolutional filters, which allow the network to detect spatial patterns in an image more efficiently than a fully connected architecture \citep{o2015introduction, Li2021Asurvey}.
+% TODO not accurate. The main reason CNNs solve this is local connectivity and weight sharing, not simply preserving spatial structure.
+Instead of flattening the image into a one-dimensional vector, they represent it as a three-dimensional volume defined by height, width, and depth, where the depth corresponds to the learned feature maps \citep{o2015introduction}. The following paragraphs introduce the main CNN components, including convolutional layers, filters, feature maps, activation functions, and pooling operations.
+%TODO add a sentence here, saying that you will introduce core mechanisms/layers of CNN in the following paragraphs
 
 \begin{figure}[htb]
 	\centering  
@@ -76,17 +83,16 @@ CNNs overcome this limitation by preserving the spatial structure of an image. I
 
 \textbf{Input layer:}
 
-The input layer can be understood as a data container that holds the raw input—in this case, an image of an orange. It stores all pixel values in a tensor with a defined height, width, and number of channels (RGB). In Figure~\ref{fig:cnn_chart}, the input therefore has the shape \(128 \times 128 \times 3\).
+The input layer can be understood as a data container that holds the raw input -- in this case, an image of an orange. It stores all pixel values in a tensor with a defined height, width, and number of channels (RGB). In Figure~\ref{fig:cnn_chart}, the input therefore has the shape \(128 \times 128 \times 3\).
 
 \textbf{Convolutional layer:}
 
-
-Convolutions reduce the complexity and size of the input by optimizing how information is processed and represented \citep{o2015introduction}. A filter (a small square matrix), also called a kernel, slides across the image from top-left to bottom-right and detects local patterns in the pixel values of the input image \citep{Montesinos2022Multivariate}. When the values in the image patch and the kernel align well, the resulting dot product is large; when they differ, the response remains low as shown in Equation~\ref{eq:conv_example}. The collection of these responses across all positions forms the activation map (also known as the feature map) \citep{Montesinos2022Multivariate}.
+%TODO you can mention again why CNN is prefered for images, e.g. due to weighting/filter sharing
+Convolutional layers are particularly suited for image data because they use local connectivity and weight sharing. Instead of learning separate weights for every pixel-neuron connection, the same filter is applied across different spatial locations of the image. This reduces the number of trainable parameters and allows the network to detect recurring visual patterns more efficiently than a fully connected architecture \citep{o2015introduction, Li2021Asurvey}. A filter (a small square matrix), also called a kernel, slides across the image from top-left to bottom-right and detects local patterns in the pixel values of the input image \citep{Montesinos2022Multivariate}. When the values in the image patch and the kernel align well, the resulting dot product is large; when they differ, the response remains low as shown in Equation~\ref{eq:conv_example}. The collection of these responses across all positions forms the activation map (also known as the feature map) \citep{Montesinos2022Multivariate}.
 
 \begin{equation}
-\begin{aligned}
 \text{Response}
-&= \sum \left(
+= \sum \left(
 \underbrace{
 \begin{bmatrix}
 100 & 103 & 100 \\
@@ -102,9 +108,8 @@ Convolutions reduce the complexity and size of the input by optimizing how infor
 1 & 0 & -1
 \end{bmatrix}
 }_{\text{Kernel}}
-\right) \\
-&= 2
-\end{aligned}
+\right)
+= 2
 \label{eq:conv_example}
 \end{equation}
 
@@ -154,7 +159,7 @@ After flattening the feature maps (Figure~\ref{fig:cnn_chart}), the network tran
 \subsection{Transformer Models}
 \label{sec:transformer_models}
 
-With the paper by \cite{VaswaniTransformerBase}, the foundation was laid for the transformer architecture in deep learning for natural language processing. Instead of relying on the inherently sequential processing of convolutional neural network models, the Transformer was presented as an architecture that uses self-attention to model dependencies between tokens across the entire input sequence \citep{VaswaniTransformerBase}. Further, \cite{DosovitskiyTransformer} extended this idea to computer vision by introducing the Vision Transformer (ViT), which applies the transformer architecture from \cite{VaswaniTransformerBase} directly to image recognition. In their approach, an image is divided into a sequence of fixed-size patches that are linearly embedded and processed as tokens by a standard transformer encoder \citep{DosovitskiyTransformer}. To understand how such vision transformers operate, the following paragraphs briefly summarise the core building blocks of a transformer encoder:
+With the paper by \cite{VaswaniTransformerBase}, the foundation was laid for the transformer architecture in deep learning for natural language processing. Instead of relying on the inherently sequential processing of convolutional neural network models, the Transformer was presented as an architecture that uses self-attention to model dependencies between tokens across the entire input sequence \citep{VaswaniTransformerBase}. Further, \cite{DosovitskiyTransformer} extended this idea to computer vision by introducing the Vision Transformer (ViT), which applies the transformer architecture from \cite{VaswaniTransformerBase} directly to computer vision. In their approach, an image is divided into a sequence of fixed-size patches that are linearly embedded and processed as tokens by a standard transformer encoder \citep{DosovitskiyTransformer}. To understand how such vision transformers operate, the following paragraphs briefly summarise the core building blocks of a transformer encoder:
 
 \textbf{Tokenizer:} The natural language input is first split into tokens \(x_1,\dots,x_n\) (words or, more commonly, subword units), and each token is mapped to a unique integer ID \(\mathrm{id}_i\) from a fixed vocabulary \citep{tunstall2022naturaltransformer, VaswaniTransformerBase}.
 Using an embedding lookup table, each ID \(\mathrm{id}_i\) is converted into a dense token embedding vector \(e_i \in \mathbb{R}^{d_{\text{model}}}\), which represents the token content in the model’s feature space. \citep{tunstall2022naturaltransformer}
@@ -326,10 +331,12 @@ Finally, the \textbf{language model backbone} processes the combined sequence of
 \subsubsection{Qwen-VL Multimodal Model}
 
 In this work, the selected vision–language model must be capable of supporting several tasks that are relevant for image-based building-footprint assessment. In particular, the model needs to perform well in three main capabilities:
+\begin{itemize}
+    \item visual-spatial reasoning,
+    \item building presence assessment,
+    \item and coordinate or point generation.
+\end{itemize}
 
-visual-spatial reasoning,
-building presence assessment,
-and coordinate or point generation.
 
 Geospatial reasoning is required for understanding the spatial structure of buildings and verifying whether predicted polygons follow the outlines of houses correctly. Spatial reasoning is also necessary to compare existing polygon overlays with visible image evidence, for example to identify whether a polygon approximately corresponds to a building, misses visible parts, or includes surrounding non-building areas. Finally, the model must be able to perform coordinate reasoning in order to place points either on or outside the building structure, which is required for the iterative correction pipeline developed in this thesis.
 
@@ -502,9 +509,9 @@ A recurring challenge in building extraction is the transition from image-based 
 
 \end{figure}
 
-\subsection{Existing QA Approaches}
+\subsection{Existing Quality Assurance Approaches}
 
-As discussed in Section~\ref{sec:geospatial_data_quality}, the quality of geospatial features—particularly building footprints—directly affects downstream analysis, cartographic production, and spatial decision-making. Traditional QA relies on manual inspection by comparison with original maps or imagery, the use of metadata to document data lineage and uncertainty over time, and geographical consistency checks based on spatial logic (e.g., rivers should not cross contour lines)~\citep{chen2022reviewing}. Based on previous reviews \citep{chen2022reviewing, prodobnukar_actualandprecivedqulity}, existing QA approaches can be broadly grouped into (i) rule-based geometric and topological validation, (ii) sampling and visual inspection against reference data, (iii) metadata-driven quality documentation, and (iv) increasingly automated frameworks that combine multiple evaluation techniques.
+As discussed in Section~\ref{sec:geospatial_data_quality}, the quality of geospatial features -- particularly building footprints -- directly affects downstream analysis, cartographic production, and spatial decision-making. Traditional QA relies on manual inspection by comparison with original maps or imagery, the use of metadata to document data lineage and uncertainty over time, and geographical consistency checks based on spatial logic (e.g., rivers should not cross contour lines)~\citep{chen2022reviewing}. Based on previous reviews \citep{chen2022reviewing, prodobnukar_actualandprecivedqulity}, existing QA approaches can be broadly grouped into (i) rule-based geometric and topological validation, (ii) sampling and visual inspection against reference data, (iii) metadata-driven quality documentation, and (iv) increasingly automated frameworks that combine multiple evaluation techniques.
 
 A representative example of classical deterministic QA is provided by \cite{ahmed2023qualitymanagement}, who presents specification-driven quality control workflows for GIS databases based on predefined acceptance criteria, geometric and topological consistency rules, attribute validation, edge matching, and structured QA/QC checklists. His framework combines automated validation (e.g., schema conformity, positional accuracy, and attribute completeness) with manual visual inspection and random sampling, reflecting a rule-based approach in which data quality is assessed against explicit standards and thresholds.
 
@@ -513,5 +520,3 @@ More recently, research has begun to explore data-driven alternatives to traditi
 Building-footprint quality assessment often focuses on comparing the dataset under evaluation with a reference dataset. For example, \cite{Hongchao_QualityAssesmentOSM} evaluated the OSM building footprint dataset for Munich by comparison with ATKIS, the authoritative German topographic database. Similarly, \cite{Brovelli_OSM_SpatialAccuracy} validated OSM building footprints for the Lombardy region in northern Italy against an authoritative reference dataset, the Lombardy Regional Topographical Database. However, this reference-based evaluation paradigm raises a fundamental question for transferable geospatial QA: how can building-footprint quality be assessed in regions where no high-quality authoritative reference dataset is available? One recent study that attempts this for automatically derived global datasets is presented by \cite{okyere2025evaluating}, who compare Google Open Buildings and Microsoft building footprints against OSM across five cities — Accra, Nairobi, Caracas, Berlin, and Houston using metrics such as overlap analysis, relative positional accuracy, and Intersection over Union to identify differences in completeness and spatial alignment without relying on an authoritative cadastral reference layer.
 
 The workflow developed in this thesis is positioned within this gap. Instead of relying exclusively on authoritative reference data, it investigates whether visual foundation models and multimodal models can support image-based quality assessment and selective refinement of existing building polygons. The goal is therefore not to replace authoritative mapping or expert validation, but to explore whether such models can contribute to transferable, feature-level QA workflows for global building-footprint datasets.
-
-% TODO: Add one short paragraph on rule-based building-footprint QA checks such as minimum area, overlap, duplicate geometries, invalid topology, compactness, and rectangularity.
