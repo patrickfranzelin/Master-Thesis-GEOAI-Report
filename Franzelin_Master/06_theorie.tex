@@ -45,10 +45,13 @@ Each transfer from one neuron to another is governed by weights, which determine
 
 \end{figure}
 
-Each neuron calculates a weighted sum of all the incoming inputs and adds a bias. Then a non-linear activation function is applied. In Figure~\ref{fig:ann_chart}, the arrows represent the weights $W^{(l)}*{ji}$, the circles represent the activations $h^{(l)}*{j}$, and the labels bias $b^{(l)}$ indicating the bias associated with each neuron. Input patches from the orange image correspond to $h^{(0)}_{i}$. The forward pass is shown in Equation~\ref{eq:neuron_forward_pass} \citep{Montesinos2022Multivariate}:
+Each neuron calculates a weighted sum of all the incoming inputs and adds a bias. Then a non-linear activation function is applied. In Figure~\ref{fig:ann_chart}, the arrows represent the weights \(W^{(l)}_{ji}\), the circles represent the activations \(h^{(l)}_j\), and \(b^{(l)}_j\) denotes the bias associated with neuron \(j\). Input patches from the orange image correspond to $h^{(0)}_{i}$. The forward pass is shown in Equation~\ref{eq:neuron_forward_pass} \citep{Montesinos2022Multivariate}:
 
 \begin{equation}
-h^{(l)}*{j} = g^{(l)}!\left( \sum*{i} W^{(l)}*{ji}, h^{(l-1)}*{i} + b^{(l)}_{j} \right)
+h^{(l)}_{j} =
+g^{(l)}\left(
+\sum_i W^{(l)}_{ji} h^{(l-1)}_i + b^{(l)}_j
+\right)
 \label{eq:neuron_forward_pass}
 \end{equation}
 
@@ -76,7 +79,7 @@ Instead of flattening the image into a one-dimensional vector, they represent it
 \begin{figure}[htb]
 	\centering  
 	\includegraphics[scale=0.4]{Franzelin_Master/img/CNN_Chart.png}
-    \caption{Schematic overview of a convolutional neural network (CNN), showing how convolution and pooling layers transform an RGB image into feature maps used for classification.Own illustration based on \citet{o2015introduction} and \citet{Li2021Asurvey}.}
+    \caption{Schematic overview of a convolutional neural network (CNN), showing how convolution and pooling layers transform an RGB image into feature maps used for classification. Own illustration based on \citet{o2015introduction} and \citet{Li2021Asurvey}.}
     \label{fig:cnn_chart}
 
 \end{figure}
@@ -182,7 +185,7 @@ x_i^{(0)} = e_i + p_i \,, \qquad i=1,\dots,n \, .
 \begin{figure}[htb]
 	\centering
 	\includegraphics[scale=0.7]{Franzelin_Master/img/InputEmbeding.jpg}
-	\caption{Input embedding construction: the token embedding \(e_i\) is combined with the positional embedding \(p_i\) to form the encoder input \(x_i^{(0)}\).Own illustration based on \citet{tunstall2022naturaltransformer} and \citet{VaswaniTransformerBase}.}
+	\caption{Input embedding construction: the token embedding \(e_i\) is combined with the positional embedding \(p_i\) to form the encoder input \(x_i^{(0)}\). Own illustration based on \citet{tunstall2022naturaltransformer} and \citet{VaswaniTransformerBase}.}
 	\label{fig:input_embedding}
 \end{figure}
 
