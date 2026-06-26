@@ -55,16 +55,13 @@ or
 \subsection*{Geometric Error Analysis}
 \begin{lstlisting}[basicstyle=\ttfamily\small,breaklines=true]
 Alignment prompt:
-Compare the green polygon edges with the roof edges on the top, bottom,
-left, and right side. For each side decide whether the edge is aligned or
-not aligned. If two or more sides are not aligned, return:
+Compare the green polygon edges with the roof edges on the top, bottom, left, and right side. For each side decide whether the edge is aligned or not aligned. If two or more sides are not aligned, return:
 { "misaligned": true }
 Otherwise return:
 { "misaligned": false }
 
 Tag prompt:
-Classify geometric error types of the green polygon while ignoring the
-general shift and focusing on non-position errors.
+Classify geometric error types of the green polygon while ignoring the general shift and focusing on non-position errors.
 
 Prompted error tags:
 SHAPE_MISMATCH, ORIENTATION_MISMATCH, MISSING_PARTS, EXTRA_PARTS
@@ -76,9 +73,7 @@ Return:
 { "tags": ["..."] }
 
 Description prompt:
-Compare the polygon outline with the building outline and summarize the
-geometric errors in a short sentence, including shift, missing parts,
-shape correctness, extra parts, level of detail, and orientation.
+Compare the polygon outline with the building outline and summarize the geometric errors in a short sentence, including shift, missing parts, shape correctness, extra parts, level of detail, and orientation.
 
 Return:
 { "description": "..." }
@@ -87,25 +82,19 @@ Return:
 \subsection*{Spatial Point Prompts}
 \begin{lstlisting}[basicstyle=\ttfamily\small,breaklines=true]
 Positive point prompt:
-A blue star marks the center of the target house. Identify the roof of the
-marked house and select exactly one new point on a different visible roof
-part. The point should be away from already placed points and cover a roof
-region not yet represented.
+A blue star marks the center of the target house. Identify the roof of the marked house and select exactly one new point on a different visible roof part. The point should be away from already placed points and cover a roof region not yet represented.
 
 Return:
 { "inside": [[x,y]] }
 
 Negative point prompt:
-A blue star marks the center of the target house. Select three points
-outside the roof on ground, vegetation, roads, or shadows. Points must not
-lie on roof pixels and should be spatially spread apart.
+A blue star marks the center of the target house. Select three points outside the roof on ground, vegetation, roads, or shadows. Points must not lie on roof pixels and should be spatially spread apart.
 
 Return:
 { "outside": [[x,y],[x,y],[x,y]] }
 
 Coordinate convention:
-(0,0) is the top-left of the patch and (1000,1000) is the bottom-right.
-The returned coordinates are converted to pixel coordinates afterwards.
+(0,0) is the top-left of the patch and (1000,1000) is the bottom-right. The returned coordinates are converted to pixel coordinates afterwards.
 \end{lstlisting}
 
 \newpage
@@ -174,7 +163,7 @@ the fields persisted for downstream routing, SAM prompting, and evaluation.
 
 \begin{table}[htb]
 \centering
-\small
+\footnotesize
 \begin{tabular}{|p{0.34\textwidth}|p{0.55\textwidth}|}
 \hline
 \textbf{Parameter} & \textbf{Value used in the implementation} \\

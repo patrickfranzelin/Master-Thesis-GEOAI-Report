@@ -11,7 +11,7 @@ In total, the workflow was applied to 2,842 building polygons from the Google Op
 
 From these outputs, 1,256 buildings were manually evaluated, as described in Section~\ref{sec:evaluation_strategy}. The number of evaluated buildings is not the same for all countries. This is mainly because some Google Open Buildings detections did not have a clearly corresponding visible building in the selected imagery and were therefore removed from the dataset. In addition, the evaluation was only possible when the original polygon, the SAM-derived polygon, and the final post-processed polygon could clearly be matched to each other. In some cases, not all three versions could be assigned reliably, so these buildings were excluded from the manual evaluation.
 
-The denominators therefore differ between analyses. The initial MLQA input always refers to all 2,842 Google Open Buildings polygons. The manual before-and-after evaluation refers to the 1,256 cases for which original, SAM-derived, and post-processed geometries could be compared. Some geometry-specific analyses use \(n=1,253\) because three evaluated cases could not be included in that specific calculation; the relevant exclusion reason is stated in the corresponding subsection or table caption.
+The denominators therefore differ between analyses. The initial MLQA input always refers to all 2,842 Google Open Buildings polygons. The manual before-and-after evaluation refers to the 1,256 cases for which original, SAM-derived, and post-processed geometries could be compared. Some geometry-specific analyses use \(n=1,253\) because three evaluated cases could not be included in that specific calculation; the relevant exclusion reason is stated in the corresponding subsection or table caption. %TOOD reference right section
 
 \begin{table}[htp]
 	\begin{center}
@@ -105,19 +105,17 @@ The strongest overall improvements were observed in Niger and Mozambique. In Nig
 
 \section{Changes in Error Composition}
 
-\subsection{Dominant Errors in Original and Post-processed Geometries}
-
 During the manual evaluation, geometry error categories were additionally assigned to each building polygon. The complete taxonomy is described in Section~\ref{sec:evaluation_criteria_error_taxonomy}. Five principal error categories were defined: \texttt{SHIFTED}, \texttt{SHAPE\_MISMATCH}, \texttt{OVERSIMPLIFIED}, \texttt{MISSING\_PARTS}, and \texttt{EXTRA\_PARTS}. The evaluation further recorded whether the post-processing workflow introduced a new geometric error that was not present in the original polygon. Across the complete manually evaluated dataset, this occurred in 207 of 1,256 buildings (\textbf{16.5\%}).
 
 \subsection{Detected Tree Context and New Post-processing Errors}
-
+%TODO one page with the table is nearly empty
 Since vegetation was one of the visible difficulties in several study areas, the relation between detected tree context and newly introduced errors was checked at building level. This analysis does not measure confirmed tree occlusions, because the database only stores detected tree masks and not whether a tree dent was actually detected and repaired on the building boundary. It should therefore be interpreted only as a proxy for vegetation-influenced image context. Cases with no tree mask were classified as \textit{no detected tree}; tree-area ratios up to 0.25 as \textit{low}, ratios above 0.25 and up to 1.0 as \textit{medium}, and ratios above 1.0 as \textit{high tree context}.
 
 Buildings with detected trees showed a higher share of newly introduced post-processing errors than buildings without detected trees. The aggregated detected-tree group corresponds to the combined low, medium, and high classes. The new-error rate increased from 13.4\% without detected trees to 18.7\% among the 726 buildings in the aggregated detected-tree group. In high tree-context cases, the rate reached 23.0\%. The binary association was weak (\(\phi=0.07\)), so tree context alone does not explain the failures, but the descriptive pattern is consistent with higher difficulty in vegetation-rich image contexts.
 
 \begin{table}[htb]
 \centering
-\caption{Newly introduced post-processing errors by detected tree-context class for the evaluated subset (\(n=1,256\)).}
+\caption{Newly introduced errors in the final workflow output by detected tree-context class for the evaluated subset(\(n=1,256\)).}
 \label{tab:new_errors_tree_context}
 \begin{tabular}{lrrrr}
 \toprule
@@ -133,12 +131,14 @@ High             & 235 & 23.0 & 63.0 & 23.0 \\
 
 Because multiple error categories could be assigned simultaneously to one building polygon, the percentages shown in Figure~\ref{fig:error_profile_by_location} are not mutually exclusive and may exceed 100\% when summed within one study area.
 
-\begin{figure}[H]
+\begin{figure}[htb]
 	\centering  
 	\includegraphics[width=\textwidth]{Franzelin_Master/img/02_error_categories_by_location_total.png}
 	\caption{Distribution of multi-label geometry error categories before and after post-processing for each study area and for the complete manually evaluated dataset (\(n=1,256\)).}
 	\label{fig:error_profile_by_location}
 \end{figure}
+
+\subsection{}
 
 Figure~\ref{fig:error_profile_by_location} summarizes the distribution of error categories before and after post-processing. The dominant error type in the original Google Open Buildings dataset was \texttt{SHIFTED}. Across the complete manually evaluated subset, 971 buildings (\textbf{77.3\%}) exhibited a noticeable spatial displacement between the polygon geometry and the visible roof structure in the aerial imagery. The highest prevalence of this error category was observed in Mozambique (\textbf{93.4\%}), followed by Niger (\textbf{81.6\%}) and Liberia (\textbf{77.6\%}).
 
@@ -175,7 +175,7 @@ Niger and Mozambique show more concentrated displacement patterns with lower spr
 \subsection{Area Preservation}
 
 
-\begin{figure}[H]
+\begin{figure}[htb]
 \centering  
 	\includegraphics[scale=0.65]{Franzelin_Master/img/03_original_vs_post_area_scatter.png}
 	\caption{Comparison of original and post-processed building areas by study area.}
@@ -249,14 +249,6 @@ The texture-difference values show a different pattern. Liberia and Nepal had th
 \label{sec:results_study_area_comparison}
 
 Table~\ref{tab:country_summary} summarizes several of the most important result indicators by study area, including final geometry quality, area preservation, positional correction magnitude, surrounding vegetation context, and polygon complexity changes.
-
-Niger and Mozambique achieved the strongest overall results, with 85.9\% and 83.8\% of buildings reaching the \textit{good} or \textit{perfect} categories. Both study areas also showed comparatively small median area changes and lower positional correction magnitudes. The strongest difference between these two study areas was observed in vegetation context. Mozambique showed the highest proportion of medium or high detected tree context among all study areas (68.9\%), whereas Niger exhibited the lowest proportion (11.7\%). Despite this difference, both locations showed similarly limited increases in polygon complexity compared to Liberia, Mexico, and Nepal.
-
-Liberia and Mexico performed within a similar range regarding final geometry quality, with 79.5\% and 72.4\% of buildings reaching the \textit{good} or \textit{perfect} category, respectively. Liberia showed a median absolute area change of 16.0\%, whereas Mexico reached 30.7\%, while both study areas exhibited relatively similar median positional corrections (3.1\,m and 3.7\,m). Mexico additionally showed a substantially higher proportion of detected surrounding vegetation (63.6\%) compared to Liberia (35.5\%). Both study areas also exhibited comparable increases in polygon complexity, with vertex increases of 154.7\% and 161.9\%, respectively.
-
-Nepal showed the lowest share of buildings classified as \textit{good} or \textit{perfect} after post-processing, reaching 65.6\%. It also exhibited the largest median absolute area change (33.4\%) and the largest median positional correction relative to the original Google Open Buildings polygons (5.1\,m). Furthermore, 47.4\% of the evaluated buildings had medium or high detected tree context near the polygon. Nepal also showed the strongest increase in polygon complexity, with the average vertex count increasing by 382.7\%. It should be noted that detected vegetation does not necessarily imply that the tree repair workflow was executed, as not every detected tree triggered this processing step.
-
-
 \begin{table}[htb]
 \centering
 \caption{Summary of final geometry quality indicators and polygon complexity changes by study area. Quality percentages refer to the manually evaluated subset; geometry-change indicators use the available post-processed geometries for the respective calculation.}
@@ -291,6 +283,15 @@ Nepal       & 65.6 & 33.4 & 5.1 & 47.4 & +382.7 \\
 \scriptsize
 Good/perfect denotes the share with a final manual rating of \textit{good} or \textit{perfect}. Median absolute area change is measured relative to the original polygon. Median centroid displacement is measured from the original to the post-processed polygon. Medium/high tree context denotes the corresponding tree-context classes. Mean vertex increase compares original and post-processed geometries. Denominators follow the manually evaluated subset unless geometry availability requires a smaller calculation subset.
 \end{table}
+
+Niger and Mozambique achieved the strongest overall results, with 85.9\% and 83.8\% of buildings reaching the \textit{good} or \textit{perfect} categories. Both study areas also showed comparatively small median area changes and lower positional correction magnitudes. The strongest difference between these two study areas was observed in vegetation context. Mozambique showed the highest proportion of medium or high detected tree context among all study areas (68.9\%), whereas Niger exhibited the lowest proportion (11.7\%). Despite this difference, both locations showed similarly limited increases in polygon complexity compared to Liberia, Mexico, and Nepal.
+
+Liberia and Mexico performed within a similar range regarding final geometry quality, with 79.5\% and 72.4\% of buildings reaching the \textit{good} or \textit{perfect} category, respectively. Liberia showed a median absolute area change of 16.0\%, whereas Mexico reached 30.7\%, while both study areas exhibited relatively similar median positional corrections (3.1\,m and 3.7\,m). Mexico additionally showed a substantially higher proportion of detected surrounding vegetation (63.6\%) compared to Liberia (35.5\%). Both study areas also exhibited comparable increases in polygon complexity, with vertex increases of 154.7\% and 161.9\%, respectively.
+
+Nepal showed the lowest share of buildings classified as \textit{good} or \textit{perfect} after post-processing, reaching 65.6\%. It also exhibited the largest median absolute area change (33.4\%) and the largest median positional correction relative to the original Google Open Buildings polygons (5.1\,m). Furthermore, 47.4\% of the evaluated buildings had medium or high detected tree context near the polygon. Nepal also showed the strongest increase in polygon complexity, with the average vertex count increasing by 382.7\%. It should be noted that detected vegetation does not necessarily imply that the tree repair workflow was executed, as not every detected tree triggered this processing step.
+
+
+
 
 
 
