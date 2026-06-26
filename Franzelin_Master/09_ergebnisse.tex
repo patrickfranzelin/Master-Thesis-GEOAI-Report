@@ -11,9 +11,11 @@ In total, the workflow was applied to 2,842 building polygons from the Google Op
 
 From these outputs, 1,256 buildings were manually evaluated, as described in Section~\ref{sec:evaluation_strategy}. The number of evaluated buildings is not the same for all countries. This is mainly because some Google Open Buildings detections did not have a clearly corresponding visible building in the selected imagery and were therefore removed from the dataset. In addition, the evaluation was only possible when the original polygon, the SAM-derived polygon, and the final post-processed polygon could clearly be matched to each other. In some cases, not all three versions could be assigned reliably, so these buildings were excluded from the manual evaluation.
 
+The denominators therefore differ between analyses. The initial MLQA input always refers to all 2,842 Google Open Buildings polygons. The manual before-and-after evaluation refers to the 1,256 cases for which original, SAM-derived, and post-processed geometries could be compared. Some geometry-specific analyses use \(n=1,253\) because three evaluated cases could not be included in that specific calculation; the relevant exclusion reason is stated in the corresponding subsection or table caption.
+
 \begin{table}[htp]
 	\begin{center}
-		\captionabove{MLQA routing classes and manually evaluated subset by study area. The categories \textit{No visible}, \textit{Partial house}, and \textit{Full house} are mutually exclusive and sum to the MLQA input count.}
+		\captionabove{MLQA routing classes and manually evaluated subset by study area. The categories \textit{No visible}, \textit{Partial house}, and \textit{Full house} are mutually exclusive and sum to the MLQA input count (\(n=2,842\)); \textit{Total evaluated} denotes the manually evaluated subset (\(n=1,256\)).}
 		\begin{tabular}{lrrrrr}
 			\toprule
 			Country &
@@ -41,7 +43,7 @@ From these outputs, 1,256 buildings were manually evaluated, as described in Sec
 	\end{center}
 \end{table}
 
-MLQA stands for \textit{Machine Learning Quality Assurance}. In this step, the Qwen3 8B model was used to analyze each building detection before the actual post-processing workflow was applied. The model first identified whether a building was clearly visible in the selected imagery. If the building was visible, the model then generated positive and negative prompt points for the SAM segmentation and additionally produced a short qualitative description of the detected errors.
+MLQA stands for \textit{Machine Learning Quality Assurance}. In this step, the Qwen3-VL-8B-Instruct model was used to analyze each building detection before the actual post-processing workflow was applied. The model first identified whether a building was clearly visible in the selected imagery. If the building was visible, the model then generated positive and negative prompt points for the SAM-based segmentation and additionally produced a short qualitative description of the detected errors.
 
 Buildings classified as \textit{No visible} were generally removed from further routing because no corresponding visible building could be identified reliably in the selected imagery; three such cases nevertheless remained in the evaluated subset. The distinction between \textit{Partial house} and \textit{Full house} is described in Section~\ref{sec:decision_logic_routing}. In this step, the model evaluated whether large parts of the visible building were cut off by the original polygon. Based on this classification, the workflow was routed differently for partial-house and full-house cases. The column \textit{Total evaluated} represents the subset of buildings that were finally post-processed and manually evaluated.
 Based on this manually evaluated subset, the following sections compare the original polygons, the SAM-derived intermediate outputs where relevant, and the final post-processed geometries.
@@ -52,7 +54,7 @@ Not all buildings passed through all processing stages. Table~\ref{tab:pipeline_
 
 \begin{table}[htb]
 \centering
-\caption{Pipeline coverage and output availability by study area. Post/SAM indicates the share of SAM-derived outputs for which a post-processed output was stored.}
+\caption{Pipeline coverage and output availability by study area. Counts start from the full MLQA input (\(n=2,842\)); the evaluated column denotes the manually evaluated subset (\(n=1,256\)). Post/SAM indicates the share of SAM-derived outputs for which a post-processed output was stored.}
 \label{tab:pipeline_dropoff}
 \begin{tabular}{lrrrrr}
 \toprule
@@ -90,7 +92,7 @@ The results also show that almost no buildings were initially classified as \tex
 
 \subsection{Improvement Rates by Study Area}
 
-The post-processing workflow improved the majority of evaluated building polygons in all study areas. Across all five locations, 1,040 buildings (\textbf{82.8\%}) showed an improvement after post-processing, while 164 (\textbf{13.1\%}) remained unchanged and 52 (\textbf{4.1\%}) were degraded.
+The post-processing workflow improved the majority of evaluated building polygons in all study areas. Across the manually evaluated subset, 1,040 buildings (\textbf{82.8\%}) showed an improvement after post-processing, while 164 (\textbf{13.1\%}) remained unchanged and 52 (\textbf{4.1\%}) were degraded.
 
 The strongest overall improvements were observed in Niger and Mozambique. In Niger, \textbf{86.7\%} of the evaluated buildings improved, corresponding to 222 out of 256 manually checked samples; 9.0\% remained unchanged and 4.3\% degraded. Mozambique showed a very similar pattern, with \textbf{86.2\%} improved buildings (144 out of 167 samples), 10.8\% unchanged, and 3.0\% degraded. Liberia also produced strong results, where \textbf{86.1\%} of the evaluated polygons improved after processing (327 out of 380 buildings), 12.6\% remained unchanged, and 1.3\% degraded. Lower, but still positive improvement rates were observed in Mexico and Nepal. In Mexico, \textbf{77.0\%} of the evaluated buildings improved (201 out of 261), while \textbf{17.2\%} remained unchanged and \textbf{5.7\%} degraded after processing. Nepal showed the lowest overall improvement rate with \textbf{76.0\%} improved buildings (146 out of 192 samples), 15.6\% unchanged, and \textbf{8.3\%} degraded.
 
@@ -150,14 +152,6 @@ The category \texttt{OVERSIMPLIFIED} was comparatively rare both before and afte
 
 Polygons classified as \textit{perfect} after post-processing were not assigned any remaining geometry error category and therefore do not contribute to the post-processing error distributions shown in Figure~\ref{fig:error_profile_by_location}.
 
-%\begin{figure}[H]
-%	\centering  
-%	\includegraphics[scale=0.65]
-%{Franzelin_Master/img/shiftinerrorcompostion2.png}
-%	\caption{Relative change in geometry error composition after post-%processing compared to the original Google Open Buildings polygons. %Negative values indicate a reduction of the respective error category %after post-processing, while positive values indicate an increase.}
-%	\label{fig:error_profile_shift}
-%\end{figure}
-
 \section{Spatial Shift Analysis}
 
 \subsection{Magnitude and Direction of Positional Corrections}
@@ -203,7 +197,7 @@ The intermediate SAM-derived geometry was also analyzed separately from the fina
 
 \begin{table}[htb]
 \centering
-\caption{Geometry characteristics of original, SAM-derived, and post-processed polygons. Vertex counts were calculated with \texttt{ST\_NPoints}.}
+\caption{Geometry characteristics of original, SAM-derived, and post-processed polygons. Vertex counts were calculated with \texttt{ST\_NPoints}; the post-processed stage uses \(n=1,253\) because three stored regularized geometries were unavailable for this calculation.}
 \label{tab:stage_geometry_comparison}
 \begin{tabular}{lrrrr}
 \toprule
@@ -227,7 +221,7 @@ The building-to-surrounding contrast analysis described in Section~\ref{sec:buil
 
 \begin{table}[htb]
 \centering
-\caption{Building-to-surrounding contrast and texture difference by study area.}
+\caption{Building-to-surrounding contrast and texture difference by study area. The analysis uses post-processed buildings manually rated as \textit{perfect} (\(n=684\)).}
 \label{tab:building_surrounding_contrast}
 \footnotesize
 \begin{tabular}{lrrr}
@@ -263,10 +257,9 @@ Liberia and Mexico performed within a similar range regarding final geometry qua
 Nepal showed the lowest share of buildings classified as \textit{good} or \textit{perfect} after post-processing, reaching 65.6\%. It also exhibited the largest median absolute area change (33.4\%) and the largest median positional correction relative to the original Google Open Buildings polygons (5.1\,m). Furthermore, 47.4\% of the evaluated buildings had medium or high detected tree context near the polygon. Nepal also showed the strongest increase in polygon complexity, with the average vertex count increasing by 382.7\%. It should be noted that detected vegetation does not necessarily imply that the tree repair workflow was executed, as not every detected tree triggered this processing step.
 
 
-\label{tab:country_summary}
 \begin{table}[htb]
 \centering
-\caption{Summary of final geometry quality indicators and polygon complexity changes by study area.}
+\caption{Summary of final geometry quality indicators and polygon complexity changes by study area. Quality percentages refer to the manually evaluated subset; geometry-change indicators use the available post-processed geometries for the respective calculation.}
 \label{tab:country_summary}
 \footnotesize
 \setlength{\tabcolsep}{3pt}
@@ -296,7 +289,7 @@ Nepal       & 65.6 & 33.4 & 5.1 & 47.4 & +382.7 \\
 \vspace{0.3em}
 \raggedright
 \scriptsize
-Good/perfect denotes the share with a final manual rating of \textit{good} or \textit{perfect}. Median absolute area change is measured relative to the original polygon. Median centroid displacement is measured from the original to the post-processed polygon. Medium/high tree context denotes the corresponding tree-context classes. Mean vertex increase compares original and post-processed geometries.
+Good/perfect denotes the share with a final manual rating of \textit{good} or \textit{perfect}. Median absolute area change is measured relative to the original polygon. Median centroid displacement is measured from the original to the post-processed polygon. Medium/high tree context denotes the corresponding tree-context classes. Mean vertex increase compares original and post-processed geometries. Denominators follow the manually evaluated subset unless geometry availability requires a smaller calculation subset.
 \end{table}
 
 
@@ -309,7 +302,7 @@ The supplementary Switzerland test compared the regularized building footprints 
 
 \begin{table}[htp]
 \centering
-\caption{Reference-based Switzerland evaluation against TLM buildings.}
+\caption{Reference-based Switzerland evaluation against TLM buildings. The supplementary test is restricted to the matched processed subset described in Section~\ref{sec:switzerland_reference_test}.}
 \label{tab:switzerland_reference_evaluation}
 \begin{tabular}{llrrrrrr}
 \toprule
@@ -366,7 +359,7 @@ The largest discrepancy was observed for \texttt{EXTRA\_PARTS}. The MLQA workflo
 
 \begin{table}[htp]
 	\begin{center}
-		\captionabove{Comparison between manually assigned semantic categories and MLQA predictions}
+		\captionabove{Comparison between manually assigned semantic categories and MLQA predictions for the manually evaluated subset (\(n=1,256\)). Percentages use the number of evaluated polygon pairs as denominator.}
 		\begin{tabular}{lll}
 			\toprule
 			\textbf{Category} & \textbf{MLQA (\%)} & \textbf{Manual (\%)} \\
@@ -408,5 +401,5 @@ After keeping the latest evaluation for each building, 99 unique sentence evalua
 \subsection{Spatial Accuracy of MLLM Point Prompts}
 \label{sec:results_mllm_point_prompts}
 
-The point-in-polygon analysis was possible for 320 manually rated \textit{perfect} buildings in the \textit{Full house} routing class. Across these cases, 885 of 960 positive points were located inside or on the boundary of the corresponding polygon, resulting in a point-level agreement of 92.19\%. At the stricter building level, all three positive points were correctly placed for 256 buildings (80.00\%). Agreement was 91.56\% for the first positive point, 96.56\% for the second, and 88.44\% for the third. Most errors were small boundary-related deviations: 51 of the 75 missed positive points were located within 0.5\,m of the polygon boundary. The negative-point analysis contained 963 points because one additional Mexico case retained a three-point negative prompt set but no corresponding positive prompt set. Of these, 881 were correctly located outside the building polygons (91.48\%).
+The point-in-polygon analysis was possible for 320 manually rated \textit{perfect} buildings in the \textit{Full house} routing class. Across these cases, 885 of 960 positive points were located inside or on the boundary of the corresponding polygon, resulting in a point-level agreement of 92.19\%. At the stricter building level, all three positive points were correctly placed for 256 buildings (80.00\%). Agreement was 91.56\% for the first positive point, 96.56\% for the second, and 88.44\% for the third. Most errors were small boundary-related deviations: 51 of the 75 missed positive points were located within 0.5\,m of the polygon boundary. The negative-point analysis contained 963 points because one additional Mexico case retained a three-point negative prompt set but no corresponding positive prompt set. Of these, 881 were correctly located outside the building polygons (91.48\%). Because this analysis was restricted to successful full-house cases, the reported point-prompt reliability should be interpreted as an upper-bound estimate and not as evidence that prompt generation was equally reliable in partial-house cases.
 

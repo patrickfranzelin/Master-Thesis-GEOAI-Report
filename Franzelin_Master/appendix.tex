@@ -179,7 +179,7 @@ the fields persisted for downstream routing, SAM prompting, and evaluation.
 \hline
 \textbf{Parameter} & \textbf{Value used in the implementation} \\
 \hline
-MLLM model & \texttt{qwen3vl8b} served through an OpenAI-compatible RunPod/vLLM endpoint. \\
+MLLM model & Qwen3-VL-8B-Instruct served through an OpenAI-compatible RunPod/vLLM endpoint; \texttt{qwen3vl8b} was used as the deployment name. \\
 \hline
 MLLM temperature & \texttt{0} for all MLLM calls. \\
 \hline
@@ -197,9 +197,13 @@ SAM mask post-processing & Morphological close/open with kernel \texttt{12} duri
 \hline
 Point prompts & Default \texttt{3} positive roof points and \texttt{3} negative outside-roof points; MLLM coordinates are normalized to \texttt{0--1000} and then converted to patch pixels. \\
 \hline
-Global discovery & Prompt \texttt{roof}; tile size \texttt{1024}; overlap \texttt{128}; polygons below $500~\mathrm{px}^{2}$ final area are removed. \\
+Global discovery & Exploratory extension not used as the central quantitative evaluation; prompt \texttt{roof}; tile size \texttt{1024}; overlap \texttt{128}; polygons below $500~\mathrm{px}^{2}$ final area are removed. \\
 \hline
 New-building matching & Candidate is treated as already known when IoU with an existing refined polygon is greater than \texttt{0.3}. \\
+\hline
+Tree-mask generation & SAM 3 concept-prompted segmentation with prompt \texttt{tree}; detected masks are converted to polygons before the occlusion repair step. \\
+\hline
+Tree-occlusion repair & Outer tree buffer \texttt{0.8}; inner tree buffer \texttt{0.3}; minimum edge length \texttt{0.1}; minimum overlap ratio \texttt{0.05}; minimum curvature \texttt{0.01}; repair buffer \texttt{0.3}. \\
 \hline
 Post-processing and regularization & Merge buffer \texttt{0.3}; merge IoU threshold \texttt{0.2}; regularization simplify tolerance \texttt{0.3}; parallel threshold \texttt{2}; circles allowed with threshold \texttt{0.9}; 45-degree angles and neighbor alignment disabled. \\
 \hline

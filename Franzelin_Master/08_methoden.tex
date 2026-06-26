@@ -2,7 +2,7 @@
 
 \section{System Overview and Architectural Design}
 
-This section presents the overall system architecture developed to enhance the quality of automatically generated building footprint datasets. The proposed framework integrates multimodal reasoning and visual segmentation into a modular, two-stage workflow for automated quality assessment and selective geometric refinement. Rather than relying solely on deterministic geometric rules or reference-based validation, the system combines semantic evaluation with data-driven segmentation to improve building footprints in a structured and reproducible manner.
+This section presents the overall system architecture developed to enhance the quality of automatically generated building footprint datasets. The proposed framework integrates multimodal reasoning and visual segmentation into a modular, two-stage workflow for AI-assisted quality assessment and selective geometric refinement. Rather than relying solely on deterministic geometric rules or reference-based validation, the system combines semantic evaluation with data-driven segmentation to improve building footprints in a structured and reproducible manner.
 
 \begin{figure}[htbp]
 	\centering  
@@ -21,11 +21,11 @@ However, this paradigm raises a fundamental question: how can building footprint
 
 The solution proposed in this thesis is a two-stage framework that leverages recent multimodal deep learning methods. In the first stage, a selected multimodal large language model (MLLM) is used to evaluate existing building footprints in relation to the underlying aerial imagery. The model performs visual reasoning to determine whether a roof structure is present and whether the footprint plausibly represents the building geometry.
 
-In the second stage, a visual foundation segmentation model (SAM 3) is applied to correct those buildings identified as potentially improvable. Unlike the MLLM, the segmentation model excels at precise geometric delineation but lacks higher-level reasoning and contextual understanding. Therefore, the MLLM not only performs validation but also generates spatial prompts that guide the segmentation process.
+In the second stage, a SAM-based segmentation component is applied to generate candidate corrections for buildings identified as potentially improvable. Unlike the MLLM, the segmentation model excels at precise geometric delineation but lacks higher-level reasoning and contextual understanding. Therefore, the MLLM not only supports assessment but also generates spatial prompts that guide the segmentation process.
 
 The core idea of the framework is thus the separation of evaluation and correction into two distinct but interconnected stages. The MLLM provides semantic understanding and structured feedback, while the visual model performs geometry-driven refinement. This decoupled architecture enables selective correction, reduces unnecessary modifications, and introduces an interpretable feedback loop into the quality enhancement process.
 
-The proposed workflow is designed as a proof-of-concept for regions where authoritative reference data are scarce or unavailable. It does not aim to replace official mapping standards but to explore how multimodal AI models can support automated quality validation and improvement in data-scarce geospatial environments.
+The proposed workflow is designed as a proof-of-concept for regions where authoritative reference data are scarce or unavailable. It does not aim to replace official mapping standards but to explore how multimodal AI models can support image-based quality assessment and candidate correction in data-scarce geospatial environments.
 
 
 \subsection{Overall Processing Pipeline}
@@ -65,7 +65,7 @@ Finally, the refined geometry is transformed back into geographic coordinates an
 
 \subsection{Building Footprint Datasets}
 
-This study uses automatically generated building footprint datasets derived from large-scale remote sensing data. The primary dataset considered in this work is the Google Open Buildings dataset, which provides building footprints across large parts of the Global South, including Africa, Latin America, and parts of South and Southeast Asia. The dataset was generated using deep learning methods applied to high-resolution satellite imagery with a spatial resolution of approximately 50\,cm per pixel \citep{sirko2021continentalscalebuildingdetectionhigh,googleopenbuildings}.
+This study uses automatically generated building footprint datasets derived from large-scale remote sensing data. The primary dataset considered in this work is the Google Open Buildings dataset, which provides building footprints across large parts of the Global South, including Africa, Latin America, and parts of South and Southeast Asia. The dataset was generated using deep learning methods applied to high-resolution satellite imagery with a spatial resolution of approximately 50\,cm per pixel \citep{sirko2021continentalscalebuildingdetectionhigh, googleopenbuildings}.
 
 The underlying detection pipeline is based on a convolutional neural network architecture derived from U-Net, which performs semantic segmentation to classify each pixel in an image as either building or non-building. Detected building regions are subsequently converted into polygon footprints through connected-component analysis and vectorization. The model was trained on approximately 100,000 manually annotated satellite image tiles containing around 1.75 million labeled building instances. After training and large-scale inference across the African continent, the resulting dataset contains approximately 516 million detected building footprints \citep{sirko2021continentalscalebuildingdetectionhigh}.
 
@@ -151,7 +151,6 @@ The MLLM-based quality assessment was performed using Qwen3-VL-8B-Instruct serve
 In the third stage of the workflow, a multimodal large language model (MLLM) is used to perform semantic quality assessment of the extracted building patch. The MLLM receives the assessment patch representation (image with polygon overlay) and produces a structured, machine-readable evaluation.
 
 The assessment consists of three core reasoning tasks.
-%TODOsince this is the key step of the pipeline, explain it more: for example, show example of the text prompts for 3 reasoning tasks.you can just show some texts used in your codes
 
 Because this stage determines the downstream routing and refinement strategy, the MLLM-based assessment was implemented as a sequence of task-specific prompts rather than as a single combined instruction. Each prompt addresses one clearly defined reasoning step and returns a structured JSON field that can be parsed automatically by the pipeline \citep{Zaid_prompt_decompisiton}. The full prompt content and JSON schema are documented in Appendix~\ref{app:mllm_prompts} and Appendix~\ref{app:mllm_json_schema}. Table~\ref{tab:mllm_reasoning_tasks} summarizes the main reasoning tasks used for semantic quality assessment.
 
@@ -289,13 +288,13 @@ The refinement stage consists of four main components:
 \item conversion of segmentation masks into geospatial vector geometries.
 \end{itemize}
 
-For the geometric refinement stage, the Segment Anything Model (SAM) developed by Meta AI was used as the visual segmentation backbone \citep{kirillov2023segment}. The model was installed within the project’s virtual environment as an editable package using the official open-source implementation provided by Meta.
+For the geometric refinement stage, the Segment Anything model family was used as the visual segmentation backbone \citep{kirillov2023segment, papersam3}. The final backend used in the implementation is specified below.
 
 
 \subsection{Segmentation Model and Prompting Interfaces}
 
 
-In this thesis, the term SAM-based refinement refers to the visual segmentation component used for prompt-based building-mask generation. Point- and box-guided refinement was performed with the SAM-based segmentation backend, whereas the text-prompted discovery step in the \textit{PartialHousePipeline} used the SAM 3 text-prompted backend. Preliminary fine-tuning experiments with SAM 2 were tested but were not used in the final workflow.
+In this thesis, the term SAM-based refinement refers to the visual segmentation component used for prompt-based building-mask generation. The final implementation used a local SAM 3 checkpoint (\texttt{sam3.pt}) as the segmentation backend. Point- and box-guided refinement used the visual-prompt interface, while the text-prompted discovery step in the \textit{PartialHousePipeline} used the SAM 3 concept-prompted backend. Preliminary fine-tuning experiments with SAM 2 were tested but were not used in the final workflow.
 
 In this work, the pretrained SAM-based backend was used without further architectural modifications. Preliminary experiments were conducted to fine-tune a previous model version (SAM 2) using building footprint data derived from two datasets: the Inria Aerial Image Labeling dataset and the SpaceNet 2 dataset for the Khartoum area. Approximately 1000 training patches were generated from these datasets. The two datasets represent different architectural contexts: the Inria dataset predominantly contains buildings from Western urban environments with pitched or heterogeneous roof structures, whereas the Khartoum dataset primarily consists of flat concrete roofs typical for dense settlements in Sudan.
 
@@ -381,9 +380,9 @@ In contrast, the \textit{PartialHousePipeline} addresses situations in which the
 
 \end{figure}
 
-For this discovery step, a text-based prompt such as ``house'' or ``building'' is used. The multimodal prompting capability of SAM 3 allows the model to use semantic information in addition to spatial prompts.
+For this discovery step, the implementation used the concept prompt ``roof''. The concept-prompted capability of SAM 3 allows the model to use semantic information in addition to spatial prompts.
 
-This mechanism allows the model to detect complete building structures even when the initial footprint represents only a partial observation of the building. Once the candidate building regions have been identified, the segmentation process proceeds with additional spatial prompts to produce the final refined building mask.
+This mechanism allows the model to detect complete building structures even when the initial footprint represents only a partial observation of the building. Once candidate roof regions have been identified, the candidate containing the original footprint centroid is selected; if no candidate contains the centroid, the nearest candidate centroid is used. The selected candidate is then passed to a local refinement crop where MLLM-generated positive and negative point prompts and the SAM-based visual-prompt backend produce the final refined building mask.
 \subsection{Iterative Segmentation and Context Expansion}
 
 Regardless of whether a building is routed through the \textit{FullHousePipeline} or the \textit{PartialHousePipeline}, the extracted patch ultimately passes through a common refinement stage in which the final building mask is generated using the SAM-based segmentation backend. In this stage, the multimodal large language model (MLLM) first generates spatial prompts in the form of positive and negative points. Together with an initial bounding box derived from the building footprint, these prompts serve as input for the visual segmentation backend. The segmentation process is performed iteratively. In the first iteration, a relatively large bounding box is used to ensure sufficient spatial context. After generating an initial mask, the bounding box is tightened to the extent of the predicted mask and the segmentation model is executed again to refine the segmentation. Where supported by the backend, segmentation logits from the previous iteration are passed to the next iteration. If the predicted polygon touches the boundary of the image patch, the system automatically extracts a larger patch to capture additional context. The refinement process was repeated for a maximum of three iterations or until no further context expansion was triggered.
@@ -410,7 +409,7 @@ The post-processing pipeline addresses these issues step by step, combining geom
 
 \subsection{Tree Occlusion}
 
-Tree occlusions are handled by analyzing the spatial relationship between buildings and nearby trees. Let \(B\) be a building polygon and \(T\) the combined geometry of nearby trees.
+Tree occlusions are handled by analyzing the spatial relationship between buildings and nearby trees. In the implementation, tree masks were generated with SAM 3 concept-prompted segmentation using the prompt ``tree'' and converted to polygon geometries before geometric repair. Let \(B\) be a building polygon and \(T\) the combined geometry of nearby trees.
 
 First, a \textit{tree influence zone} is defined as a small area around the trees. This is done by slightly enlarging the tree geometry and subtracting a smaller inner buffer, where \(r_1\) and \(r_2\) denote the outer and inner tree-buffer radii, respectively:
 
@@ -447,7 +446,7 @@ To avoid unrealistic changes, the corrected polygon is only accepted if it remai
 
 The correction is applied only if this value is above a threshold.
 
-This approach allows the reconstruction of building parts that were partially hidden by trees while preserving the overall shape of the building.
+This approach allows the reconstruction of building parts that were partially hidden by trees while preserving the overall shape of the building. The tree-occlusion component was custom-developed for this thesis. The main implementation parameters, including tree buffers, minimum overlap, and curvature thresholds, are listed in Appendix~\ref{app:core_parameters}.
 
 \subsection{Polygon Regularization}
 \label{sec:rectangularization}
@@ -469,9 +468,9 @@ where \(\theta\) is the current edge direction, \(\theta_{\mathrm{target}}\) is 
 
 The evaluation approach is based on a manual assessment of building footprints across several regions in the Global South. The main objective is to determine whether the post-processed geometries produced by the pipeline improve upon the original input polygons. For each building, different aspects of geometric quality are examined, rather than relying on a single metric. The manual evaluation was based on visual agreement with the selected imagery rather than on independent cadastral ground truth.
 
-To make the evaluation process efficient, a simple annotation tool was developed that allows quick navigation through the dataset and fast input of labels. This makes it possible to review a large number of samples in a consistent way.
+To make the evaluation process efficient, a simple annotation tool was developed that allows quick navigation through the dataset and fast input of labels. The interface displayed the original polygon, the SAM-derived intermediate geometry, and the final post-processed geometry against the same imagery context. Ambiguous cases were rated conservatively according to the visible agreement between geometry and image evidence.
 
-All manual ratings were assigned by the author using the same annotation interface and evaluation criteria. No independent second annotator was available; therefore, the labels should be interpreted as expert visual assessment rather than inter-annotator validated ground truth.
+All manual ratings were assigned by the author using the same annotation interface and evaluation criteria. No independent second annotator was available; therefore, the labels should be interpreted as expert visual assessment rather than inter-annotator validated ground truth, and no inter-annotator agreement could be calculated.
 
 In addition to the overall quality assessment, specific error types are recorded for both the original and the processed geometries. This enables an analysis of the dominant error sources before and after the pipeline. Furthermore, the manually assigned labels can be compared with the error descriptions generated by the multimodal model, allowing an assessment of how well the automated reasoning aligns with human evaluation.
 \begin{figure}[htb]
@@ -565,7 +564,7 @@ extra, includes, non-building, surrounding area, surrounding ground, vegetation,
 
 In addition to the rule-based text analysis, a small manual qualitative evaluation of the generated sentences was carried out. A separate annotation interface was created for this purpose. The interface displayed the aerial image patch with the original polygon overlay and the corresponding MLQA-generated error description. The evaluator assigned one of four sentence-quality labels: \textit{Correct}, \textit{Partly correct}, \textit{Too vague}, or \textit{Wrong}. Initially, 50 examples per study area were exported for this evaluation. However, while reviewing the generated descriptions it became apparent that the model repeatedly produced very similar sentence structures and reused the same terms, especially references to missing and extra parts. Therefore, the qualitative evaluation was limited to approximately 100 sentences, as additional samples were unlikely to provide substantially new insight into the linguistic behavior of the model.
 
-Moreover, to evaluate whether the MLLM-generated spatial prompts were consistent with successful building refinements, an additional point-in-polygon analysis was performed. The analysis was restricted to buildings that were manually rated as \textit{perfect} after processing, because these geometries represent the most reliable available approximation of the visible roof outline. Only full-house cases were included, since the secondary crop transformations required to reconstruct point coordinates for partial-house cases were not stored. For each analyzable building, the generated positive and negative prompt points were transformed back into map coordinates and tested against the corresponding final polygon.
+Moreover, to evaluate whether the MLLM-generated spatial prompts were consistent with successful building refinements, an additional point-in-polygon analysis was performed. The analysis was restricted to buildings that were manually rated as \textit{perfect} after processing, because these geometries represent the most reliable available approximation of the visible roof outline. Only full-house cases were included, since the secondary crop transformations required to reconstruct point coordinates for partial-house cases were not stored. The results should therefore not be generalized to the harder partial-house branch. For each analyzable building, the generated positive and negative prompt points were transformed back into map coordinates and tested against the corresponding final polygon.
 
 \subsection{Building-to-Surrounding Contrast Analysis}
 \label{sec:building_surrounding_contrast}
@@ -592,6 +591,8 @@ The contrast and texture measures are used here as descriptive image statistics 
 While the previous sections describe the methodological design of the workflow, this section summarizes the practical implementation choices required to execute the pipeline reproducibly. The implementation consists of a local Python-based geospatial processing environment, a PostgreSQL/PostGIS database for persistent spatial data management, and a remote GPU inference service for the multimodal model.
 
 The processing code is organized as a modular Python project. The main entry point is \texttt{src/main.py}. Raster patch extraction is implemented in \texttt{patches/}, multimodal quality assessment in \texttt{mlqa/}, refinement logic in \texttt{pipelines/}, SAM-based segmentation in \texttt{sam/}, database operations in \texttt{db/}, and geometric post-processing in \texttt{postprocess/}. This structure separates processing responsibilities and allows individual components, such as the MLLM or segmentation backend, to be exchanged without modifying the complete workflow.
+
+In addition to the evaluated per-building workflow, the code repository contains a tiled global-discovery extension that applies SAM 3 concept-prompted segmentation with the prompt ``roof'' to search for additional roof candidates. This component was treated as an exploratory extension and was not central to the reported quantitative evaluation.
 
 Dependency management was handled using \texttt{uv}, a high-performance Python package and project manager developed by Astral, designed to provide reproducible dependency resolution and virtual environment management while replacing multiple traditional Python tooling components such as \texttt{pip}, \texttt{virtualenv}, and \texttt{pip-tools} \citep{uv_docs}. The main pipeline was executed in a project-specific Python 3.11 environment containing geospatial, computer vision, database, and model inference dependencies. Important libraries include \texttt{geopandas}, \texttt{rasterio}, \texttt{shapely}, \texttt{pyproj}, \texttt{opencv-python}, \texttt{torch}, \texttt{sqlalchemy}, \texttt{psycopg2}, and the OpenAI Python client. A separate virtual environment was used for the post-processing module, where the \texttt{Building-Regulariser} package was linked as a locally editable dependency.
 

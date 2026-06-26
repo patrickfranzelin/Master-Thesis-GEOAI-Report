@@ -1,9 +1,9 @@
 \chapter{Study Area}
 \label{ch:study_area}
 
-This thesis uses five selected study areas located within the spatial coverage of the Google Open Buildings Dataset v3 \citep{sirko2021continentalscalebuildingdetectionhigh,googleopenbuildings}. This dataset mainly covers regions in the Global South and is therefore well suited for analyzing building-footprint quality in areas where authoritative cadastral data are often incomplete or unavailable. Instead of focusing on one homogeneous region, the five study areas were selected to represent different environmental, morphological, and image-related conditions.
+This thesis uses five selected study areas located within the spatial coverage of the Google Open Buildings Dataset v3 \citep{sirko2021continentalscalebuildingdetectionhigh, googleopenbuildings}. This dataset mainly covers regions in the Global South and is therefore well suited for analyzing building-footprint quality in areas where authoritative cadastral data are often incomplete or unavailable. Instead of focusing on one homogeneous region, the five study areas were selected to represent different environmental, morphological, and image-related conditions.
 
-The selected areas are located in Niger, Mozambique, Liberia, Mexico and Nepal. They were chosen because they differ strongly in building form, roof material, settlement structure, vegetation cover, contrast between buildings and surrounding land cover, and the degree of tree occlusion.
+The selected areas are located in Niger, Mozambique, Liberia, Mexico and Nepal. They were chosen because they differ strongly in building form, roof material, settlement structure, vegetation cover, contrast between buildings and surrounding land cover, and the degree of tree occlusion. Methodologically, the selection required overlap between Google Open Buildings coverage and very high-resolution OpenAerialMap imagery, while also covering contrasting settlement structures, roof materials, building morphologies, image contrast, vegetation, and occlusion conditions. The study areas therefore provide a diverse transferability test, but they should not be interpreted as a representative sample of all Global South settlement environments.
 
 Table~\ref{tab:study_area_imagery_sources} summarizes the OpenAerialMap imagery used for the five study areas \citep{openaerialmap}. All scenes are UAV-based orthomosaics with very high spatial resolution between 2 and 6\,cm. This high image resolution was important for the visual assessment of small buildings and for the patch-based refinement workflow.
 
@@ -54,13 +54,6 @@ UAV, DJI Mavic 2 Pro with 1-inch CMOS sensor \\
 \end{figure}
 
 The selected study areas are not intended to represent all possible global settlement types or landscape contexts. Rather, they provide a deliberately diverse test set for evaluating how robust the proposed workflow is under different real-world conditions. The focus is especially on cases where building footprints are difficult to extract or regularize because of low brightness contrast, irregular building shapes, vegetation occlusion, heterogeneous roof materials, or complex texture differences between buildings and their surroundings.
-
-%\begin{figure}[htb]
-%    \centering
-%    \includegraphics[width=\textwidth]{Franzelin_Master/img/study_area_examples_abcde.png}
-%    \caption{Visual examples of the five selected study areas showing differences in settlement structure, vegetation cover, roof material, and building morphology. Own illustration.}
-%    \label{fig:study_area_examples}
-%\end{figure}
 
 Together, the five study areas support an analysis of workflow transferability across contrasting visual and geographic conditions. Niger represents a densely cluttered arid settlement with high measured building-to-surrounding brightness contrast, while Mozambique represents the lowest brightness-contrast case. Liberia represents strong color- and texture-based building-background separability with heterogeneous roof materials, whereas Mexico combines structured settlement patterns, strong vegetation occlusion, and relatively high brightness contrast. Nepal represents complex building morphology in sloped terrain with high texture differences between buildings and their surroundings. This selection allows the workflow to be evaluated across different visual and geographic conditions.
 
