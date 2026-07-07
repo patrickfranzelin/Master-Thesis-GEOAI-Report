@@ -43,7 +43,7 @@ The denominators therefore differ between analyses. The initial MLQA input alway
 	\end{center}
 \end{table}
 
-MLQA stands for \textit{Machine Learning Quality Assurance}. In this step, the Qwen3-VL-8B-Instruct model was used to analyze each building detection before the subsequent refinement stages were applied. The model first identified whether a building was clearly visible in the selected imagery. If the building was visible, the model then generated positive and negative prompt points for the SAM-based segmentation and additionally produced a short qualitative description of the detected errors.
+In this step, the Qwen3-VL-8B-Instruct model was used to analyze each building detection before the subsequent refinement stages were applied. The model first identified whether a building was clearly visible in the selected imagery. If the building was visible, the model then generated positive and negative prompt points for the SAM-based segmentation and additionally produced a short qualitative description of the detected errors.
 
 Buildings classified as \textit{No visible} were generally removed from further routing because no corresponding visible building could be identified reliably in the selected imagery; three such cases nevertheless remained in the evaluated subset. The distinction between \textit{Partial house} and \textit{Full house} is described in Section~\ref{sec:decision_logic_routing}. In this step, the model evaluated whether large parts of the visible building were cut off by the original Google Open Buildings polygon. Based on this classification, the workflow was routed differently for partial-house and full-house cases. The column \textit{Total evaluated} represents the subset of buildings for which final workflow outputs were available and manually evaluated.
 Based on this manually evaluated subset, the following sections compare the original Google Open Buildings polygons, the SAM-derived intermediate geometries where relevant, and the final workflow outputs.
@@ -276,7 +276,7 @@ Country &
 \midrule
 Niger       & 85.9 & 14.7 & 1.7 & 11.7 & +44.9 \\
 Mozambique  & 83.8 & 9.0  & 3.7 & 68.9 & +43.1 \\
-Liberia     & 79.5 & 16.0 & 3.1 & 35.5 & +154.7 \\
+Liberia     & 79.5 & 16.0 & 3.1 & 35.5 & +154.6 \\
 Mexico      & 72.4 & 30.7 & 3.7 & 63.6 & +161.9 \\
 Nepal       & 65.6 & 33.4 & 5.1 & 47.4 & +382.7 \\
 \bottomrule
@@ -290,7 +290,7 @@ Good/perfect denotes the share with a final manual rating of \textit{good} or \t
 
 Niger and Mozambique achieved the strongest overall results, with 85.9\% and 83.8\% of buildings reaching the \textit{good} or \textit{perfect} categories. Both study areas also showed comparatively small median area changes and lower positional correction magnitudes. The strongest difference between these two study areas was observed in vegetation context. Mozambique showed the highest proportion of medium or high detected tree context among all study areas (68.9\%), whereas Niger exhibited the lowest proportion (11.7\%). Despite this difference, both locations showed similarly limited increases in polygon complexity compared to Liberia, Mexico, and Nepal.
 
-Liberia and Mexico performed within a similar range regarding final geometry quality, with 79.5\% and 72.4\% of buildings reaching the \textit{good} or \textit{perfect} category, respectively. Liberia showed a median absolute area change of 16.0\%, whereas Mexico reached 30.7\%, while both study areas exhibited relatively similar median positional corrections (3.1\,m and 3.7\,m). Mexico additionally showed a substantially higher proportion of detected surrounding vegetation (63.6\%) compared to Liberia (35.5\%). Both study areas also exhibited comparable increases in polygon complexity, with vertex increases of 154.7\% and 161.9\%, respectively.
+Liberia and Mexico performed within a similar range regarding final geometry quality, with 79.5\% and 72.4\% of buildings reaching the \textit{good} or \textit{perfect} category, respectively. Liberia showed a median absolute area change of 16.0\%, whereas Mexico reached 30.7\%, while both study areas exhibited relatively similar median positional corrections (3.1\,m and 3.7\,m). Mexico additionally showed a substantially higher proportion of detected surrounding vegetation (63.6\%) compared to Liberia (35.5\%). Both study areas also exhibited comparable increases in polygon complexity, with vertex increases of 154.6\% and 161.9\%, respectively.
 
 Nepal showed the lowest share of buildings classified as \textit{good} or \textit{perfect} in the final workflow outputs, reaching 65.6\%. It also exhibited the largest median absolute area change (33.4\%) and the largest median positional correction relative to the original Google Open Buildings polygons (5.1\,m). Furthermore, 47.4\% of the evaluated buildings had medium or high detected tree context near the polygon. Nepal also showed the strongest increase in polygon complexity, with the average vertex count increasing by 382.7\%. It should be noted that detected vegetation does not necessarily imply that the tree repair workflow was executed, as not every detected tree triggered this processing step.
 
