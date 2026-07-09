@@ -7,6 +7,8 @@ As mentioned in Section~\ref{ch:study_area}, the workflow was applied to five di
 
 \subsection{MLQA Classification and Manual Evaluation Sample}
 
+This subsection provides the empirical basis for RQ1 by summarizing the MLLM-based visibility and routing decisions before the refinement stages.
+
 In total, the workflow was applied to 2,842 building polygons from the Google Open Buildings dataset. The mutually exclusive MLQA routing classes comprised 1,283 cases classified as \textit{No visible}, 971 as \textit{Partial house}, and 588 as \textit{Full house}. Thus, 1,559 buildings were routed as visible partial- or full-house cases. A SAM-derived polygon was available for 1,518 buildings and a final workflow output for 1,352 buildings.
 
 From these outputs, 1,256 buildings were manually evaluated, as described in Section~\ref{sec:evaluation_strategy}. The number of evaluated buildings is not the same for all countries. This is mainly because some Google Open Buildings detections did not have a clearly corresponding visible building in the selected imagery and were therefore removed from the dataset. In addition, the evaluation was only possible when the original Google Open Buildings polygon, the SAM-derived polygon, and the final workflow output could clearly be matched to each other. In some cases, not all three versions could be assigned reliably, so these buildings were excluded from the manual evaluation.
@@ -75,7 +77,7 @@ Nepal      & 626 & 263 & 235 & 192 & 89.4 \\
 
 \section{Overall Quality Improvement}
 
-\subsection{Transition from Original Quality to Final Workflow Output Quality}
+\subsection{Transition from Original Quality to Final Workflow Output Quality (RQ2)}
 
 The manual ratings indicate an overall improvement across all selected study areas. The original Google Open Buildings polygons often contained substantial geometric errors, irregular boundaries, or incomplete building outlines. None of the manually checked buildings was classified as \textit{perfect} in the original Google Open Buildings dataset before workflow processing.
 
@@ -109,7 +111,7 @@ The strongest overall improvements were observed in Niger and Mozambique. In Nig
 
 During the manual evaluation, geometry error categories were additionally assigned to each building polygon. The complete taxonomy is described in Section~\ref{sec:evaluation_criteria_error_taxonomy}. Five principal error categories were defined: \texttt{SHIFTED}, \texttt{SHAPE\_MISMATCH}, \texttt{MISSING\_PARTS}, \texttt{EXTRA\_PARTS}, and \texttt{OVERSIMPLIFIED}. Multiple categories could be assigned to the same polygon, so the percentages reported for these categories are not mutually exclusive.
 
-\subsection{Error-category Shifts Before and After Workflow Processing}
+\subsection{Error-category Shifts Before and After Workflow Processing (RQ2)}
 
 Figure~\ref{fig:error_profile_by_location} summarizes the distribution of error categories before and after workflow processing for each study area and for the complete manually evaluated dataset.
 
@@ -249,7 +251,7 @@ The contrast value reports the median absolute linear Weber contrast between the
 The texture-difference values show a different pattern. Liberia and Nepal had the highest texture differences, while Mexico and Mozambique had the lowest values. This indicates that visual separability between buildings and their surroundings was not only controlled by brightness contrast, but also by differences in local texture. For example, Liberia showed only moderate brightness contrast but the highest texture difference, which is consistent with buildings being visually distinguishable from vegetated surroundings through texture and surface structure rather than brightness alone. Overall, the results suggest that the visual conditions for building extraction differed substantially between the study areas and that brightness contrast and texture contrast captured complementary aspects of building visibility.
 
 
-\section{Study Area Comparison}
+\section{Study Area Comparison and Transferability (RQ3)}
 \label{sec:results_study_area_comparison}
 
 Table~\ref{tab:country_summary} summarizes several of the most important result indicators by study area, including final geometry quality, area preservation, positional correction magnitude, surrounding vegetation context, and polygon complexity changes.
@@ -297,6 +299,7 @@ Nepal showed the lowest share of buildings classified as \textit{good} or \texti
 \section{Reference-based Switzerland Test}
 \label{sec:switzerlandrsults}
 Before evaluating the MLLM-specific outputs, a supplementary reference-based test was performed in Switzerland, where TLM geometries were available as an external comparison dataset \citep{swisstopo_swisstlm3d}.
+This test provides an additional perspective on RQ3 by comparing the workflow with an already high-quality reference-data setting.
 
 The supplementary Switzerland test compared the regularized building footprints and the corresponding Microsoft source polygons against Swiss TLM building geometries. As described in Section~\ref{sec:switzerland_reference_test}, the evaluation was restricted to the processed subset for which regularized outputs were available. This subset contained 425 regularized candidate polygons, 436 Microsoft source polygons and 488 TLM reference buildings.
 
@@ -322,7 +325,7 @@ The results show that both datasets achieved high precision and moderate to high
 
 This indicates that the regularization step did not improve the footprint agreement with the authoritative Swiss reference data in this test. Instead, it slightly reduced recall and F1-score compared to the Microsoft source polygons.
 
-\section{MLLM Outputs: Semantic Descriptions and Spatial Prompts}
+\section{MLLM Outputs: Semantic Descriptions and Spatial Prompts (RQ1)}
 \label{sec:results_mllm_outputs}
 
 The MLLM produced two output types that were evaluated separately: semantic descriptions of the discrepancy between the original Google Open Buildings polygon and the visible building, and spatial point prompts used to guide SAM. The following subsections first compare the semantic outputs with the manual error labels and then evaluate whether the generated positive and negative points were spatially consistent with successful final polygons.
