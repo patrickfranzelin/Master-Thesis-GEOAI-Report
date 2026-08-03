@@ -5,6 +5,33 @@ Building footprints are a fundamental component of geospatial information system
 
 In recent years, advances in machine learning, high-resolution satellite imagery, and large-scale geospatial data processing have enabled the production of extensive open building-footprint datasets. A prominent example is the Google Open Buildings dataset, generated using deep-learning-based building detection algorithms based on high-resolution satellite imagery, provides large-scale footprint coverage in regions where authoritative building data are often incomplete or unavailable \citep{sirko2021continentalscalebuildingdetectionhigh, googleopenbuildings}. Such datasets can provide valuable baseline information, particularly in data-scarce regions, but their quality is not spatially uniform. Building-footprint products may differ substantially in terms of completeness, footprint count, total building area, and local reliability, meaning that they cannot always be used without further quality assessment \citep{CHAMBERLAIN2024102104, herfort2023spatio}.
 
+\begin{figure}[htbp]
+    \centering
+
+    \begin{subfigure}[t]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{Franzelin_Master/img/liberia_original_labeld.png}
+        \caption{Original Google Open Buildings polygons}
+        \label{fig:liberia_googlebuildings}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{Franzelin_Master/img/liberia2imporved.png}
+        \caption{Polygons after the proposed workflow}
+        \label{fig:liberia_improvedpolygons}
+    \end{subfigure}
+\caption{Visual comparison of building-footprint polygons in a sample area in Liberia. Red outlines show the original Google Open Buildings footprints, while blue outlines show the refined polygons after applying the proposed workflow. The numbered callouts in panel~(a) indicate typical quality problems in the original dataset: (1) false positive, (2) shifted polygon, (3) oversimplified outline, and (4) a combination of shape mismatch and building fragmentation.}
+    \label{fig:liberia_polygon_comparison}
+\end{figure}
+
+%\begin{figure}[htb]
+%	\centering  
+%	\includegraphics[scale=0.7]{Franzelin_Master/img/Building_Footprint.png}
+%    \caption{Example illustrating the difference between visible roof outlines and building footprints, highlighting how shadows, occlusion, roof overhangs, and complex settlement structures can complicate footprint delineation. Own illustration.}
+%    \label{fig:building_footprint}
+%\end{figure}
+
 The quality assessment of building footprints is therefore a central challenge in GIScience. Existing approaches commonly evaluate positional accuracy, completeness, and geometric similarity by comparing building footprints against authoritative or manually validated reference data \citep{Hongchao_QualityAssesmentOSM, Brovelli_OSM_SpatialAccuracy}. While such reference-based methods are highly valuable, they are difficult to apply in regions where reliable reference datasets are missing, outdated, or inconsistent. At the same time, automated building-footprint extraction remains affected by recurring errors such as missing buildings, false detections, shifted polygons, incomplete outlines, merged buildings, and irregular geometries. These errors are partly caused by the diversity of building materials, roof shapes, settlement patterns, vegetation cover, shadows, and image conditions across different geographic regions \citep{sirko2021continentalscalebuildingdetectionhigh, shankar2017classificationrepresentationassessinggeodiversity, yin2023givlimprovinggeographicalinclusivity}.
 
 This creates a need for quality-assessment workflows that can evaluate existing vector-based building footprints directly from imagery and support selective correction where necessary. Recent developments in foundation models offer new possibilities in this context \citep{awais2023foundationalmodelsdefiningnew}. Vision transformers and related architectures have shown that transformer-based models can capture global image context for visual recognition and dense prediction tasks \citep{DosovitskiyTransformer, ranftl2021visiontransformersdenseprediction}. More recently, visual foundation models such as the Segment Anything Model (SAM) have introduced promptable segmentation, enabling the generation of object masks from spatial prompts such as points or bounding boxes \citep{kirillov2023segment}. SAM 3 extends this model family with concept-based segmentation, which can use text prompts to identify object categories \citep{papersam3}. In parallel, multimodal large language models (MLLMs) combine visual and textual information and can perform image-based reasoning, description, and evaluation tasks \citep{wu2023multimodallargelanguagemodels, Yin_2024MLLM}. These developments are increasingly relevant for GeoAI, although their transfer to geospatial quality assessment and vector-data update workflows remains limited \citep{mai2023opportunitieschallengesfoundationmodels, Ji_2025_foundationGeospatiolreasoning}.
