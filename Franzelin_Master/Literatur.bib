@@ -93,30 +93,13 @@ journal = {IEEE Transactions on Neural Networks and Learning Systems},
 doi = {10.1109/TNNLS.2021.3084827}
 }
 
-@article{DosovitskiyTransformer,
-  author       = {Alexey Dosovitskiy and
-                  Lucas Beyer and
-                  Alexander Kolesnikov and
-                  Dirk Weissenborn and
-                  Xiaohua Zhai and
-                  Thomas Unterthiner and
-                  Mostafa Dehghani and
-                  Matthias Minderer and
-                  Georg Heigold and
-                  Sylvain Gelly and
-                  Jakob Uszkoreit and
-                  Neil Houlsby},
-  title        = {An Image is Worth 16x16 Words: Transformers for Image Recognition
-                  at Scale},
-  journal      = {CoRR},
-  volume       = {abs/2010.11929},
-  year         = {2020},
-  url          = {https://arxiv.org/abs/2010.11929},
-  eprinttype    = {arXiv},
-  eprint       = {2010.11929},
-  timestamp    = {Fri, 20 Nov 2020 14:04:05 +0100},
-  biburl       = {https://dblp.org/rec/journals/corr/abs-2010-11929.bib},
-  bibsource    = {dblp computer science bibliography, https://dblp.org}
+@inproceedings{
+DosovitskiyTransformer,
+title={An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale},
+author={Alexey Dosovitskiy and Lucas Beyer and Alexander Kolesnikov and Dirk Weissenborn and Xiaohua Zhai and Thomas Unterthiner and Mostafa Dehghani and Matthias Minderer and Georg Heigold and Sylvain Gelly and Jakob Uszkoreit and Neil Houlsby},
+booktitle={International Conference on Learning Representations},
+year={2021},
+url={https://openreview.net/forum?id=YicbFdNTTy}
 }
 
 @inproceedings{VaswaniTransformerBase,
@@ -265,15 +248,16 @@ keywords = {Building damage assessment, Change detection, Disaster response, Dee
  year = {2021},
  pages = {12179-12188}
 }
-@misc{wu2023multimodallargelanguagemodels,
-      title={Multimodal Large Language Models: A Survey}, 
-      author={Jiayang Wu and Wensheng Gan and Zefeng Chen and Shicheng Wan and Philip S. Yu},
-      year={2023},
-      eprint={2311.13165},
-      archivePrefix={arXiv},
-      primaryClass={cs.AI},
-      url={https://arxiv.org/abs/2311.13165}, 
-}
+@INPROCEEDINGS{wu2023multimodallargelanguagemodels,
+  author={Wu, Jiayang and Gan, Wensheng and Chen, Zefeng and Wan, Shicheng and Yu, Philip S.},
+  booktitle={2023 IEEE International Conference on Big Data (BigData)}, 
+  title={Multimodal Large Language Models: A Survey}, 
+  year={2023},
+  volume={},
+  number={},
+  pages={2247-2256},
+  keywords={Surveys;Diversity reception;Focusing;Companies;Big Data;Data models;Task analysis;modalities;language models;multimodal models;large models;survey},
+  doi={10.1109/BigData59044.2023.10386743}}
 @article{Ji_2025_foundationGeospatiolreasoning,
    title={Foundation models for geospatial reasoning: assessing the capabilities of large language models in understanding geometries and topological spatial relations},
    volume={39},
@@ -540,14 +524,18 @@ eprint = {https://doi.org/10.1080/10095020.2024.2341747}
  volume = {35},
  year = {2022}
 }
-@misc{liang2025comprehensivesurveyguidemultimodal,
-      title={A Comprehensive Survey and Guide to Multimodal Large Language Models in Vision-Language Tasks}, 
-      author={Chia Xin Liang and Pu Tian and Caitlyn Heqi Yin and Yao Yua and Wei An-Hou and Li Ming and Xinyuan Song and Tianyang Wang and Ziqian Bi and Ming Liu},
-      year={2025},
-      eprint={2411.06284},
-      archivePrefix={arXiv},
-      primaryClass={cs.AI},
-      url={https://arxiv.org/abs/2411.06284}, 
+@Article{liang2025comprehensivesurveyguidemultimodal,
+AUTHOR = {Liang, Chia Xin and Tian, Pu and Yin, Caitlyn Heqi and Yua, Yao and Wei, An-Hou and Li, Ming and Song, Xinyuan and Wang, Tianyang and Bi, Ziqian and Liu, Ming and Bao, Riyang and Feng, Pengbin},
+TITLE = {A Comprehensive Survey and Guide to Multimodal Large Language Models in Vision–Language Tasks},
+JOURNAL = {Computation},
+VOLUME = {14},
+YEAR = {2026},
+NUMBER = {6},
+ARTICLE-NUMBER = {125},
+URL = {https://www.mdpi.com/2079-3197/14/6/125},
+ISSN = {2079-3197},
+ABSTRACT = {This survey provides a comprehensive guide to Multimodal Large Language Models (MLLMs) with a focus on vision–language tasks, including image captioning, visual question answering, cross-modal retrieval, visual grounding, multi-image reasoning, long-video understanding, and embodied AI. We examine architectures, training pipelines, and practical applications, covering visual encoders, language model backbones, connector modules, contrastive pre-training, instruction tuning, and preference alignment. We also foreground first-principles constraints—information bottlenecks, data-processing limits, and statistical co-occurrence bias—that shape architecture, robustness, and evaluation. This survey centers on vision–language systems and does not cover audio-only models or code-generation tools without visual inputs. Through task-level analysis and system-level case studies, we examine prominent MLLM implementations while addressing key challenges in scalability, memory, energy use, inference cost, robustness, and cross-modal learning. We present a unified taxonomy of the MLLM design space, a comparative overview of representative models and evaluation benchmarks, and a discussion of open problems. Concluding with ethical considerations and responsible AI development, this survey offers theoretical frameworks and practical insights for researchers, practitioners, and students working at the intersection of natural language processing and computer vision.},
+DOI = {10.3390/computation14060125}
 }
 @inproceedings{an2025choicebenchmarkingremotesensing,
  author = {An, Xiao and Sun, Jiaxing and Gui, Zihan and He, Wei},
@@ -578,14 +566,21 @@ eprint = {https://doi.org/10.1080/10095020.2024.2341747}
       primaryClass={cs.CV},
       url={https://arxiv.org/abs/2511.21631}, 
 }
-@misc{kwon2023pagedattention,
-      title={Efficient Memory Management for Large Language Model Serving with PagedAttention}, 
-      author={Woosuk Kwon and Zhuohan Li and Siyuan Zhuang and Ying Sheng and Lianmin Zheng and Cody Hao Yu and Joseph E. Gonzalez and Hao Zhang and Ion Stoica},
-      year={2023},
-      eprint={2309.06180},
-      archivePrefix={arXiv},
-      primaryClass={cs.LG},
-      url={https://arxiv.org/abs/2309.06180}, 
+@inproceedings{kwon2023pagedattention,
+author = {Kwon, Woosuk and Li, Zhuohan and Zhuang, Siyuan and Sheng, Ying and Zheng, Lianmin and Yu, Cody Hao and Gonzalez, Joseph and Zhang, Hao and Stoica, Ion},
+title = {Efficient Memory Management for Large Language Model Serving with PagedAttention},
+year = {2023},
+isbn = {9798400702297},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/3600006.3613165},
+doi = {10.1145/3600006.3613165},
+abstract = {High throughput serving of large language models (LLMs) requires batching sufficiently many requests at a time. However, existing systems struggle because the key-value cache (KV cache) memory for each request is huge and grows and shrinks dynamically. When managed inefficiently, this memory can be significantly wasted by fragmentation and redundant duplication, limiting the batch size. To address this problem, we propose PagedAttention, an attention algorithm inspired by the classical virtual memory and paging techniques in operating systems. On top of it, we build vLLM, an LLM serving system that achieves (1) near-zero waste in KV cache memory and (2) flexible sharing of KV cache within and across requests to further reduce memory usage. Our evaluations show that vLLM improves the throughput of popular LLMs by 2--4{\texttimes} with the same level of latency compared to the state-of-the-art systems, such as FasterTransformer and Orca. The improvement is more pronounced with longer sequences, larger models, and more complex decoding algorithms. vLLM's source code is publicly available at https://github.com/vllm-project/vllm.},
+booktitle = {Proceedings of the 29th Symposium on Operating Systems Principles},
+pages = {611–626},
+numpages = {16},
+location = {Koblenz, Germany},
+series = {SOSP '23}
 }
 @misc{ba2016layernormalization,
       title={Layer Normalization}, 
@@ -660,15 +655,7 @@ url={https://ideas.repec.org/a/gam/jeners/v14y2021i23p7982-d690993.html},
  year = {2023},
  pages = {10951-10961}
 }
-@misc{shankar2017classificationrepresentationassessinggeodiversity,
-      title={No Classification without Representation: Assessing Geodiversity Issues in Open Data Sets for the Developing World}, 
-      author={Shreya Shankar and Yoni Halpern and Eric Breck and James Atwood and Jimbo Wilson and D. Sculley},
-      year={2017},
-      eprint={1711.08536},
-      archivePrefix={arXiv},
-      primaryClass={stat.ML},
-      url={https://arxiv.org/abs/1711.08536}, 
-}
+@inproceedings{shankar2017classificationrepresentationassessinggeodiversity,title	= {No Classification without Representation: Assessing Geodiversity Issues in Open Data Sets for the Developing World},author	= {Shreya Shankar and Yoni Halpern and Eric Breck and James Atwood and Jimbo Wilson and D. Sculley},year	= {2017},booktitle	= {NIPS 2017 workshop: Machine Learning for the Developing World}}
 
 @article{Toutin01052004,
 author = {T. Toutin},
@@ -687,11 +674,13 @@ eprint = {
         https://doi.org/10.1080/0143116031000101611
 }
 }
-@article{zhou2022least,
-  title={Least-to-most prompting enables complex reasoning in large language models},
-  author={Zhou, Denny and Sch{\"a}rli, Nathanael and Hou, Le and Wei, Jason and Scales, Nathan and Wang, Xuezhi and Schuurmans, Dale and Cui, Claire and Bousquet, Olivier and Le, Quoc and others},
-  journal={arXiv preprint arXiv:2205.10625},
-  year={2022}
+@inproceedings{
+zhou2022least,
+title={Least-to-Most Prompting Enables Complex Reasoning in Large Language Models},
+author={Denny Zhou and Nathanael Sch{\"a}rli and Le Hou and Jason Wei and Nathan Scales and Xuezhi Wang and Dale Schuurmans and Claire Cui and Olivier Bousquet and Quoc V Le and Ed H. Chi},
+booktitle={The Eleventh International Conference on Learning Representations },
+year={2023},
+url={https://openreview.net/forum?id=WZH7099tgfM}
 }
 @inproceedings{Zaid_prompt_decompisiton,
  author = {Khan, Zaid and B G, Vijay Kumar and Schulter, Samuel and Chandraker, Manmohan and Fu, Yun},
@@ -736,23 +725,34 @@ eprint = {
   pages={29385--29394},
   year={2025}
 }
-@misc{lu2025visionfoundationmodelsremote,
-      title={Vision Foundation Models in Remote Sensing: A Survey}, 
-      author={Siqi Lu and Junlin Guo and James R Zimmer-Dauphinee and Jordan M Nieusma and Xiao Wang and Parker VanValkenburgh and Steven A Wernke and Yuankai Huo},
-      year={2025},
-      eprint={2408.03464},
-      archivePrefix={arXiv},
-      primaryClass={cs.CV},
-      url={https://arxiv.org/abs/2408.03464}, 
-}
-@misc{mai2023opportunitieschallengesfoundationmodels,
-      title={On the Opportunities and Challenges of Foundation Models for Geospatial Artificial Intelligence}, 
-      author={Gengchen Mai and Weiming Huang and Jin Sun and Suhang Song and Deepak Mishra and Ninghao Liu and Song Gao and Tianming Liu and Gao Cong and Yingjie Hu and Chris Cundy and Ziyuan Li and Rui Zhu and Ni Lao},
-      year={2023},
-      eprint={2304.06798},
-      archivePrefix={arXiv},
-      primaryClass={cs.AI},
-      url={https://arxiv.org/abs/2304.06798}, 
+@ARTICLE{lu2025visionfoundationmodelsremote,
+  author={Lu, Siqi and Guo, Junlin and Zimmer-Dauphinee, James R. and Nieusma, Jordan M. and Wang, Xiao and VanValkenburgh, Parker and Wernke, Steven A. and Huo, Yuankai},
+  journal={IEEE Geoscience and Remote Sensing Magazine}, 
+  title={Vision Foundation Models in Remote Sensing: A survey}, 
+  year={2025},
+  volume={13},
+  number={3},
+  pages={190-215},
+  keywords={Frequency modulation;Transformers;Data models;Object detection;Thermal sensors;Surveys;Satellites;Foundation models;Urban planning},
+  doi={10.1109/MGRS.2025.3541952}}
+@article{mai2023opportunitieschallengesfoundationmodels,
+author = {Mai, Gengchen and Huang, Weiming and Sun, Jin and Song, Suhang and Mishra, Deepak and Liu, Ninghao and Gao, Song and Liu, Tianming and Cong, Gao and Hu, Yingjie and Cundy, Chris and Li, Ziyuan and Zhu, Rui and Lao, Ni},
+title = {On the Opportunities and Challenges of Foundation Models for GeoAI (Vision Paper)},
+year = {2024},
+issue_date = {June 2024},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+volume = {10},
+number = {2},
+issn = {2374-0353},
+url = {https://doi.org/10.1145/3653070},
+doi = {10.1145/3653070},
+abstract = {Large pre-trained models, also known as foundation models (FMs), are trained in a task-agnostic manner on large-scale data and can be adapted to a wide range of downstream tasks by fine-tuning, few-shot, or even zero-shot learning. Despite their successes in language and vision tasks, we have not yet seen an attempt to develop foundation models for geospatial artificial intelligence (GeoAI). In this work, we explore the promises and challenges of developing multimodal foundation models for GeoAI. We first investigate the potential of many existing FMs by testing their performances on seven tasks across multiple geospatial domains, including Geospatial Semantics, Health Geography, Urban Geography, and Remote Sensing. Our results indicate that on several geospatial tasks that only involve text modality, such as toponym recognition, location description recognition, and US state-level/county-level dementia time series forecasting, the task-agnostic large learning models (LLMs) can outperform task-specific fully supervised models in a zero-shot or few-shot learning setting. However, on other geospatial tasks, especially tasks that involve multiple data modalities (e.g., POI-based urban function classification, street view image–based urban noise intensity classification, and remote sensing image scene classification), existing FMs still underperform task-specific models. Based on these observations, we propose that one of the major challenges of developing an FM for GeoAI is to address the multimodal nature of geospatial tasks. After discussing the distinct challenges of each geospatial data modality, we suggest the possibility of a multimodal FM that can reason over various types of geospatial data through geospatial alignments. We conclude this article by discussing the unique risks and challenges to developing such a model for GeoAI.},
+journal = {ACM Trans. Spatial Algorithms Syst.},
+month = jul,
+articleno = {11},
+numpages = {46},
+keywords = {Foundation models, geospatial artificial intelligence, multimodal learning}
 }
 @misc{huang2025surveyremotesensingfoundation,
       title={A Survey on Remote Sensing Foundation Models: From Vision to Multimodality}, 
