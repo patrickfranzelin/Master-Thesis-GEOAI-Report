@@ -7,7 +7,7 @@ As mentioned in Section~\ref{ch:study_area}, the workflow was applied to five di
 
 \subsection{MLQA Classification and Manual Evaluation Sample}
 
-This subsection provides the empirical basis for RQ1 by summarizing the MLLM-based visibility and routing decisions before the refinement stages.
+This subsection provides the empirical basis for RQ1 by summarising the MLLM-based visibility and routing decisions before the refinement stages.
 
 In total, the workflow was applied to 2,842 building polygons from the Google Open Buildings dataset. The mutually exclusive MLQA routing classes comprised 1,283 cases classified as \textit{No visible}, 971 as \textit{Partial house}, and 588 as \textit{Full house}. Thus, 1,559 buildings were routed as visible partial- or full-house cases. A SAM-derived polygon was available for 1,518 buildings and a final workflow output for 1,352 buildings.
 
@@ -45,12 +45,12 @@ The denominators therefore differ between analyses. The initial MLQA input alway
 	\end{center}
 \end{table}
 
-In this step, the Qwen3-VL-8B-Instruct model was used to analyze each building detection before the subsequent refinement stages were applied. The model first identified whether a building was clearly visible in the selected imagery. If the building was visible, the model then generated positive and negative prompt points for the SAM-based segmentation and additionally produced a short qualitative description of the detected errors.
+In this step, the Qwen3-VL-8B-Instruct model was used to analyse each building detection before the subsequent refinement stages were applied. The model first identified whether a building was clearly visible in the selected imagery. If the building was visible, the model then generated positive and negative prompt points for the SAM-based segmentation and additionally produced a short qualitative description of the detected errors.
 
 Buildings classified as \textit{No visible} were generally removed from further routing because no corresponding visible building could be identified reliably in the selected imagery; three such cases nevertheless remained in the evaluated subset. The distinction between \textit{Partial house} and \textit{Full house} is described in Section~\ref{sec:decision_logic_routing}. In this step, the model evaluated whether large parts of the visible building were cut off by the original Google Open Buildings polygon. Based on this classification, the workflow was routed differently for partial-house and full-house cases. The column \textit{Total evaluated} represents the subset of buildings for which final workflow outputs were available and manually evaluated.
 Based on this manually evaluated subset, the following sections compare the original Google Open Buildings polygons, the SAM-derived intermediate geometries where relevant, and the final workflow outputs.
 
-In the following sections, the term \textit{final workflow output} refers to the building polygon produced after the complete refinement workflow, including SAM-based segmentation, polygonization, geometric regularization, and database storage.
+In the following sections, the term \textit{final workflow output} refers to the building polygon produced after the complete refinement workflow, including SAM-based segmentation, polygonisation, geometric regularisation, and database storage.
 
 \subsection{Pipeline Output Availability}
 
@@ -113,7 +113,7 @@ During the manual evaluation, geometry error categories were additionally assign
 
 \subsection{Error-category Shifts Before and After Workflow Processing (RQ2)}
 
-Figure~\ref{fig:error_profile_by_location} summarizes the distribution of error categories before and after workflow processing for each study area and for the complete manually evaluated dataset.
+Figure~\ref{fig:error_profile_by_location} summarises the distribution of error categories before and after workflow processing for each study area and for the complete manually evaluated dataset.
 
 \begin{figure}[htb]
 	\centering
@@ -161,7 +161,7 @@ High             & 235 & 23.0 & 63.0 & 23.0 \\
 
 \subsection{Magnitude and Direction of Positional Corrections}
 
-Since \texttt{SHIFTED} was the dominant error category in the original Google Open Buildings dataset, the spatial displacement of these 971 cases was analyzed in more detail. For this purpose, centroid shift vectors were calculated between the original Google Open Buildings polygons labeled as \texttt{SHIFTED} and the corresponding final workflow geometries using PostGIS geography distances in meters. The aim of this analysis was to assess whether the displacement followed a homogeneous direction that could have been corrected by a simple global translation before running the workflow.
+Since \texttt{SHIFTED} was the dominant error category in the original Google Open Buildings dataset, the spatial displacement of these 971 cases was analysed in more detail. For this purpose, centroid shift vectors were calculated between the original Google Open Buildings polygons labelled as \texttt{SHIFTED} and the corresponding final workflow geometries using PostGIS geography distances in metres. The aim of this analysis was to assess whether the displacement followed a homogeneous direction that could have been corrected by a simple global translation before running the workflow.
 
 
 \begin{figure}[htb]
@@ -198,11 +198,11 @@ The Google Open Buildings dataset includes a confidence value for each detection
 
 \subsection{Original, SAM-derived, and Final Workflow Geometry Complexity}
 
-The intermediate SAM-derived geometry was also analyzed separately from the final workflow geometry. This shows the roles of SAM-based segmentation and geometric post-processing more clearly. Vertex counts were calculated with \texttt{ST\_NPoints} on valid geometries and include all rings, multipart components, and ring-closing coordinates. The SAM-derived output had a much higher average vertex count than both the original Google Open Buildings polygons and the final workflow outputs. On average, the original Google Open Buildings polygons had 5.27 vertices, the SAM-derived polygons had 40.81 vertices, and the final workflow outputs had 13.45 vertices. The three final workflow geometries unavailable for this calculation were Liberia cases without a stored regularized geometry, resulting in \(n=1,253\) for the final stage.
+The intermediate SAM-derived geometry was also analysed separately from the final workflow geometry. This shows the roles of SAM-based segmentation and geometric post-processing more clearly. Vertex counts were calculated with \texttt{ST\_NPoints} on valid geometries and include all rings, multipart components, and ring-closing coordinates. The SAM-derived output had a much higher average vertex count than both the original Google Open Buildings polygons and the final workflow outputs. On average, the original Google Open Buildings polygons had 5.27 vertices, the SAM-derived polygons had 40.81 vertices, and the final workflow outputs had 13.45 vertices. The three final workflow geometries unavailable for this calculation were Liberia cases without a stored regularised geometry, resulting in \(n=1,253\) for the final stage.
 
 \begin{table}[htb]
 \centering
-\caption{Geometry characteristics of original Google Open Buildings polygons, SAM-derived polygons, and final workflow outputs. Vertex counts were calculated with \texttt{ST\_NPoints}; the final workflow stage uses \(n=1,253\) because three stored regularized geometries were unavailable for this calculation.}
+\caption{Geometry characteristics of original Google Open Buildings polygons, SAM-derived polygons, and final workflow outputs. Vertex counts were calculated with \texttt{ST\_NPoints}; the final workflow stage uses \(n=1,253\) because three stored regularised geometries were unavailable for this calculation.}
 \label{tab:stage_geometry_comparison}
 \begin{tabular}{lrrrr}
 \toprule
@@ -223,7 +223,7 @@ The comparison between \textit{Full house} and \textit{Partial house} cases incl
 
 \section{Building-to-Surrounding Contrast}
 
-The building-to-surrounding contrast analysis described in Section~\ref{sec:building_surrounding_contrast} showed clear differences between the five study areas. The automatic polygon-ring analysis was applied to all 684 final workflow outputs that were manually labeled as \textit{perfect}. The number of available samples therefore differs by country and reflects the number of high-quality final workflow outputs available for this additional image analysis. Since the analysis was restricted to polygons rated as \textit{perfect}, the values describe image conditions for successfully refined buildings rather than the image conditions of all processed buildings.
+The building-to-surrounding contrast analysis described in Section~\ref{sec:building_surrounding_contrast} showed clear differences between the five study areas. The automatic polygon-ring analysis was applied to all 684 final workflow outputs that were manually labelled as \textit{perfect}. The number of available samples therefore differs by country and reflects the number of high-quality final workflow outputs available for this additional image analysis. Since the analysis was restricted to polygons rated as \textit{perfect}, the values describe image conditions for successfully refined buildings rather than the image conditions of all processed buildings.
 
 \begin{table}[htb]
 \centering
@@ -246,7 +246,7 @@ Nepal      & 68  & 0.678 & 23.1 \\
 \end{tabular}
 \end{table}
 
-The contrast value reports the median absolute linear Weber contrast between the building and its local surrounding ring after sRGB linearization. The texture value reports the median Euclidean distance between the building and surrounding texture descriptors. The strongest brightness separation was observed in Niger, followed by Mexico, Liberia, Nepal, and Mozambique. Mozambique showed by far the lowest building-to-surrounding contrast, suggesting that building roofs and surrounding surfaces were often more similar in brightness. In contrast, Niger and Mexico showed much stronger brightness separation between buildings and their local surroundings.
+The contrast value reports the median absolute linear Weber contrast between the building and its local surrounding ring after sRGB linearisation. The texture value reports the median Euclidean distance between the building and surrounding texture descriptors. The strongest brightness separation was observed in Niger, followed by Mexico, Liberia, Nepal, and Mozambique. Mozambique showed by far the lowest building-to-surrounding contrast, suggesting that building roofs and surrounding surfaces were often more similar in brightness. In contrast, Niger and Mexico showed much stronger brightness separation between buildings and their local surroundings.
 
 The texture-difference values show a different pattern. Liberia and Nepal had the highest texture differences, while Mexico and Mozambique had the lowest values. This indicates that visual separability between buildings and their surroundings was not only controlled by brightness contrast, but also by differences in local texture. For example, Liberia showed only moderate brightness contrast but the highest texture difference, which is consistent with buildings being visually distinguishable from vegetated surroundings through texture and surface structure rather than brightness alone. Overall, the results suggest that the visual conditions for building extraction differed substantially between the study areas and that brightness contrast and texture contrast captured complementary aspects of building visibility.
 
@@ -254,7 +254,7 @@ The texture-difference values show a different pattern. Liberia and Nepal had th
 \section{Study Area Comparison and Transferability (RQ3)}
 \label{sec:results_study_area_comparison}
 
-Table~\ref{tab:country_summary} summarizes several of the most important result indicators by study area, including final geometry quality, area preservation, positional correction magnitude, surrounding vegetation context, and polygon complexity changes.
+Table~\ref{tab:country_summary} summarises several of the most important result indicators by study area, including final geometry quality, area preservation, positional correction magnitude, surrounding vegetation context, and polygon complexity changes.
 \begin{table}[htb]
 \centering
 \caption{Summary of final geometry quality indicators and polygon complexity changes by study area. Quality percentages refer to the manually evaluated subset; geometry-change indicators use the available final workflow geometries for the respective calculation.}
@@ -301,7 +301,7 @@ Nepal showed the lowest share of buildings classified as \textit{good} or \texti
 Before evaluating the MLLM-specific outputs, a supplementary reference-based test was performed in Switzerland, where TLM geometries were available as an external comparison dataset \citep{swisstopo_swisstlm3d}.
 This test provides an additional perspective on RQ3 by comparing the workflow with an already high-quality reference-data setting.
 
-The supplementary Switzerland test compared the regularized building footprints and the corresponding Microsoft source polygons against Swiss TLM building geometries. As described in Section~\ref{sec:switzerland_reference_test}, the evaluation was restricted to the processed subset for which regularized outputs were available. This subset contained 425 regularized candidate polygons, 436 Microsoft source polygons and 488 TLM reference buildings.
+The supplementary Switzerland test compared the regularised building footprints and the corresponding Microsoft source polygons against Swiss TLM building geometries. As described in Section~\ref{sec:switzerland_reference_test}, the evaluation was restricted to the processed subset for which regularised outputs were available. This subset contained 425 regularised candidate polygons, 436 Microsoft source polygons and 488 TLM reference buildings.
 
 \begin{table}[htp]
 \centering
@@ -323,7 +323,7 @@ Microsoft   & 0.50 & 354 & 82 & 134 & 0.812 & 0.725 & 0.766 \\
 
 The results show that both datasets achieved high precision and moderate to high recall against the TLM reference subset. At the strictest IoU threshold of 0.50, the workflow output reached a precision of \textbf{0.800}, a recall of \textbf{0.697} and an F1-score of \textbf{0.745}. The Microsoft source polygons performed slightly better at the same threshold, with a precision of \textbf{0.812}, a recall of \textbf{0.725} and an F1-score of \textbf{0.766}.
 
-This indicates that the regularization step did not improve the footprint agreement with the authoritative Swiss reference data in this test. Instead, it slightly reduced recall and F1-score compared to the Microsoft source polygons.
+This indicates that the regularisation step did not improve the footprint agreement with the authoritative Swiss reference data in this test. Instead, it slightly reduced recall and F1-score compared to the Microsoft source polygons.
 
 \section{MLLM Outputs: Semantic Descriptions and Spatial Prompts (RQ1)}
 \label{sec:results_mllm_outputs}
@@ -353,7 +353,7 @@ The semantic categories used in the workflow were:
 \end{itemize}
 
 
-The model output \texttt{MISALIGNED} was normalized to the manual category \texttt{SHIFTED}. The structured prompt did not request \texttt{OVERSIMPLIFIED}, which consequently had no structured MLQA predictions in this comparison. Among the requested semantic categories, \texttt{SHIFTED} was the most frequently assigned category by the MLQA workflow. Since positional displacement was evaluated through a dedicated prompt, the category was assigned in 97.6\% of all cases, compared to 77.3\% in the manual interpretation.
+The model output \texttt{MISALIGNED} was normalised to the manual category \texttt{SHIFTED}. The structured prompt did not request \texttt{OVERSIMPLIFIED}, which consequently had no structured MLQA predictions in this comparison. Among the requested semantic categories, \texttt{SHIFTED} was the most frequently assigned category by the MLQA workflow. Since positional displacement was evaluated through a dedicated prompt, the category was assigned in 97.6\% of all cases, compared to 77.3\% in the manual interpretation.
 
 The largest discrepancy was observed for \texttt{EXTRA\_PARTS}. The MLQA workflow assigned this category in 72.6\% of all cases, whereas manual interpretation assigned it in only 2.5\% of buildings.
 
@@ -391,7 +391,7 @@ The extracted semantic descriptions also assigned more categories per building t
 
 The strongest performance was observed for the category \texttt{SHIFTED}, which reached a precision of \textbf{0.801}, a recall of \textbf{0.509}, and an F1-score of \textbf{0.623}. \texttt{SHAPE\_MISMATCH} reached an F1-score of \textbf{0.426}.
 
-Strong overprediction behavior was visible for \texttt{EXTRA\_PARTS} and \texttt{MISSING\_PARTS}. The extraction procedure assigned \texttt{EXTRA\_PARTS} 956 times although manual interpretation identified only 31 occurrences. Similarly, \texttt{MISSING\_PARTS} was extracted 898 times compared to 95 manually assigned cases.
+Strong overprediction behaviour was visible for \texttt{EXTRA\_PARTS} and \texttt{MISSING\_PARTS}. The extraction procedure assigned \texttt{EXTRA\_PARTS} 956 times although manual interpretation identified only 31 occurrences. Similarly, \texttt{MISSING\_PARTS} was extracted 898 times compared to 95 manually assigned cases.
 
 In addition to the rule-based keyword analysis, a smaller qualitative evaluation was performed for the generated free-text descriptions in a separate evaluation interface. The evaluation was stopped after this subset because the generated descriptions showed strong repetition. Many sentences followed nearly the same structure and repeatedly described the polygon as having \textit{missing parts}, \textit{extra parts}, or both, even when the specific visual error differed.
 
